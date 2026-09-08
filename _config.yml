@@ -1,0 +1,18 @@
+# Jekyll configuration
+
+title: EDGCPP
+url: https://edgcpp.org # the base hostname & protocol for the site
+description: >-
+  The edgcpp.org open-source project website.
+
+# Build settings
+markdown: kramdown
+
+# Exclude from processing.
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor
+  - local
+  - README.md
