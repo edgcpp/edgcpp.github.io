@@ -1,13 +1,24 @@
 # edgcpp.org Website
 
-Source code for [edgcpp.org](https://edgcpp.org), the EDGCPP open-source
-project website. It is a Jekyll 4 project published as a fully static
-site through GitHub Pages.
+Source code for [edgcpp.org](https://edgcpp.org), the website for EDG's
+transition to open source under a fiscal sponsorship agreement with
+[The C++ Alliance](https://cppalliance.org). It is a Jekyll 4 project
+published as a fully static site through GitHub Pages.
 
-The site is currently a barebones placeholder. It was bootstrapped from
-[cppalliance.github.io](https://github.com/cppalliance/cppalliance.github.io),
-and content (layouts, styling, navigation, etc.) may be taken from that
-repository as needed.
+The site is a single page. Its content lives in `index.html`, built on a
+small Jekyll scaffold:
+
+- `_layouts/default.html` – page shell
+- `_includes/head.html`, `header.html`, `footer.html` – shared chrome
+- `assets/css/main.css` – plain CSS, no Sass
+- `assets/img/favicon.svg`
+
+Site-wide links (the GitHub organization, this repository, and The C++
+Alliance) are set in `_config.yml`. The history section of the page is a
+marked placeholder until that content is collected.
+
+The project was bootstrapped from
+[cppalliance.github.io](https://github.com/cppalliance/cppalliance.github.io).
 
 ## Local Development
 
