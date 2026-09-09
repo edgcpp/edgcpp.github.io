@@ -5,6 +5,11 @@ url: https://edgcpp.org # the base hostname & protocol for the site
 description: >-
   The edgcpp.org open-source project website.
 
+# Project links used throughout the site.
+github_url: https://github.com/edgcpp
+repo_url: https://github.com/edgcpp/edgcpp.github.io
+alliance_url: https://cppalliance.org
+
 # Build settings
 markdown: kramdown
 
@@ -16,3 +21,5 @@ exclude:
   - vendor
   - local
   - README.md
+  - CLAUDE.md
+  - AGENTS.md

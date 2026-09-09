@@ -1,11 +1,202 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>edgcpp.org</title>
-</head>
-<body>
-  <h1>edgcpp.org website - in development</h1>
-</body>
-</html>
+---
+layout: default
+title: Open Source Transition
+description: >-
+  On September 30, 2026, EDG's C++ front end goes open source with The C++
+  Alliance as its nonprofit home. What changes for EDG users, and where to
+  follow the work.
+---
+<section class="hero" aria-labelledby="hero-title">
+  <div class="container">
+    <p class="eyebrow eyebrow--on-dark">The EDG open source transition</p>
+    <h1 id="hero-title">EDG is going open source.</h1>
+    <p class="lead">On September 30, 2026, the source for EDG's C++ front end goes public, and The C++ Alliance becomes its nonprofit home. Same engine, same standards, professionally maintained.</p>
+    <div class="hero__actions">
+      <a class="button button--primary" href="{{ site.github_url }}">Follow along on GitHub</a>
+      <a class="button button--ghost" href="#transition">Read the plan</a>
+    </div>
+    <div class="callout callout--on-dark">
+      <p><strong>Continuity is the point.</strong> This is a change of steward, not a change of course.</p>
+    </div>
+  </div>
+</section>
+
+<section id="history" class="section" aria-labelledby="history-title">
+  <div class="container">
+    <p class="eyebrow">Part one</p>
+    <h2 id="history-title">The history of EDG</h2>
+    <p class="section__lead">For thirty years, EDG's front end has powered C++ compilation across the industry as the only production-quality source-to-source engine of its kind.</p>
+
+    <!--
+      PLACEHOLDER. Replace this block with the EDG history once it has been
+      collected: founding, key people, front-end milestones, and the compilers
+      and tools built on top of it.
+    -->
+    <div class="placeholder">
+      <p class="placeholder__label">Coming soon</p>
+      <h3>The full story is still being written</h3>
+      <p>This section will cover EDG's founding, the people behind it, the milestones of its front end, and the compilers and tools built on top of it. Have a piece of that history to share? <a href="{{ site.repo_url }}/issues">Open an issue</a> on the site's repository.</p>
+    </div>
+  </div>
+</section>
+
+<section id="transition" class="section section--alt" aria-labelledby="transition-title">
+  <div class="container">
+    <p class="eyebrow">Part two</p>
+    <h2 id="transition-title">EDG after September 30</h2>
+    <p class="section__lead">When the source goes public on September 30, 2026, professional maintenance has to continue. EDG needed a new home that could do three things at once.</p>
+
+    <div class="grid grid--3">
+      <article class="card">
+        <p class="card__number">01</p>
+        <h3>Fiscal sponsorship</h3>
+        <p>Receive and manage donations on behalf of EDG.</p>
+      </article>
+      <article class="card">
+        <p class="card__number">02</p>
+        <h3>Technical continuity</h3>
+        <p>Sustain the engineering quality EDG users depend on.</p>
+      </article>
+      <article class="card">
+        <p class="card__number">03</p>
+        <h3>Domain expertise</h3>
+        <p>C++ compiler front-end knowledge, from the inside.</p>
+      </article>
+    </div>
+
+    <div class="split">
+      <div>
+        <h3>Why The C++ Alliance</h3>
+        <p>The C++ Alliance is a nonprofit with proven fiscal-sponsorship infrastructure, C++ compiler engineers on staff, and deep roots in the C++ standards and Boost communities. It will serve as EDG's nonprofit home.</p>
+        <p><a href="{{ site.alliance_url }}">Learn more about The C++ Alliance</a></p>
+      </div>
+      <ul class="checklist">
+        <li>Fiscal sponsor of the Boost C++ Libraries since 2024</li>
+        <li>LLVM committers with direct Clang front-end contributions</li>
+        <li>A former LWG Chair and libc++ code owner on staff</li>
+        <li>Published transparency reports</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="model" class="section" aria-labelledby="model-title">
+  <div class="container">
+    <p class="eyebrow">How it works</p>
+    <h2 id="model-title">Two tracks, one codebase, no early access</h2>
+    <p class="section__lead">Development is funded on two tracks. Both end in the same place: code that everyone gets at the same time.</p>
+
+    <div class="grid grid--2">
+      <article class="card card--track">
+        <p class="card__label">Track 1</p>
+        <h3>Bug fixes: always open</h3>
+        <p>Fixes are published immediately. No gating, no delays.</p>
+      </article>
+      <article class="card card--track">
+        <p class="card__label">Track 2</p>
+        <h3>Features: collectively funded</h3>
+        <p>Users collectively fund new development. Once a feature is funded, it is released to everyone simultaneously.</p>
+      </article>
+    </div>
+
+    <div class="callout">
+      <p><strong>No one gets early access.</strong> Not donors, not the Alliance, not anyone.</p>
+    </div>
+  </div>
+</section>
+
+<section id="users" class="section section--alt" aria-labelledby="users-title">
+  <div class="container">
+    <p class="eyebrow">What this means for you</p>
+    <h2 id="users-title">What changes, and what doesn't</h2>
+    <p class="section__lead">The engine, the standards it implements, and the person you talk to stay the same. How the work is funded and where the code lives do not.</p>
+
+    <div class="table-wrap">
+      <table class="compare">
+        <thead>
+          <tr>
+            <th scope="col"><span class="visually-hidden">Area</span></th>
+            <th scope="col">Licensed model</th>
+            <th scope="col" class="compare__new">Open source model</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Source code</th>
+            <td data-label="Licensed model">Proprietary, available under license</td>
+            <td data-label="Open source model" class="compare__new">Public, at <a href="{{ site.github_url }}">github.com/edgcpp</a></td>
+          </tr>
+          <tr>
+            <th scope="row">Funding</th>
+            <td data-label="Licensed model">Annual license fees</td>
+            <td data-label="Open source model" class="compare__new">Tax-deductible donations</td>
+          </tr>
+          <tr>
+            <th scope="row">Development</th>
+            <td data-label="Licensed model">The EDG team</td>
+            <td data-label="Open source model" class="compare__new">EDG developers hired by The C++ Alliance</td>
+          </tr>
+          <tr>
+            <th scope="row">Point of contact</th>
+            <td data-label="Licensed model">John Spicer</td>
+            <td data-label="Open source model" class="compare__new">John Spicer, as Chair of the Fiscal Sponsorship Committee</td>
+          </tr>
+          <tr>
+            <th scope="row">Lock-in</th>
+            <td data-label="Licensed model">Not applicable</td>
+            <td data-label="Open source model" class="compare__new">None. Exit at any time.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="next-steps" class="section" aria-labelledby="next-steps-title">
+  <div class="container">
+    <p class="eyebrow">Get involved</p>
+    <h2 id="next-steps-title">Next steps</h2>
+    <p class="section__lead">The transition is under way. Here is what happens next, and how EDG users can take part.</p>
+
+    <ol class="steps">
+      <li>
+        <span class="steps__number" aria-hidden="true">01</span>
+        <div>
+          <h3>The agreement executes before September 30</h3>
+          <p>The fiscal sponsorship agreement is ready to sign ahead of the transition date.</p>
+        </div>
+      </li>
+      <li>
+        <span class="steps__number" aria-hidden="true">02</span>
+        <div>
+          <h3>John Spicer leads the transition</h3>
+          <p>Available now to walk any user through the details of the hand-off.</p>
+        </div>
+      </li>
+      <li>
+        <span class="steps__number" aria-hidden="true">03</span>
+        <div>
+          <h3>Your input shapes the committee</h3>
+          <p>EDG user feedback on the composition of the Fiscal Sponsorship Committee and on development priorities is welcome.</p>
+        </div>
+      </li>
+      <li>
+        <span class="steps__number" aria-hidden="true">04</span>
+        <div>
+          <h3>Talk to us directly</h3>
+          <p>Any EDG stakeholder can reach the Alliance team, any time. <a href="{{ site.alliance_url }}/#contact">Contact The C++ Alliance</a>.</p>
+        </div>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<section class="cta" aria-labelledby="cta-title">
+  <div class="container cta__inner">
+    <div>
+      <h2 id="cta-title">Follow the work on GitHub</h2>
+      <p>EDG's source and development are moving to github.com/edgcpp. Watch the organization to follow the transition as it happens.</p>
+    </div>
+    <a class="button button--primary" href="{{ site.github_url }}">Go to github.com/edgcpp</a>
+  </div>
+</section>
