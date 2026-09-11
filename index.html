@@ -1,18 +1,53 @@
----
-layout: default
-title: Open Source Transition
-description: >-
-  On September 30, 2026, EDG's C++ front end goes open source with The C++
-  Alliance as its nonprofit home. What changes for EDG users, how to
-  contribute, and where to follow the work.
----
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><title>Open Source Transition · EDGCPP</title><meta name="description" content="On September 30, 2026, EDG's C++ front end goes open source with The C++ Alliance as its nonprofit home. What changes for EDG users, how to contribute, and where to follow the work.">
+  <link rel="canonical" href="https://edgcpp.org/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="EDGCPP">
+  <meta property="og:title" content="Open Source Transition">
+  <meta property="og:description" content="On September 30, 2026, EDG's C++ front end goes open source with The C++ Alliance as its nonprofit home. What changes for EDG users, how to contribute, and where to follow the work.">
+  <meta property="og:url" content="https://edgcpp.org/">
+  <meta name="twitter:card" content="summary">
+  <meta name="theme-color" content="#0b1220">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/main.css">
+</head>
+
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+  <div class="container site-header__inner">
+    <a class="brand" href="/">
+      <span class="brand__mark" aria-hidden="true"></span>
+      <span class="brand__name">EDGCPP</span>
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      <a href="#history">History</a>
+      <a href="#transition">The transition</a>
+      <a href="#model">How it works</a>
+      <a href="#users">What changes</a>
+      <a href="#next-steps">Get involved</a>
+    </nav>
+    <a class="button button--github" href="https://github.com/edgcpp">
+      <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+      GitHub
+    </a>
+  </div>
+</header>
+
+  <main id="main">
 <section class="hero" aria-labelledby="hero-title">
   <div class="container">
     <p class="eyebrow eyebrow--on-dark">The EDG open source transition</p>
     <h1 id="hero-title">EDG is going open source.</h1>
     <p class="lead">On September 30, 2026, the source for EDG's C++ front end goes public, and The C++ Alliance becomes its nonprofit home. Same engine, same standards, professionally maintained, and open to contributions.</p>
     <div class="hero__actions">
-      <a class="button button--primary" href="{{ site.github_url }}">Follow along on GitHub</a>
+      <a class="button button--primary" href="https://github.com/edgcpp">Follow along on GitHub</a>
       <a class="button button--ghost" href="#transition">Read the plan</a>
     </div>
     <div class="callout callout--on-dark">
@@ -35,7 +70,7 @@ description: >-
     <div class="placeholder">
       <p class="placeholder__label">Coming soon</p>
       <h3>The full story is still being written</h3>
-      <p>This section will cover EDG's founding, the people behind it, the milestones of its front end, and the compilers and tools built on top of it. Have a piece of that history to share? <a href="{{ site.repo_url }}/issues">Open an issue</a> on the site's repository.</p>
+      <p>This section will cover EDG's founding, the people behind it, the milestones of its front end, and the compilers and tools built on top of it. Have a piece of that history to share? <a href="https://github.com/edgcpp/edgcpp.github.io/issues">Open an issue</a> on the site's repository.</p>
     </div>
   </div>
 </section>
@@ -68,7 +103,7 @@ description: >-
       <div>
         <h3>Why The C++ Alliance</h3>
         <p>The C++ Alliance is a nonprofit with proven fiscal-sponsorship infrastructure, C++ compiler engineers on staff, and deep roots in the C++ standards and Boost communities. It will serve as EDG's nonprofit home.</p>
-        <p><a href="{{ site.alliance_url }}">Learn more about The C++ Alliance</a></p>
+        <p><a href="https://cppalliance.org">Learn more about The C++ Alliance</a></p>
       </div>
       <ul class="checklist">
         <li>Fiscal sponsor of the Boost C++ Libraries since 2024</li>
@@ -143,7 +178,7 @@ description: >-
           <tr>
             <th scope="row">Source code</th>
             <td data-label="Licensed model">Proprietary, available under license</td>
-            <td data-label="Open source model" class="compare__new">Public, at <a href="{{ site.github_url }}">github.com/edgcpp</a></td>
+            <td data-label="Open source model" class="compare__new">Public, at <a href="https://github.com/edgcpp">github.com/edgcpp</a></td>
           </tr>
           <tr>
             <th scope="row">Funding</th>
@@ -203,14 +238,14 @@ description: >-
         <span class="steps__number" aria-hidden="true">04</span>
         <div>
           <h3>Contribute code</h3>
-          <p>Once the source is public, bug fixes and new features from EDG users are welcome as pull requests at <a href="{{ site.github_url }}">github.com/edgcpp</a>. <a href="#model">See how contributions are handled</a>.</p>
+          <p>Once the source is public, bug fixes and new features from EDG users are welcome as pull requests at <a href="https://github.com/edgcpp">github.com/edgcpp</a>. <a href="#model">See how contributions are handled</a>.</p>
         </div>
       </li>
       <li>
         <span class="steps__number" aria-hidden="true">05</span>
         <div>
           <h3>Join the conversation</h3>
-          <p>CppLang Slack for real-time chat. <a href="{{ site.slack_url }}">Request an invite</a>, then join the <code>#edgcpp</code> channel.</p>
+          <p>CppLang Slack for real-time chat. <a href="https://cppalliance.org/slack/">Request an invite</a>, then join the <code>#edgcpp</code> channel.</p>
           <!--
             TODO: once there are more repositories under github.com/edgcpp,
             also point people to GitHub issues and discussions here.
@@ -221,7 +256,7 @@ description: >-
         <span class="steps__number" aria-hidden="true">06</span>
         <div>
           <h3>Talk to us directly</h3>
-          <p>Any EDG stakeholder can reach the Alliance team, any time. <a href="{{ site.alliance_url }}/#contact">Contact The C++ Alliance</a>.</p>
+          <p>Any EDG stakeholder can reach the Alliance team, any time. <a href="https://cppalliance.org/#contact">Contact The C++ Alliance</a>.</p>
         </div>
       </li>
     </ol>
@@ -234,6 +269,22 @@ description: >-
       <h2 id="cta-title">Follow the work on GitHub</h2>
       <p>EDG's source and development are moving to github.com/edgcpp. Watch the organization to follow the transition as it happens.</p>
     </div>
-    <a class="button button--primary" href="{{ site.github_url }}">Go to github.com/edgcpp</a>
+    <a class="button button--primary" href="https://github.com/edgcpp">Go to github.com/edgcpp</a>
   </div>
 </section>
+
+  </main>
+  <footer class="site-footer">
+  <div class="container site-footer__inner">
+    <p class="site-footer__brand">edgcpp.org</p>
+    <nav class="site-footer__links" aria-label="Footer">
+      <a href="https://github.com/edgcpp">github.com/edgcpp</a>
+      <a href="https://cppalliance.org">The C++ Alliance</a>
+      <a href="https://github.com/edgcpp/edgcpp.github.io">Site source</a>
+    </nav>
+    <p class="site-footer__legal">&copy; 2026 edgcpp.org</p>
+  </div>
+</footer>
+
+</body>
+</html>
