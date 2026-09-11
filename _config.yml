@@ -9,6 +9,7 @@ description: >-
 github_url: https://github.com/edgcpp
 repo_url: https://github.com/edgcpp/edgcpp.github.io
 alliance_url: https://cppalliance.org
+slack_url: https://cppalliance.org/slack/
 
 # Build settings
 markdown: kramdown
