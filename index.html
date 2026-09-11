@@ -3,14 +3,14 @@ layout: default
 title: Open Source Transition
 description: >-
   On September 30, 2026, EDG's C++ front end goes open source with The C++
-  Alliance as its nonprofit home. What changes for EDG users, and where to
-  follow the work.
+  Alliance as its nonprofit home. What changes for EDG users, how to
+  contribute, and where to follow the work.
 ---
 <section class="hero" aria-labelledby="hero-title">
   <div class="container">
     <p class="eyebrow eyebrow--on-dark">The EDG open source transition</p>
     <h1 id="hero-title">EDG is going open source.</h1>
-    <p class="lead">On September 30, 2026, the source for EDG's C++ front end goes public, and The C++ Alliance becomes its nonprofit home. Same engine, same standards, professionally maintained.</p>
+    <p class="lead">On September 30, 2026, the source for EDG's C++ front end goes public, and The C++ Alliance becomes its nonprofit home. Same engine, same standards, professionally maintained, and open to contributions.</p>
     <div class="hero__actions">
       <a class="button button--primary" href="{{ site.github_url }}">Follow along on GitHub</a>
       <a class="button button--ghost" href="#transition">Read the plan</a>
@@ -83,24 +83,43 @@ description: >-
 <section id="model" class="section" aria-labelledby="model-title">
   <div class="container">
     <p class="eyebrow">How it works</p>
-    <h2 id="model-title">Two tracks, one codebase, no early access</h2>
-    <p class="section__lead">Development is funded on two tracks. Both end in the same place: code that everyone gets at the same time.</p>
+    <h2 id="model-title">Three tracks, one codebase</h2>
+    <p class="section__lead">EDG will work like any other open source project: anyone can contribute, and everything that lands is available to everyone. Development follows three tracks: contributions from the user community, ongoing maintenance, and collectively funded features.</p>
 
-    <div class="grid grid--2">
+    <div class="grid grid--3">
       <article class="card card--track">
         <p class="card__label">Track 1</p>
-        <h3>Bug fixes: always open</h3>
-        <p>Fixes are published immediately. No gating, no delays.</p>
+        <h3>Community contributions</h3>
+        <p>Bug fixes and new features from EDG users, submitted as pull requests. Reviewers, initially former EDG employees, will evaluate the changes. Once approved, these changes will be merged into the EDG codebase.</p>
       </article>
       <article class="card card--track">
         <p class="card__label">Track 2</p>
+        <h3>Maintenance: always open</h3>
+        <p>Bug fixes and maintenance by the Alliance's EDG developers are published immediately.</p>
+      </article>
+      <article class="card card--track">
+        <p class="card__label">Track 3</p>
         <h3>Features: collectively funded</h3>
-        <p>Users collectively fund new development. Once a feature is funded, it is released to everyone simultaneously.</p>
+        <p>Larger features are developed by the Alliance's EDG developers and funded collectively by the EDG community. Once a feature is funded, it is released to everyone at the same time.</p>
       </article>
     </div>
 
     <div class="callout">
-      <p><strong>No one gets early access.</strong> Not donors, not the Alliance, not anyone.</p>
+      <p><strong>One codebase, for everyone.</strong> Whichever track a change arrives on, it lands in the same public repository at the same time. No one gets early access.</p>
+    </div>
+
+    <div class="split">
+      <div>
+        <h3>Who oversees the process</h3>
+        <p>The Fiscal Sponsorship Committee (FSC) oversees the process across all three tracks. It is chaired by John Spicer and will include volunteers from the EDG user community.</p>
+        <p>Want a say in who sits on it? <a href="#next-steps">See how to get involved</a>.</p>
+      </div>
+      <ul class="checklist">
+        <li>Chaired by John Spicer</li>
+        <li>Includes volunteers from the EDG user community</li>
+        <li>Oversees how contributions are reviewed and merged</li>
+        <li>Sets priorities for maintenance and new features</li>
+      </ul>
     </div>
   </div>
 </section>
@@ -134,7 +153,7 @@ description: >-
           <tr>
             <th scope="row">Development</th>
             <td data-label="Licensed model">The EDG team</td>
-            <td data-label="Open source model" class="compare__new">EDG developers hired by The C++ Alliance</td>
+            <td data-label="Open source model" class="compare__new">EDG developers hired by The C++ Alliance, plus contributions from the EDG user community</td>
           </tr>
           <tr>
             <th scope="row">Point of contact</th>
@@ -177,11 +196,29 @@ description: >-
         <span class="steps__number" aria-hidden="true">03</span>
         <div>
           <h3>Your input shapes the committee</h3>
-          <p>EDG user feedback on the composition of the Fiscal Sponsorship Committee and on development priorities is welcome.</p>
+          <p>EDG user feedback on the composition of the Fiscal Sponsorship Committee and on development priorities is welcome. The committee will include volunteers from the EDG user community.</p>
         </div>
       </li>
       <li>
         <span class="steps__number" aria-hidden="true">04</span>
+        <div>
+          <h3>Contribute code</h3>
+          <p>Once the source is public, bug fixes and new features from EDG users are welcome as pull requests at <a href="{{ site.github_url }}">github.com/edgcpp</a>. <a href="#model">See how contributions are handled</a>.</p>
+        </div>
+      </li>
+      <li>
+        <span class="steps__number" aria-hidden="true">05</span>
+        <div>
+          <h3>Join the conversation</h3>
+          <p>CppLang Slack for real-time chat. <a href="{{ site.slack_url }}">Request an invite</a>, then join the <code>#edgcpp</code> channel.</p>
+          <!--
+            TODO: once there are more repositories under github.com/edgcpp,
+            also point people to GitHub issues and discussions here.
+          -->
+        </div>
+      </li>
+      <li>
+        <span class="steps__number" aria-hidden="true">06</span>
         <div>
           <h3>Talk to us directly</h3>
           <p>Any EDG stakeholder can reach the Alliance team, any time. <a href="{{ site.alliance_url }}/#contact">Contact The C++ Alliance</a>.</p>
