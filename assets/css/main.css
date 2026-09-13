@@ -163,19 +163,17 @@ p {
 
 .brand {
   display: flex;
-  align-items: baseline;
-  gap: 0.5rem;
+  align-items: center;
+  gap: 0.75rem;
   margin-right: auto;
   color: var(--text);
   text-decoration: none;
 }
 
-.brand__mark {
-  align-self: center;
-  width: 0.6rem;
-  height: 0.6rem;
-  border-radius: 2px;
-  background: var(--accent);
+.brand__logo {
+  display: block;
+  height: 2.5rem;
+  width: auto;
 }
 
 .brand__name {
