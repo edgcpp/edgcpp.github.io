@@ -5,11 +5,14 @@ transition to open source under a fiscal sponsorship agreement with
 [The C++ Alliance](https://cppalliance.org). It is a Jekyll 4 project
 published as a fully static site through GitHub Pages.
 
-The site is a single page. Its content lives in `index.html`, built on a
-small Jekyll scaffold:
+The site has two pages: the main page in `index.html`, and John Spicer's
+announcement note with the transition FAQ in `announcement.html` (served at
+`/announcement/`). Both are built on a small Jekyll scaffold:
 
 - `_layouts/default.html` – page shell
 - `_includes/head.html`, `header.html`, `footer.html` – shared chrome
+- `_includes/banner.html` – announcement banner, shown on pages that set
+  `banner: true` in their front matter (currently only `index.html`)
 - `assets/css/main.css` – plain CSS, no Sass
 - `assets/img/logo.gif` – site logo, also used as the favicon
 

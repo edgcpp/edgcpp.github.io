@@ -3,6 +3,7 @@
 {% include head.html %}
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
+  {% if page.banner %}{% include banner.html %}{% endif %}
   {% include header.html %}
   <main id="main">
 {{ content }}
