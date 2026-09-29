@@ -143,6 +143,34 @@ p {
   top: 1rem;
 }
 
+/* Announcement banner */
+
+.site-banner {
+  padding: 0.65rem 0;
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.95rem;
+  text-align: center;
+}
+
+.site-banner p {
+  margin: 0;
+}
+
+.site-banner a {
+  font-weight: 500;
+  color: #fff;
+}
+
+.site-banner a:hover {
+  color: #fff;
+  text-decoration-thickness: 2px;
+}
+
+.site-banner a:focus-visible {
+  outline-color: #fff;
+}
+
 /* Header */
 
 .site-header {
@@ -315,6 +343,14 @@ p {
   flex-wrap: wrap;
   gap: 0.75rem;
   margin-bottom: 2.5rem;
+}
+
+.hero--compact {
+  padding: 4.5rem 0 3.5rem;
+}
+
+.hero--compact .hero__actions {
+  margin-bottom: 0;
 }
 
 /* Callouts */
@@ -602,6 +638,100 @@ p {
 @media (max-width: 700px) {
   .steps {
     grid-template-columns: 1fr;
+  }
+}
+
+/* Announcement letter */
+
+.letter {
+  max-width: 44rem;
+  font-size: 1.125rem;
+  line-height: 1.7;
+}
+
+.letter p {
+  margin-bottom: 1.25rem;
+}
+
+.letter__signoff {
+  margin-top: 2rem;
+}
+
+.letter__name {
+  font-weight: 700;
+}
+
+.letter__postscript {
+  margin-top: 2.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border);
+}
+
+.team {
+  display: grid;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.team li {
+  padding-left: 1rem;
+  border-left: 3px solid var(--accent-soft-border);
+}
+
+.team__note {
+  color: var(--muted);
+}
+
+/* FAQ */
+
+.faq {
+  display: grid;
+  gap: 1rem;
+  max-width: 52rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.faq li {
+  display: flex;
+  gap: 1.25rem;
+  padding: 1.5rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: #fff;
+}
+
+.faq__number {
+  flex: 0 0 2.25rem;
+  padding-top: 0.1rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--accent);
+}
+
+.faq h3 {
+  margin-bottom: 0.5rem;
+  font-size: 1.15rem;
+}
+
+.faq p {
+  margin: 0;
+  color: var(--muted);
+}
+
+@media (max-width: 520px) {
+  .faq li {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .faq__number {
+    flex-basis: auto;
+    font-size: 1.1rem;
   }
 }
 
