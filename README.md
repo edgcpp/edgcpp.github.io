@@ -6,8 +6,8 @@ transition to open source under a fiscal sponsorship agreement with
 published as a fully static site through GitHub Pages.
 
 The site has two pages: the main page in `index.html`, and John Spicer's
-announcement note with the transition FAQ in `announcement.html` (served at
-`/announcement/`). Both are built on a small Jekyll scaffold:
+announcement note with testimonials and the transition FAQ in
+`announcement.html` (served at `/announcement/`). Both are built on a small Jekyll scaffold:
 
 - `_layouts/default.html` – page shell
 - `_includes/head.html`, `header.html`, `footer.html` – shared chrome

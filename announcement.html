@@ -3,16 +3,18 @@ layout: default
 title: What's Next for EDG
 permalink: /announcement/
 description: >-
-  A note from John Spicer on EDG's C++ front end becoming open source, with
-  answers to frequently asked questions about the transition.
+  A note from John Spicer on EDG's C++ front end becoming open source,
+  testimonials from the C++ community, and answers to frequently asked
+  questions about the transition.
 ---
 <section class="hero hero--compact" aria-labelledby="hero-title">
   <div class="container">
     <p class="eyebrow eyebrow--on-dark">The EDG open source transition</p>
     <h1 id="hero-title">What’s next for EDG</h1>
-    <p class="lead">A note from John Spicer on EDG's move to open source, followed by answers to the questions EDG users are most likely to ask about the transition.</p>
+    <p class="lead">A note from John Spicer on EDG's move to open source, followed by testimonials from across the C++ community and answers to the questions EDG users are most likely to ask about the transition.</p>
     <div class="hero__actions">
       <a class="button button--primary" href="#note">Read the note</a>
+      <a class="button button--ghost" href="#testimonials">Read the testimonials</a>
       <a class="button button--ghost" href="#faq">Jump to the FAQ</a>
     </div>
   </div>
@@ -58,7 +60,64 @@ description: >-
   </div>
 </section>
 
-<section id="faq" class="section section--alt" aria-labelledby="faq-title">
+<section id="testimonials" class="section section--alt" aria-labelledby="testimonials-title">
+  <div class="container">
+    <p class="eyebrow">Testimonials</p>
+    <h2 id="testimonials-title">What people are saying</h2>
+    <p class="section__lead">Reflections on EDG and its move to open source from the C++ Alliance, the C++ standards community and EDG users.</p>
+
+    <div class="testimonials">
+      <figure class="testimonial">
+        <blockquote>
+          <p>Many C++ developers have never heard of EDG, but a lot of them have used it. It has been working quietly inside compilers and tools for decades, and it’s one of the most exacting C++ front ends there is. Now, anyone can read that code, learn from it and build on it. Our job at the C++ Alliance is to support the project, not run it. Opening EDG was President John Spicer’s decision, and he has taken real care to do it in a way that works for the people who depend on it.</p>
+        </blockquote>
+        <figcaption>
+          <span class="testimonial__name">Harry Bott</span>
+          <span class="testimonial__role">CEO of C++ Alliance</span>
+        </figcaption>
+      </figure>
+
+      <figure class="testimonial">
+        <blockquote>
+          <p>EDG has a very special place in my heart. It was the first compiler I ever tinkered with, and I was incredibly fortunate to be given the opportunity to work on it, alongside some of the great names in the C++ community. I have enormous respect for what EDG has built over nearly four decades.</p>
+          <p>I'm delighted to see the EDG C++ Front End begin a new chapter as an open-source project, and particularly excited to see the C++ Alliance investing in its future. One of the things I have come to greatly appreciate about the Alliance is its willingness to invest in talented people and ambitious projects that can make a real contribution to the future of C++. The EDG C++ Front End feels like a natural fit for that mission.</p>
+          <p>I'm very excited to see what the Alliance and the wider C++ community can build on the extraordinary foundation EDG has created.</p>
+        </blockquote>
+        <figcaption>
+          <span class="testimonial__name">Nina Ranns</span>
+          <span class="testimonial__role">ISO C++ committee vice convener, Standard C++ Foundation vice chair, EDG and GCC compiler engineer, C++ consultant at NMLB ltd.</span>
+        </figcaption>
+      </figure>
+
+      <figure class="testimonial">
+        <blockquote>
+          <p>I have known EDG since I became involved in C++ standardization around 1997. I have encountered its work from several vantage points: as a GCC developer who sought to bring EDG-level diagnostics to GCC, in academic research (including the early implementation of the IPR), and in industry as the architect of a product serving millions of C++ developers. I offer these thoughts in a personal capacity, drawing in part on my former work at Microsoft, not speaking for the company.</p>
+          <p>What has impressed me about EDG's front end is the quality of its engineering. It takes both the finer points of the C++ standard and the messy reality of compatibility with other compilers seriously. We sometimes joke that EDG is more compatible with other C++ front ends than those front ends are with themselves. Behind the joke is a serious achievement: engineers willing to wrestle with the hard cases, not just implement the easy ones.</p>
+          <p>I designed the IFC format and developed its specification as part of the implementation of C++20 Modules. I had the pleasure of working with EDG engineers on that effort. Their feedback was exacting, constructive, and grounded in the realities of implementing C++. Our conversations made the specification stronger. Just as memorable was the thoughtful, generous way they engaged with the work.</p>
+          <p>John Spicer's technical leadership and longstanding involvement in C++ standardization have meant a great deal to me personally. His feedback has contributed to my work on constexpr, modules, concepts, and to advocacy for safety in C++. He brings deep technical judgment to difficult questions and takes other people's ideas seriously. That combination is rare, and it has helped both the language and the people working to advance it.</p>
+          <p>I am delighted to see EDG become open source. It gives more of the C++ community a chance to learn from and to contribute to the work John and so many exceptional EDG engineers have built over the years. I look forward to what we can make possible together in this next chapter.</p>
+        </blockquote>
+        <figcaption>
+          <span class="testimonial__name">Gabriel Dos Reis</span>
+          <span class="testimonial__role">Technical Fellow at Susquehanna International Group</span>
+        </figcaption>
+      </figure>
+
+      <figure class="testimonial">
+        <blockquote>
+          <p>Veracode depends on the EDG compiler frontend for our Static Application Security Testing (SAST) of our customers’ C++ applications. We have found it to be of the highest quality and to live up to its reputation as an industry standard.</p>
+          <p>EDG’s broad range of support for the different C++ language versions and compatibility modes with different C++ compiler vendors is invaluable in enabling us to support parsing virtually any C/C++ code from our customer base. John Spicer is a pleasure to work with and always responsive, helpful, and supportive. We are very happy to know he will be continuing to steward the EDG technology.</p>
+        </blockquote>
+        <figcaption>
+          <span class="testimonial__name">Bruce Duncan</span>
+          <span class="testimonial__role">Director, Software Engineering at Veracode</span>
+        </figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section id="faq" class="section" aria-labelledby="faq-title">
   <div class="container">
     <p class="eyebrow">FAQ</p>
     <h2 id="faq-title">Frequently asked questions</h2>
