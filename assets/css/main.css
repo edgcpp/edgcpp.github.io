@@ -261,11 +261,32 @@ p {
   color: #fff;
 }
 
+.site-header__actions {
+  display: flex;
+  flex-shrink: 0;
+  gap: 0.5rem;
+}
+
+.button--docs,
 .button--github {
   padding: 0.55rem 1rem;
+  font-size: 0.95rem;
+}
+
+.button--docs {
+  border-color: var(--border);
+  background: var(--bg);
+  color: var(--text);
+}
+
+.button--docs:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.button--github {
   background: var(--dark);
   color: #fff;
-  font-size: 0.95rem;
 }
 
 .button--github:hover {
@@ -273,6 +294,7 @@ p {
   color: #fff;
 }
 
+.button--docs svg,
 .button--github svg {
   width: 1.1em;
   height: 1.1em;
@@ -879,16 +901,36 @@ p {
 
 /* Small screens */
 
-@media (max-width: 760px) {
+/* Below this width the nav no longer fits beside the brand and header buttons. */
+@media (max-width: 980px) {
   .site-nav {
     display: none;
   }
+}
 
+@media (max-width: 760px) {
   .section {
     padding: 3.5rem 0;
   }
 
   .hero {
     padding: 4rem 0 3.5rem;
+  }
+}
+
+/* Keep the logo and both header buttons on one line on phones. */
+@media (max-width: 480px) {
+  .site-header__inner {
+    gap: 1rem;
+  }
+
+  .brand__name {
+    display: none;
+  }
+}
+
+@media (max-width: 359px) {
+  .site-header__actions svg {
+    display: none;
   }
 }
