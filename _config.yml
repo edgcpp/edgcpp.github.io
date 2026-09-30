@@ -7,6 +7,7 @@ description: >-
 
 # Project links used throughout the site.
 github_url: https://github.com/edgcpp
+compiler_url: https://github.com/edgcpp/compiler
 repo_url: https://github.com/edgcpp/edgcpp.github.io
 alliance_url: https://cppalliance.org
 slack_url: https://cppalliance.org/slack/

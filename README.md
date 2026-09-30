@@ -16,8 +16,8 @@ announcement note with testimonials and the transition FAQ in
 - `assets/css/main.css` – plain CSS, no Sass
 - `assets/img/logo.gif` – site logo, also used as the favicon
 
-Site-wide links (the GitHub organization, this repository, and The C++
-Alliance) are set in `_config.yml`. The history section of the page is a
+Site-wide links (the GitHub organization, the compiler repository, this
+repository, and The C++ Alliance) are set in `_config.yml`. The history section of the page is a
 marked placeholder until that content is collected.
 
 The project was bootstrapped from
