@@ -24,3 +24,10 @@ exclude:
   - README.md
   - CLAUDE.md
   - AGENTS.md
+
+# Keep the Sphinx output directories that the compiler documentation build
+# copies into doc/ (Jekyll skips names that start with an underscore).
+include:
+  - _static
+  - _sources
+  - _images
