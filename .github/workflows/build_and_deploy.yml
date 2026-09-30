@@ -4,6 +4,9 @@ on:
   push:
     branches-ignore:
       - master
+  # edgcpp/compiler triggers this (on develop) when doc/ changes on its main
+  # branch, to republish https://edgcpp.org/dev/doc/.
+  workflow_dispatch:
 
 # Serialize runs (replaces the CircleCI eddiewebb/queue orb).
 concurrency:
@@ -13,6 +16,8 @@ concurrency:
 env:
   # Tag of edgcpp/compiler whose documentation is published at
   # https://edgcpp.org/doc/.  Bump this to publish a newer release's docs.
+  # The documentation for its main branch is published at
+  # https://edgcpp.org/dev/doc/.
   COMPILER_DOC_REF: '7.0'
 
 jobs:
@@ -22,18 +27,8 @@ jobs:
       - uses: actions/checkout@v5
       - name: Build compiler documentation
         run: |
-          # Fetch only doc/ at the tag; a full checkout of the tree is over 3 GB.
-          git -c advice.detachedHead=false clone --depth 1 \
-            --branch "$COMPILER_DOC_REF" --filter=blob:none --sparse \
-            https://github.com/edgcpp/compiler.git /tmp/compiler
-          git -C /tmp/compiler sparse-checkout set doc
-          docker run --rm \
-            -v /tmp/compiler:/work \
-            -w /work/doc \
-            edgcpp/sphinx-env:latest \
-            make dirhtml
-          mkdir -p doc
-          cp -a /tmp/compiler/doc/build/dirhtml/. doc/
+          .github/scripts/build-compiler-docs.sh "$COMPILER_DOC_REF" doc
+          .github/scripts/build-compiler-docs.sh main dev/doc
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: '4.0'
@@ -50,18 +45,8 @@ jobs:
       - uses: actions/checkout@v5
       - name: Build compiler documentation
         run: |
-          # Fetch only doc/ at the tag; a full checkout of the tree is over 3 GB.
-          git -c advice.detachedHead=false clone --depth 1 \
-            --branch "$COMPILER_DOC_REF" --filter=blob:none --sparse \
-            https://github.com/edgcpp/compiler.git /tmp/compiler
-          git -C /tmp/compiler sparse-checkout set doc
-          docker run --rm \
-            -v /tmp/compiler:/work \
-            -w /work/doc \
-            edgcpp/sphinx-env:latest \
-            make dirhtml
-          mkdir -p doc
-          cp -a /tmp/compiler/doc/build/dirhtml/. doc/
+          .github/scripts/build-compiler-docs.sh "$COMPILER_DOC_REF" doc
+          .github/scripts/build-compiler-docs.sh main dev/doc
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: '4.0'
@@ -78,8 +63,8 @@ jobs:
           mv _site/* .
           rm -r _site/
           # Serve master as-is.  Without this, GitHub Pages runs Jekyll over it
-          # again, which drops the documentation's doc/_static/ and
-          # doc/_sources/ directories.
+          # again, which drops the documentation's _static/ and _sources/
+          # directories.
           touch .nojekyll
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@edgcpp.org"
