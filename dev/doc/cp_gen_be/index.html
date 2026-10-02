@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="violet" data-content_root="../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>24. C++-Generating Back End - CPFE 7.0 documentation</title><link rel="index" title="Index" href="../genindex/" /><link rel="search" title="Search" href="../search/" /><link rel="next" title="25. Coding Style Guide" href="../code_style/" /><link rel="prev" title="23. C-Generating Back End" href="../c_gen_be/" />
+      <link rel="canonical" href="https://edgcpp.org/dev/doc/cp_gen_be/" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e1a1ceaf" />
+    <link rel="stylesheet" type="text/css" href="../_static/shibuya.css?v=2ceb65ce" />
+    <link media="print" rel="stylesheet" type="text/css" href="../_static/print.css?v=20ff2c19" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=8971ef7f" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://edgcpp.org/dev/doc/cp_gen_be/"/>
+  <meta property="og:title" content="24. C++-Generating Back End"/>
+    <meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="../">
+      <img class="light-logo" src="../_static/doc-logo-light.png" alt="CPFE" height="28" loading="lazy" />
+      <img class="dark-logo" src="../_static/doc-logo-dark.png" alt="CPFE" height="28" loading="lazy" />
+      <strong>CPFE</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="../search/" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials"></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2"></span>
+          <span class="hamburger_3"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../build/">1. Configuring and Building the C++ Front End</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ext_intf/">2. External Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../int_overview/">3. Overview of Internal Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../il/">4. Intermediate Language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lower_il/">5. IL Lowering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../symbol_tbl/">6. Symbol Table</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lex_pp/">7. Lexical Analysis and Preprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tables/">8. Table Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../expr/">9. Expression Scanning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../decls/">10. Declarations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../class_decl/">11. Class Declarations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../statements/">12. Statement Scanning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../templates/">13. Templates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../exceptions/">14. Exception Handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pragma/">15. Pragmas and Attributes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/">16. Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../trans_unit/">17. Multiple Translation Units</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../admin/">18. Administrative Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../err_msgs/">19. Error Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../includes/">20. ANSI C and C++ Include Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../runtime/">21. Runtime Library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../utilities/">22. Utility Programs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../c_gen_be/">23. C-Generating Back End</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">24. C++-Generating Back End</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../code_style/">25. Coding Style Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../testing/">26. EDG Testing Framework</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#source-sequence-lists">24.1. Source Sequence Lists</a></li>
+<li><a class="reference internal" href="#declarations">24.2. Declarations</a></li>
+<li><a class="reference internal" href="#executable-code">24.3. Executable Code</a></li>
+<li><a class="reference internal" href="#constants">24.4. Constants</a></li>
+<li><a class="reference internal" href="#templates-and-macros">24.5. Templates and Macros</a></li>
+<li><a class="reference internal" href="#source-output">24.6. Source Output</a></li>
+<li><a class="reference internal" href="#troublesome-cases">24.7. Troublesome Cases</a><ul>
+<li><a class="reference internal" href="#names">24.7.1. Names</a></li>
+<li><a class="reference internal" href="#references">24.7.2. References</a></li>
+<li><a class="reference internal" href="#prototype-scopes">24.7.3. Prototype Scopes</a></li>
+<li><a class="reference internal" href="#rewritten-property-references">24.7.4. Rewritten Property References</a></li>
+</ul>
+</li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../"><span itemprop="name">CPFE</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name"><span class="section-number">24. </span>C++-Generating Back End</strong>
+        <meta itemprop="position" content="2" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="relative min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+  <div class="copy-page-wrapper relative pb-4 lg:absolute lg:top-8 lg:right-6 xl:right-12">
+  <div id="copy-page-trigger">
+    <button
+      type="button"
+      class="js-copy px-3 py-1 inline-flex items-center gap-1"
+      data-url="https://edgcpp.org/dev/doc/_sources/cp_gen_be.rst.txt"
+    >
+      <i class="i-lucide" data-icon="copy"></i>
+      <span>Copy page</span>
+    </button>
+    <button class="js-menu px-2 py-1" type="button" aria-label="More actions"
+      aria-haspopup="menu" aria-expanded="false" aria-controls="copy-page-content">
+      <i class="i-lucide chevron-down"></i>
+    </button>
+  </div>
+  <div id="copy-page-content" role="menu" aria-orientation="vertical" aria-hidden="true">
+    <div role="presentation">
+      <div class="flex flex-col" role="group">
+        <button class="js-copy" type="button" role="menuitem"
+          data-url="https://edgcpp.org/dev/doc/_sources/cp_gen_be.rst.txt">
+          <span class="iconify-icon">
+            <i class="i-lucide" data-icon="copy"></i>
+          </span>
+          <span>Copy page</span>
+        </button>
+        <a role="menuitem" href="https://edgcpp.org/dev/doc/_sources/cp_gen_be.rst.txt" target="_blank" rel="nofollow"><iconify-icon icon="bi:code-slash"></iconify-icon>
+            <span>View Source</span></a><a role="menuitem" href="https://chatgpt.com/?hints=search&q=Read%20https%3A//edgcpp.org/dev/doc/_sources/cp_gen_be.rst.txt%20so%20I%20can%20ask%20questions%20about%20it." target="_blank" rel="nofollow">
+          <iconify-icon icon="bi:openai"></iconify-icon>
+          <span>Open in ChatGPT</span>
+        </a><a role="menuitem" href="https://claude.ai/new?q=Read%20https%3A//edgcpp.org/dev/doc/_sources/cp_gen_be.rst.txt%20so%20I%20can%20ask%20questions%20about%20it." target="_blank" rel="nofollow">
+          <iconify-icon icon="bi:claude"></iconify-icon>
+          <span>Open in Claude</span>
+        </a></div>
+    </div>
+  </div>
+</div><article class="yue" role="main">
+          <section id="c-generating-back-end">
+<h1><span class="section-number">24. </span>C++-Generating Back End<a class="headerlink" href="#c-generating-back-end" title="Link to this heading">#</a></h1>
+<p>The C++-generating back end is a “back end” that turns C or C++ intermediate
+language back into source text in C or C++.  It is designed for
+source-to-source-transformation applications, i.e., processors that read in
+source code, make some modifications to its meaning (e.g., adding profiling
+code), and then write it out as modified.</p>
+<p>The C++-generating back end handles C++, ANSI/ISO C, and K&amp;R C <a class="footnote-reference brackets" href="#f1" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.  The
+output is in the same language as the input, and means the same thing, but
+is not expected to be identical.  At the very least, comments are
+eliminated and preprocessing is done, which means <code class="docutils literal notranslate"><span class="pre">#include</span></code> files are
+merged in, macros are expanded, and <code class="docutils literal notranslate"><span class="pre">#if</span></code>s and the like are processed.
+The output <em>will</em> match the input exactly with regard to entity names and
+source line numbers (the latter by use of <code class="docutils literal notranslate"><span class="pre">#line</span></code> directives, if
+necessary), and in the order of declarations and statements in the source.
+In short, it should be possible to compile the output file with a C or C++
+compiler, execute it to get the same results as the original program, and
+debug it using the original source text.</p>
+<p>The source code for the C++-generating back end is in <code class="docutils literal notranslate"><span class="pre">cp_gen_be.c</span></code>;
+<code class="docutils literal notranslate"><span class="pre">cp_gen_be.h</span></code> contains the associated declarations.</p>
+<section id="source-sequence-lists">
+<h2><span class="section-number">24.1. </span>Source Sequence Lists<a class="headerlink" href="#source-sequence-lists" title="Link to this heading">#</a></h2>
+<p>The C++-generating back end requires the source sequence list, which is a
+construct that lists all declarations and statements of the source program in
+the order of their appearance.  It is optional, and must be enabled by the
+configuration flag <code class="docutils literal notranslate"><span class="pre">GENERATE_SOURCE_SEQUENCE_LISTS</span></code>.  The source sequence
+list stands alongside the “normal” tree-structured intermediate language, as a
+sort of table of contents for the IL tree.  That is, for a program fragment
+that declares variable <code class="docutils literal notranslate"><span class="pre">i</span></code>, function <code class="docutils literal notranslate"><span class="pre">f</span></code>, and variable <code class="docutils literal notranslate"><span class="pre">j</span></code>, the source
+sequence list would be a list of three entries, pointing to the IL entries for
+<code class="docutils literal notranslate"><span class="pre">i</span></code>, <code class="docutils literal notranslate"><span class="pre">f</span></code>, and <code class="docutils literal notranslate"><span class="pre">j</span></code>, and the tree-structured information under those
+entries would provide full information on the entities.</p>
+<p>The list is conceptually a single list that runs through the whole compilation
+unit, though in actuality it is implemented by a somewhat more complicated data
+structure that snakes between the file scope memory region and the function
+scope memory regions.  That is, however, merely the low-level representation
+dictated by the restrictions on pointers between memory regions, and is hidden
+by access functions, e.g., <code class="docutils literal notranslate"><span class="pre">adv_to_signif_source_sequence_entry</span></code>.</p>
+<p>Some entities in the source program may be declared or defined more than once.
+For example, a function can be declared and then later defined.  For such
+cases, one of the occurrences (the definition if there is one) is selected as
+the primary declaration, and the source sequence entry for that declaration
+points directly at the IL entry for the entity.  For all the other
+declarations, the source sequence entry on the list points to a source sequence
+secondary declaration entry, which points to the IL entry for the entity and
+also gives information about that particular declaration, e.g., the source
+position and the specific type used (which may differ from that of the
+definition by use of typedefs, array bounds, etc.).</p>
+<p>The C++-generating back end operates by traversing the list and generating code
+for each construct it encounters.  A program is considered to be made up of an
+alternation of declarative regions and executable regions.</p>
+<p>In declarative regions, the C++-generating back end steps through the
+entries on the source sequence list, each of which points to a declared
+entity, and generates declarations.  Source sequence entries for class,
+struct, union, and enum types that are declared as part of some other
+declaration (e.g., “<code class="docutils literal notranslate"><span class="pre">struct</span> <span class="pre">A</span> <span class="pre">{int</span> <span class="pre">i;}</span> <span class="pre">x;</span></code>”), called <em>non-</em>autonomous
+declarations, are skipped over without generating a declaration for the
+type, but the type is marked to be put out when encountered while putting
+out the type of the containing entity (e.g., “<code class="docutils literal notranslate"><span class="pre">x</span></code>” above).  All other
+declarative source sequence entries are processed immediately.</p>
+<p>In executable regions, the C++-generating back end steps through the source
+sequence entries (a flat list) and the IL statement entries (a tree) in tandem,
+and generates code for the statements.</p>
+</section>
+<section id="declarations">
+<h2><span class="section-number">24.2. </span>Declarations<a class="headerlink" href="#declarations" title="Link to this heading">#</a></h2>
+<p>The top-level routine for declaration processing is <code class="docutils literal notranslate"><span class="pre">gen_declaration</span></code>.  It
+calls routines like</p>
+<ul>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">gen_variable_decl</span></code>,</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">gen_routine_decl</span></code>,</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">gen_namespace</span></code>,</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">gen_type_decl</span></code>,</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">gen_template</span></code>,</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">gen_using_directive_or_declaration</span></code>, and</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">gen_instantiation_directive</span></code>.</div>
+</div>
+</li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">gen_type_decl</span></code> breaks the various type-declaration cases down as calls to</p>
+<ul>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">gen_class_definition</span></code>,</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">gen_enum_definition</span></code>, or</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">gen_typedef_decl</span></code>.</div>
+</div>
+</li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">gen_declaration_using_type</span></code> and <code class="docutils literal notranslate"><span class="pre">gen_type</span></code> output types in general, by
+calling routines in <code class="docutils literal notranslate"><span class="pre">il_to_str.c</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">gen_secondary_decl</span></code> handles secondary declaration source sequence entries.</p>
+<p><code class="docutils literal notranslate"><span class="pre">gen_initializer</span></code> handles initializers on variables.  It calls
+<code class="docutils literal notranslate"><span class="pre">gen_dynamic_init</span></code> to handle dynamic initialization.</p>
+<p><code class="docutils literal notranslate"><span class="pre">gen_class_definition</span></code> uses normal declaration routines like
+<code class="docutils literal notranslate"><span class="pre">gen_routine_decl</span></code> to put out code for the class members, and also the
+following, which handle special kinds of members:</p>
+<ul>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">gen_field_decl</span></code>,</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">gen_member_constant_decl</span></code>, and</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">gen_using_declaration.</span></code></div>
+</div>
+</li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">gen_type_decl</span></code>, <code class="docutils literal notranslate"><span class="pre">gen_variable_decl</span></code> and <code class="docutils literal notranslate"><span class="pre">gen_routine_decl</span></code> include
+special code to deal with declarations within class definitions.  In
+particular, they deal with friend declarations.</p>
+</section>
+<section id="executable-code">
+<h2><span class="section-number">24.3. </span>Executable Code<a class="headerlink" href="#executable-code" title="Link to this heading">#</a></h2>
+<p>The top-level routine for executable code processing is <code class="docutils literal notranslate"><span class="pre">gen_statement</span></code>.
+Most statements are straightforward, but the following routines handle the more
+complicated cases:</p>
+<ul>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">gen_block_statement</span></code>,</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">gen_try_block_statement</span></code>,</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">gen_switch_statement</span></code>, and</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">gen_for_statement</span></code>.</div>
+</div>
+</li>
+</ul>
+<p>Expressions are handled by <code class="docutils literal notranslate"><span class="pre">gen_expr</span></code>, with some more complicated cases
+handled by:</p>
+<ul>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">gen_new_delete</span></code> and</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">gen_temp_init</span></code></div>
+</div>
+</li>
+</ul>
+<p>The expression routines always add parentheses around expressions if there is
+any chance of precedence confusion.</p>
+</section>
+<section id="constants">
+<h2><span class="section-number">24.4. </span>Constants<a class="headerlink" href="#constants" title="Link to this heading">#</a></h2>
+<p>Constants are put out by <code class="docutils literal notranslate"><span class="pre">gen_constant</span></code>, which calls routines in
+<code class="docutils literal notranslate"><span class="pre">il_to_str.c</span></code> to do the actual output.</p>
+<p><code class="docutils literal notranslate"><span class="pre">gen_initializer_constant</span></code> handles initializer constants, which include
+aggregate constants, <code class="docutils literal notranslate"><span class="pre">ck_dynamic_init</span></code> constants, and cases where a reference
+is initialized from a constant, as well as the usual kinds of constants.</p>
+</section>
+<section id="templates-and-macros">
+<h2><span class="section-number">24.5. </span>Templates and Macros<a class="headerlink" href="#templates-and-macros" title="Link to this heading">#</a></h2>
+<p>Templates and macros are strange cases in the IL.  Both are macro-like, in
+that the source provides a prototype that is expanded by the front end on
+each use of the construct.  That means that template and macro references
+are largely invisible in the IL – one sees only the expanded form and
+little evidence that it came from a template or macro reference.</p>
+<p>It is nevertheless desirable to be able to put out the template and macro
+definitions in some way so that template instantiation and symbolic debugging
+can be done on the generated code.  To accommodate this need, the IL optionally
+contains entries for templates and macros.  These contain normalized textual
+representations of the template or macro (e.g., a string like “<code class="docutils literal notranslate"><span class="pre">#define</span> <span class="pre">x(a)</span>
+<span class="pre">a+1</span></code>”).  The C++-generating back just puts those out verbatim.  (The macro
+entries are all put out at the end of the output file, so they won’t affect the
+already-macro-expanded code that is put out, but they will still be available
+for symbolic debuggers.) Note that macro entries are also used for <code class="docutils literal notranslate"><span class="pre">#undef</span></code>
+directives.  See <code class="docutils literal notranslate"><span class="pre">gen_template</span></code> and <code class="docutils literal notranslate"><span class="pre">gen_macro</span></code>.</p>
+</section>
+<section id="source-output">
+<h2><span class="section-number">24.6. </span>Source Output<a class="headerlink" href="#source-output" title="Link to this heading">#</a></h2>
+<p>The effective position for source output is set by calling
+<code class="docutils literal notranslate"><span class="pre">set_output_position</span></code>.  That will result in generation of <code class="docutils literal notranslate"><span class="pre">#line</span></code>
+directives as necessary, but not until some text is actually output, at which
+point <code class="docutils literal notranslate"><span class="pre">adjust_output_position</span></code> is called.  Note that while line number
+correspondence is maintained in the output, there is no attempt to maintain
+column number correspondence, or even to do appropriate indentation.</p>
+<p>Actual text output is done through</p>
+<ul>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">write_ch</span></code>,</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">m_write_ch</span></code>,</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">write_space</span></code>,</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">m_write_space</span></code>,</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">write_tok_ch</span></code>,</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">m_write_tok_ch</span></code>,</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">write_tok_str</span></code>,</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">m_write_tok_str</span></code>,</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">write_unsigned_num</span></code>, and</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">write_num</span></code>,</div>
+</div>
+</li>
+</ul>
+<p>The names that begin with “<code class="docutils literal notranslate"><span class="pre">m_</span></code>” are macros and are intended for those cases
+where speed is important.  The others are functions.  The names that include
+“<code class="docutils literal notranslate"><span class="pre">_tok_</span></code>” are used to write complete tokens or sequences of tokens; the
+low-level routines are given permission to break long output lines before or
+after such text to avoid overly-long lines.</p>
+</section>
+<section id="troublesome-cases">
+<h2><span class="section-number">24.7. </span>Troublesome Cases<a class="headerlink" href="#troublesome-cases" title="Link to this heading">#</a></h2>
+<section id="names">
+<h3><span class="section-number">24.7.1. </span>Names<a class="headerlink" href="#names" title="Link to this heading">#</a></h3>
+<p>Names are, in general, put out exactly as they appear in the IL.  In some
+cases, unnamed entities are given generated names.  Members of classes are in
+general put out as qualified names (e.g., <code class="docutils literal notranslate"><span class="pre">A::x</span></code>), but sometimes special care
+is required:</p>
+<ul>
+<li><div class="line-block">
+<div class="line">The declaration of a member within its class must not use a qualified name.
+To handle this, a name context stack is maintained (see
+<code class="docutils literal notranslate"><span class="pre">push_name_context</span></code> and <code class="docutils literal notranslate"><span class="pre">pop_name_context</span></code>), tracking the current
+scope.  When immediately within a class definition, the class qualifier for
+that class is suppressed.  The same thing is done for namespaces.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">A call of a virtual function with a qualified name suppresses the
+virtual-ness of the function, so a qualified name must be used only if that
+behavior is desired.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">In references to nonstatic members of classes (data or function), the
+choice of name can have an effect on access control (e.g., for protected
+members) and can disambiguate an otherwise ambiguous member name.
+<code class="docutils literal notranslate"><span class="pre">gen_simple_field_selection</span></code> and <code class="docutils literal notranslate"><span class="pre">gen_bound_function</span></code> handle such
+references for data and function cases, and call
+<code class="docutils literal notranslate"><span class="pre">optimized_expr_for_selection</span></code> to determine the class to be used in
+naming the member (that’s done by examining any implicit casts used in the
+member selection).</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">Sometimes, a prefix “<code class="docutils literal notranslate"><span class="pre">::</span></code>” or an elaborated type specifier (e.g., <code class="docutils literal notranslate"><span class="pre">class</span>
+<span class="pre">X</span></code>) must be used to distinguish one name from another.  One would think
+that always generating those would be the appropriate (and easy) thing to
+do.  It turns out, however, that various compilers have bugs in that area,
+and won’t accept some valid code generated in that mechanical way.  As a
+consequence, the C++-generating back end uses the hidden-name information
+developed by the front end to generate prefix “<code class="docutils literal notranslate"><span class="pre">::</span></code>”, qualified names in
+general, and elaborated type specifiers only when they are required.  See
+<code class="docutils literal notranslate"><span class="pre">alloc_hidden_name_fixup</span></code> et al.  This processing has an additional
+benefit: it handles external variables and functions that are declared
+<code class="docutils literal notranslate"><span class="pre">extern</span></code> within a function.  References to such entities must not use a
+“<code class="docutils literal notranslate"><span class="pre">::</span></code>” prefix, because although the entity named is external, and thus in
+some sense in the global scope, the name used for it is declared local to
+the function.</div>
+</div>
+</li>
+</ul>
+<p>See</p>
+<ul>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">gen_name</span></code>,</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">gen_unqualified_name</span></code>,</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">gen_decl_name</span></code>,</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">gen_class_qualifier</span></code>, and</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">gen_namespace_qualifier</span></code>.</div>
+</div>
+</li>
+</ul>
+</section>
+<section id="references">
+<h3><span class="section-number">24.7.2. </span>References<a class="headerlink" href="#references" title="Link to this heading">#</a></h3>
+<p>Reference types, or rather uses of entities with such types, require some
+special attention.  In expressions, <code class="docutils literal notranslate"><span class="pre">eok_reference_to</span></code> and
+<code class="docutils literal notranslate"><span class="pre">eok_ref_indirect</span></code> occur in order to make explicit the indirection implicit
+in the uses of the reference types; these operators are simply ignored when
+generating the expressions.</p>
+<p>More subtle is the fact that certain kinds of constants implicitly contain an
+“address-of” operation.  The ordinary processing of these by <code class="docutils literal notranslate"><span class="pre">form_constant</span></code>
+adds an <code class="docutils literal notranslate"><span class="pre">&amp;</span></code> to the output before writing the constant’s value; this <code class="docutils literal notranslate"><span class="pre">&amp;</span></code>
+must be suppressed when the constant has a reference type (or, more generally,
+is used in an lvalue context).  This special processing is provided by
+<code class="docutils literal notranslate"><span class="pre">handle_lvalue_constant_node</span></code>.</p>
+</section>
+<section id="prototype-scopes">
+<h3><span class="section-number">24.7.3. </span>Prototype Scopes<a class="headerlink" href="#prototype-scopes" title="Link to this heading">#</a></h3>
+<p>Prototype scopes (scopes associated with a prototyped function declarator, in
+C) cause a particular set of headaches, because while such types cannot be
+named outside of the prototype scope, they do nevertheless show up in the types
+of objects outside those scopes.  For example:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kt">void</span><span class="w"> </span><span class="n">f</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">A</span><span class="w"> </span><span class="p">{</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="p">;}</span><span class="w"> </span><span class="o">*</span><span class="n">p</span><span class="p">);</span>
+</span><span data-line="2"><span class="kt">void</span><span class="w"> </span><span class="nf">g</span><span class="p">(</span><span class="k">enum</span><span class="w"> </span><span class="nc">E</span><span class="w"> </span><span class="p">{</span><span class="n">e1</span><span class="p">});</span>
+</span><span data-line="3"><span class="n">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span data-line="4"><span class="w">  </span><span class="n">f</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span><span class="w">   </span><span class="cm">/* Really f((struct A *)0) */</span>
+</span><span data-line="5"><span class="w">  </span><span class="n">g</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span><span class="w">   </span><span class="cm">/* Really g((enum E)1) */</span>
+</span><span data-line="6"><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+</span><span data-line="7"><span class="p">}</span>
+</span></pre></div>
+</div>
+<p>The C++-generating back end deals with these by noting such cases and
+suppressing the explicit casts in those cases.  The conversion is then once
+again implicit in the output program.</p>
+<p>See <code class="docutils literal notranslate"><span class="pre">is_implicitly_cast_integral_constant</span></code>.</p>
+</section>
+<section id="rewritten-property-references">
+<h3><span class="section-number">24.7.4. </span>Rewritten Property References<a class="headerlink" href="#rewritten-property-references" title="Link to this heading">#</a></h3>
+<p>References to Microsoft properties are rewritten by the front end.  Something
+like “<code class="docutils literal notranslate"><span class="pre">p+1</span></code>”, referring to a property <code class="docutils literal notranslate"><span class="pre">p</span></code>, might have been rewritten as
+“call the get accessor function for <code class="docutils literal notranslate"><span class="pre">p</span></code>, add <code class="docutils literal notranslate"><span class="pre">1</span></code>to it, and store the
+resulting value by calling the set accessor for <code class="docutils literal notranslate"><span class="pre">p</span></code>.” The C++-generating back
+end recovers the original source form.  This is based on a field in expression
+nodes called <code class="docutils literal notranslate"><span class="pre">rewritten_property_reference_kind</span></code>, which is set by the front
+end to special values to identify certain key nodes in the expansion.  See
+<code class="docutils literal notranslate"><span class="pre">gen_prop_event_or_op_synth_call</span></code>.  Event references are similarly
+reconstituted.</p>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="f1" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<p>It cannot be used, however, to generate C from the output of IL
+lowering.</p>
+</aside>
+</aside>
+</section>
+</section>
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"><div class="navigation-prev">
+    <a href="../c_gen_be/">
+      <i class="i-lucide chevron-left"></i>
+      <div class="page-info">
+        <span>Previous</span><div class="title"><span class="section-number">23. </span>C-Generating Back End</div></div>
+    </a>
+  </div><div class="navigation-next">
+    <a href="../code_style/">
+      <div class="page-info">
+        <span>Next</span>
+        <div class="title"><span class="section-number">25. </span>Coding Style Guide</div>
+      </div>
+      <i class="i-lucide chevron-right"></i>
+    </a>
+  </div></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>EDG 7.0, 7/20/26 - ©2026, Edison Design Group, Inc.</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials"></div>
+    </div>
+  </div>
+</footer>
+      <script src="../_static/documentation_options.js?v=618d875b"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/shibuya.js?v=50760d75"></script></body>
+</html>

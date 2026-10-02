@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="violet" data-content_root="../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>26. EDG Testing Framework - CPFE 7.0 documentation</title><link rel="index" title="Index" href="../genindex/" /><link rel="search" title="Search" href="../search/" /><link rel="prev" title="25. Coding Style Guide" href="../code_style/" />
+      <link rel="canonical" href="https://edgcpp.org/dev/doc/testing/" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e1a1ceaf" />
+    <link rel="stylesheet" type="text/css" href="../_static/shibuya.css?v=2ceb65ce" />
+    <link media="print" rel="stylesheet" type="text/css" href="../_static/print.css?v=20ff2c19" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=8971ef7f" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://edgcpp.org/dev/doc/testing/"/>
+  <meta property="og:title" content="26. EDG Testing Framework"/>
+    <meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="../">
+      <img class="light-logo" src="../_static/doc-logo-light.png" alt="CPFE" height="28" loading="lazy" />
+      <img class="dark-logo" src="../_static/doc-logo-dark.png" alt="CPFE" height="28" loading="lazy" />
+      <strong>CPFE</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="../search/" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials"></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2"></span>
+          <span class="hamburger_3"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../build/">1. Configuring and Building the C++ Front End</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ext_intf/">2. External Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../int_overview/">3. Overview of Internal Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../il/">4. Intermediate Language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lower_il/">5. IL Lowering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../symbol_tbl/">6. Symbol Table</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lex_pp/">7. Lexical Analysis and Preprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tables/">8. Table Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../expr/">9. Expression Scanning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../decls/">10. Declarations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../class_decl/">11. Class Declarations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../statements/">12. Statement Scanning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../templates/">13. Templates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../exceptions/">14. Exception Handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pragma/">15. Pragmas and Attributes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/">16. Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../trans_unit/">17. Multiple Translation Units</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../admin/">18. Administrative Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../err_msgs/">19. Error Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../includes/">20. ANSI C and C++ Include Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../runtime/">21. Runtime Library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../utilities/">22. Utility Programs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../c_gen_be/">23. C-Generating Back End</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cp_gen_be/">24. C++-Generating Back End</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../code_style/">25. Coding Style Guide</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">26. EDG Testing Framework</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#writing-a-test-file">26.1. Writing a Test File</a><ul>
+<li><a class="reference internal" href="#single-file-testing">26.1.1. Single-file Testing</a></li>
+<li><a class="reference internal" href="#multi-file-testing">26.1.2. Multi-file Testing</a></li>
+<li><a class="reference internal" href="#advanced-concepts">26.1.3. Advanced Concepts</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#testing-tools">26.2. Testing Tools</a><ul>
+<li><a class="reference internal" href="#edgy">26.2.1. <code class="docutils literal notranslate"><span class="pre">edgy</span></code></a><ul>
+<li><a class="reference internal" href="#setup-requirements">26.2.1.1. Setup Requirements</a></li>
+<li><a class="reference internal" href="#filtering">26.2.1.2. Filtering</a><ul>
+<li><a class="reference internal" href="#filter-reduction">26.2.1.2.1. Filter Reduction</a></li>
+<li><a class="reference internal" href="#special-filters">26.2.1.2.2. Special Filters</a></li>
+<li><a class="reference internal" href="#negative-filters">26.2.1.2.3. Negative Filters</a></li>
+<li><a class="reference internal" href="#file-loaded-filters">26.2.1.2.4. File-Loaded Filters</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#live-feedback">26.2.1.3. Live Feedback</a><ul>
+<li><a class="reference internal" href="#test-run-status">26.2.1.3.1. Test Run Status</a></li>
+<li><a class="reference internal" href="#problem-reporting">26.2.1.3.2. Problem Reporting</a></li>
+<li><a class="reference internal" href="#test-termination">26.2.1.3.3. Test Termination</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#failure-debug-mode">26.2.1.4. Failure Debug Mode</a></li>
+<li><a class="reference internal" href="#regress-mode">26.2.1.5. Regress Mode</a></li>
+<li><a class="reference internal" href="#failure-limiting">26.2.1.6. Failure Limiting</a></li>
+<li><a class="reference internal" href="#re-record-mode">26.2.1.7. Re-record Mode</a></li>
+<li><a class="reference internal" href="#no-expectations-mode">26.2.1.8. No Expectations Mode</a></li>
+<li><a class="reference internal" href="#no-flakey-tests-mode">26.2.1.9. No Flakey Tests Mode</a></li>
+<li><a class="reference internal" href="#replay-mode">26.2.1.10. Replay mode</a><ul>
+<li><a class="reference internal" href="#replaying-failed-test">26.2.1.10.1. Replaying Failed Test</a></li>
+<li><a class="reference internal" href="#replaying-subset-of-failed-test">26.2.1.10.2. Replaying Subset of Failed Test</a></li>
+<li><a class="reference internal" href="#replaying-mismatched">26.2.1.10.3. Replaying Mismatched</a></li>
+<li><a class="reference internal" href="#replaying-regressions">26.2.1.10.4. Replaying Regressions</a></li>
+<li><a class="reference internal" href="#replaying-unexpected">26.2.1.10.5. Replaying Unexpected</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#slow-test-reporting">26.2.1.11. Slow Test Reporting</a></li>
+<li><a class="reference internal" href="#verbose-mode">26.2.1.12. Verbose Mode</a></li>
+<li><a class="reference internal" href="#copying-tested-binaries">26.2.1.13. Copying Tested Binaries</a></li>
+<li><a class="reference internal" href="#test-run-cleanup">26.2.1.14. Test Run Cleanup</a></li>
+<li><a class="reference internal" href="#multi-configuration-support">26.2.1.15. Multi-Configuration Support</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#edg-run-test">26.2.2. edg-run-test</a></li>
+</ul>
+</li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../"><span itemprop="name">CPFE</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name"><span class="section-number">26. </span>EDG Testing Framework</strong>
+        <meta itemprop="position" content="2" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="relative min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+  <div class="copy-page-wrapper relative pb-4 lg:absolute lg:top-8 lg:right-6 xl:right-12">
+  <div id="copy-page-trigger">
+    <button
+      type="button"
+      class="js-copy px-3 py-1 inline-flex items-center gap-1"
+      data-url="https://edgcpp.org/dev/doc/_sources/testing.rst.txt"
+    >
+      <i class="i-lucide" data-icon="copy"></i>
+      <span>Copy page</span>
+    </button>
+    <button class="js-menu px-2 py-1" type="button" aria-label="More actions"
+      aria-haspopup="menu" aria-expanded="false" aria-controls="copy-page-content">
+      <i class="i-lucide chevron-down"></i>
+    </button>
+  </div>
+  <div id="copy-page-content" role="menu" aria-orientation="vertical" aria-hidden="true">
+    <div role="presentation">
+      <div class="flex flex-col" role="group">
+        <button class="js-copy" type="button" role="menuitem"
+          data-url="https://edgcpp.org/dev/doc/_sources/testing.rst.txt">
+          <span class="iconify-icon">
+            <i class="i-lucide" data-icon="copy"></i>
+          </span>
+          <span>Copy page</span>
+        </button>
+        <a role="menuitem" href="https://edgcpp.org/dev/doc/_sources/testing.rst.txt" target="_blank" rel="nofollow"><iconify-icon icon="bi:code-slash"></iconify-icon>
+            <span>View Source</span></a><a role="menuitem" href="https://chatgpt.com/?hints=search&q=Read%20https%3A//edgcpp.org/dev/doc/_sources/testing.rst.txt%20so%20I%20can%20ask%20questions%20about%20it." target="_blank" rel="nofollow">
+          <iconify-icon icon="bi:openai"></iconify-icon>
+          <span>Open in ChatGPT</span>
+        </a><a role="menuitem" href="https://claude.ai/new?q=Read%20https%3A//edgcpp.org/dev/doc/_sources/testing.rst.txt%20so%20I%20can%20ask%20questions%20about%20it." target="_blank" rel="nofollow">
+          <iconify-icon icon="bi:claude"></iconify-icon>
+          <span>Open in Claude</span>
+        </a></div>
+    </div>
+  </div>
+</div><article class="yue" role="main">
+          <section id="edg-testing-framework">
+<h1><span class="section-number">26. </span>EDG Testing Framework<a class="headerlink" href="#edg-testing-framework" title="Link to this heading">#</a></h1>
+<p>The EDG front end testing framework is fundamentally based on process exit
+codes and recorded “expected output.”</p>
+<section id="writing-a-test-file">
+<h2><span class="section-number">26.1. </span>Writing a Test File<a class="headerlink" href="#writing-a-test-file" title="Link to this heading">#</a></h2>
+<p>Test files are written using a series of directives at the start of the test
+file.</p>
+<p>The following is a sample single-file test (the common case) to help illustrate
+some of the features described below:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1">//remark:Simple friend functions in class template</span>
+</span><span data-line="2"><span class="c1">//options::;cn</span>
+</span><span data-line="3"><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">A</span><span class="w"> </span><span class="p">{</span>
+</span><span data-line="4"><span class="w">  </span><span class="k">friend</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="n">A</span><span class="p">);</span>
+</span><span data-line="5"><span class="w">  </span><span class="kt">int</span><span class="w">     </span><span class="n">i</span><span class="p">;</span>
+</span><span data-line="6"><span class="p">};</span>
+</span><span data-line="7">
+</span><span data-line="8"><span class="n">A</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w">  </span><span class="n">a</span><span class="p">;</span>
+</span><span data-line="9">
+</span><span data-line="10"><span class="kt">int</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="n">A</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">a</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span data-line="11"><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">i</span><span class="p">;</span><span class="w">     </span><span class="c1">// Should be OK</span>
+</span><span data-line="12"><span class="p">}</span>
+</span><span data-line="13">
+</span><span data-line="14"><span class="cp">#if TEST_NUMBER==2</span>
+</span><span data-line="15"><span class="kt">int</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="n">A</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span data-line="16"><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">i</span><span class="p">;</span><span class="w">     </span><span class="c1">// No access -- should fail</span>
+</span><span data-line="17"><span class="p">}</span>
+</span><span data-line="18"><span class="cp">#endif</span>
+</span></pre></div>
+</div>
+<section id="single-file-testing">
+<h3><span class="section-number">26.1.1. </span>Single-file Testing<a class="headerlink" href="#single-file-testing" title="Link to this heading">#</a></h3>
+<p>Individual test files end in either <code class="docutils literal notranslate"><span class="pre">.sft.c</span></code> or <code class="docutils literal notranslate"><span class="pre">.sft.cpp</span></code> depending on
+the programming language being tested.  The testing directives that can be
+used in a single-file test are enumerated below.  Additional directives
+have meaning in multi-file tests and are described in <a class="reference internal" href="#mtu-testing"><span class="std std-ref">Multi-file Testing</span></a>.</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">//remark:</span></code><em>A string that gets printed on the output</em></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">//type:</span></code><em>xx</em></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">//name:</span></code><em>xxx</em></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">//options:-a:-b=xx:-c=</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">//options_all:-A</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">//options_sep:</span></code><em>x</em></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">//match_regex:</span></code><em>regular expression</em></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">//cases:</span></code><em>n</em></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">//eccp_command:</span></code><em>compile-command</em></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">//ulimit:</span></code><em>options</em></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">//linker_options:</span></code><em>options</em></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">//execution_args:</span></code><em>command line arguments</em></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">//use_system_includes:</span></code><em>true/false</em></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">//edg_header_pack:</span></code><em>string</em></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">//require:</span></code><em>string</em></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">//filter:</span></code><em>pipe-command</em></div>
+</div>
+</div></blockquote>
+<p><em>xx</em> is a type identifier.  The accepted values are:</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Identifier</p></th>
+<th class="head"><p>Meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">fn</span></code></p></td>
+<td><p>front end only negative</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">fp</span></code></p></td>
+<td><p>front end only positive</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">fc</span></code></p></td>
+<td><p>front end - expect catastrophic error</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">cn</span></code></p></td>
+<td><p>compile negative</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">cp</span></code></p></td>
+<td><p>compile positive (including compiling generated C) - DEFAULT</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">cc</span></code></p></td>
+<td><p>compile - expect catastrophic error</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ln</span></code></p></td>
+<td><p>compile and link negative</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">lp</span></code></p></td>
+<td><p>compile and link positive</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rn</span></code></p></td>
+<td><p>runtime negative</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">rp</span></code></p></td>
+<td><p>runtime positive</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ra</span></code></p></td>
+<td><p>runtime - expect abort</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">cppbe</span></code></p></td>
+<td><p>a special C++-generating back end only mode that dumps the
+generated code for review and validation</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">s</span></code></p></td>
+<td><p>skip the test</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Positive tests expect a return code of zero.  Negative tests expect a
+non-zero return code.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">//name:</span></code> directive specifies the name to be used when the file is
+compiled.  This is useful for tests that need to test platform support for
+Unicode file names and similar file name-dependent scenarios.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">//options:</span></code> directive specifies a set of command line options to be
+used, separated (by default) by colons.  The compiler will be invoked once
+for each set of options. An option set can override the type specified by
+appending the optional string <code class="docutils literal notranslate"><span class="pre">;</span></code><em>xx</em> on the end of an option
+specification.</p>
+<p>If the options need to include a colon, the <code class="docutils literal notranslate"><span class="pre">//options_sep:</span></code> directive
+can be used to specify a different separator.  For example,
+<code class="docutils literal notranslate"><span class="pre">//options_sep:!</span></code> will change the separator to <code class="docutils literal notranslate"><span class="pre">!</span></code>.  The separator can
+be multiple characters.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">//options_all:</span></code> directive specifies a set of command line options
+that will be provided on every compilation.  This is useful for tests with
+a single case and for options that don’t vary from case to case.  This may
+be used in conjunction with the <code class="docutils literal notranslate"><span class="pre">//options:</span></code> directive.  The options from
+each option set are put in the command line after the <code class="docutils literal notranslate"><span class="pre">//options_all:</span></code>
+string so that they can override values in the <code class="docutils literal notranslate"><span class="pre">//options_all:</span></code> string.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">//match_regex:</span></code> directive allows specification of a regular
+expression (expressed in the Python regex dialect) that must be found in
+the output for the test to pass.  Matches will additionally add sections to
+the captured output highlighting the matching lines (thus serving as a
+further sanity check against unintended changes).  This directive is
+particularly useful if wanting to require fine grained details like
+specific diagnostics, IL output fragments, or generated C++ code (when
+using a <code class="docutils literal notranslate"><span class="pre">cppbe</span></code> test).</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">//linker_options:</span></code> directive specifies an additional set of options
+that are placed at the end of the command used to compile and link the
+program and is intended to be used for library names.</p>
+<p>The string specified in the <code class="docutils literal notranslate"><span class="pre">//remark:</span></code> directive is printed in the test
+results output to help identify what a test is doing.</p>
+<p>As shown in the initial testing example, it is often useful to be able to have
+code conditionally compiled for each of the different compilations specified by
+the options string.  The test driver defines a preprocessor variable named
+<code class="docutils literal notranslate"><span class="pre">TEST_NUMBER</span></code>.  This variable has the value “1” for the first set of options,
+“2” for the second, and so on.</p>
+<p>If you have a number of test cases that don’t require different command
+line options and that have the same result type you can use the
+<code class="docutils literal notranslate"><span class="pre">//cases:</span></code><em>n</em> directive to specify that the compiler should by invoked
+<em>n</em> times, with <code class="docutils literal notranslate"><span class="pre">TEST_NUMBER</span></code> set to the current invocation number.</p>
+<p><code class="docutils literal notranslate"><span class="pre">//options:</span></code> and <code class="docutils literal notranslate"><span class="pre">//cases:</span></code> can be used together.  For example, you may
+have five test cases but only need to specify options for the first two.</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1">//options:-A;cn:-O;cn</span>
+</span><span data-line="2"><span class="c1">//cases:5</span>
+</span></pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">//ulimit:</span></code> directive specifies command-line options passed to a
+<code class="docutils literal notranslate"><span class="pre">ulimit</span></code> command prior to compiling, linking, and running the test.  This
+can be used to prevent a test from exhausting system resources or running
+in a non-terminating loop.</p>
+<p>Special characters can be incorporated into the test case by using special
+escape sequences.  The escapes are of the form <code class="docutils literal notranslate"><span class="pre">???</span></code><em>nnn</em> where <em>n</em> is
+a decimal digit.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">//require:</span></code> is specified, the string that follows is searched for in the
+output of <code class="docutils literal notranslate"><span class="pre">--dump_configuration</span></code>; if not found, the test is skipped.  If
+multiple <code class="docutils literal notranslate"><span class="pre">//require:</span></code> cases are specified, all strings must be found or the
+test will be skipped.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">//use_system_includes:</span></code> is set to <code class="docutils literal notranslate"><span class="pre">true</span></code>, the system headers
+associated with the current EDG base will be added to the default include
+paths.  Additionally, EDG compiler emulation modes will be enabled as
+appropriate.  For instance, if the test is run using a GCC 15.1 base this will
+add the include paths for system headers associated with GCC 15.1 and
+<code class="docutils literal notranslate"><span class="pre">--gnu_version</span> <span class="pre">150100</span></code> to the command line.  Otherwise, if this directive is
+set to <code class="docutils literal notranslate"><span class="pre">false</span></code>, EDG headers in <code class="docutils literal notranslate"><span class="pre">include_c99</span></code> (for C programs) and
+<code class="docutils literal notranslate"><span class="pre">include_c++</span></code> (for C++ programs) will be added to the default include paths.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">//edg_header_pack:</span></code> directive specifies an “EDG header pack” to include
+as system headers for testing.  Header packs are include directories that are
+themselves subdirectories of <code class="docutils literal notranslate"><span class="pre">$TEST_ROOT/.includes/</span></code>.  For instance,
+<code class="docutils literal notranslate"><span class="pre">//edg_header_pack:</span> <span class="pre">foo</span></code> will result in a hidden
+<code class="docutils literal notranslate"><span class="pre">--sys_include</span> <span class="pre">$TEST_ROOT/.includes/foo</span></code> command line argument.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">//filter:</span></code> is specified, the specified command will be used to filter
+the <code class="docutils literal notranslate"><span class="pre">run_test</span></code> output before <code class="docutils literal notranslate"><span class="pre">diff</span></code>-ing it.  By default, a test driver
+uses in-process test normalization logic as a filter.</p>
+</section>
+<section id="multi-file-testing">
+<span id="mtu-testing"></span><h3><span class="section-number">26.1.2. </span>Multi-file Testing<a class="headerlink" href="#multi-file-testing" title="Link to this heading">#</a></h3>
+<p>Multi-file tests work similarly to single-file tests; however, they end
+with either <code class="docutils literal notranslate"><span class="pre">.mft.c</span></code> or <code class="docutils literal notranslate"><span class="pre">.mft.cpp</span></code>.  Additionally, for correct
+operation, these tests live in their own test directory, typically
+following the convention of <code class="docutils literal notranslate"><span class="pre">test-name/test.mft.cpp</span></code>. This allows the
+test to live alongside its supporting files.</p>
+<p>For instance, testing a simple C++ <code class="docutils literal notranslate"><span class="pre">#include</span></code> might using the following
+structure:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span><span data-line="1">simple-include/
+</span><span data-line="2">  test.h
+</span><span data-line="3">  test.mft.cpp
+</span></pre></div>
+</div>
+<p>Similarly, for testing an import of a module, the test might use the
+following structure:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span><span data-line="1">modules-function/
+</span><span data-line="2">  exporting-module.ixx
+</span><span data-line="3">  test.mft.cpp
+</span></pre></div>
+</div>
+<p>where <code class="docutils literal notranslate"><span class="pre">test.mft.cpp</span></code> contains the testing directives (described below) that
+compile <code class="docutils literal notranslate"><span class="pre">exporting-module.ixx</span></code>.</p>
+<p>As previously noted, there are additional directives which are useful for
+multi-file testing:</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">//header_unit_files:t.h</span> <span class="pre">t2.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">//module_files:i-part.ixx</span> <span class="pre">internal:i-internal.cpp</span> <span class="pre">i.ixx</span> <span class="pre">obj:msvc-module.ixx</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">//script:</span></code><em>script_file</em></div>
+</div>
+</div></blockquote>
+<p>The <code class="docutils literal notranslate"><span class="pre">//header_unit_files:</span></code> directive specifies any header files that should
+be compiled via <code class="docutils literal notranslate"><span class="pre">--create_header_unit</span></code> and passed to the test invocation via
+a <code class="docutils literal notranslate"><span class="pre">--header_unit</span></code> mapping.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">//module_files:</span></code> directive specifies any module files to be compiled for
+the test.</p>
+<p>In most cases these files should be listed without a prefix; such files are
+presumed to be module interface source files and will be compiled with the
+<code class="docutils literal notranslate"><span class="pre">--module_interface</span></code> flag to generate both an IFC and a <code class="docutils literal notranslate"><span class="pre">.obj</span></code> file for
+the module source file.</p>
+<p>If given the <code class="docutils literal notranslate"><span class="pre">obj:</span></code> prefix it’s assumed the IFC file is already present and
+only the <code class="docutils literal notranslate"><span class="pre">.obj</span></code> file should be compiled.</p>
+<p>If given the <code class="docutils literal notranslate"><span class="pre">internal:</span></code> prefix this is a module implementation unit that an
+IFC file should be force-generated for (this is unusual).  These module
+source files are compiled under the <code class="docutils literal notranslate"><span class="pre">--module_internal_partition</span></code> flag to
+generate both an IFC and a <code class="docutils literal notranslate"><span class="pre">.obj</span></code> file.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">//script:</span></code> is specified, that script is executed instead of any other
+commands.  In general, the test type does not matter for script files except
+for checking the return code.  For example, a <code class="docutils literal notranslate"><span class="pre">cp</span></code> test will expect a zero
+return code, while a <code class="docutils literal notranslate"><span class="pre">cn</span></code> will expect a non-zero.  The script will be passed
+command-line arguments in the same way that the compile command would.</p>
+</section>
+<section id="advanced-concepts">
+<h3><span class="section-number">26.1.3. </span>Advanced Concepts<a class="headerlink" href="#advanced-concepts" title="Link to this heading">#</a></h3>
+<p>The directives are processed in the following sequence:</p>
+<ul class="simple">
+<li><p>those specified in <code class="docutils literal notranslate"><span class="pre">$TEST_ROOT/.run_test_flags</span></code></p></li>
+<li><p>(for multi-file tests) the <code class="docutils literal notranslate"><span class="pre">flags.txt</span></code> file in the directory of the test</p></li>
+<li><p>those specified at the start of the test file</p></li>
+</ul>
+<p>In some cases later directives overwrite earlier ones (e.g., <code class="docutils literal notranslate"><span class="pre">//type:</span></code>).
+In other cases, a list of the specified values is accumulated (in the order in
+which the various lists are specified above).  The directives for which the
+values are accumulated are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">options</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">options_all</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">match_regex</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">linker_options</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">execution_args</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">require</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">header_unit_files</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">module_files</span></code></p></li>
+</ul>
+<p>Compile tests are processed through <code class="docutils literal notranslate"><span class="pre">eccp</span> <span class="pre">-c</span></code>.  Runtime tests are
+compiled and linked using <code class="docutils literal notranslate"><span class="pre">eccp</span></code>.  Compile and link tests are also
+compiled and linked using <code class="docutils literal notranslate"><span class="pre">eccp</span></code>, however a <code class="docutils literal notranslate"><span class="pre">ln</span></code> test is expected to
+return a non-zero status from <code class="docutils literal notranslate"><span class="pre">eccp</span></code> where a <code class="docutils literal notranslate"><span class="pre">rn</span></code> test is expected to
+return a zero status from <code class="docutils literal notranslate"><span class="pre">eccp</span></code> and a nonzero status when the program is
+executed.  If the <code class="docutils literal notranslate"><span class="pre">//eccp_command:</span></code> directive is used, the command
+specified is used instead of the <code class="docutils literal notranslate"><span class="pre">eccp</span></code> command.</p>
+</section>
+</section>
+<section id="testing-tools">
+<h2><span class="section-number">26.2. </span>Testing Tools<a class="headerlink" href="#testing-tools" title="Link to this heading">#</a></h2>
+<p>There are two primary tools for testing, <code class="docutils literal notranslate"><span class="pre">edgy</span></code> and <code class="docutils literal notranslate"><span class="pre">edg-run-test</span></code>.
+Both of these tools rely on the same internal <code class="docutils literal notranslate"><span class="pre">edgtest</span></code> Python library,
+they just provide a different interface to it.</p>
+<p>In most cases <code class="docutils literal notranslate"><span class="pre">edgy</span></code> is the preferred testing tool as it’s designed for
+large-scale testing.  However, when authoring a new test <code class="docutils literal notranslate"><span class="pre">edg-run-test</span></code>
+can be a great way to get immediate feedback.</p>
+<section id="edgy">
+<h3><span class="section-number">26.2.1. </span><code class="docutils literal notranslate"><span class="pre">edgy</span></code><a class="headerlink" href="#edgy" title="Link to this heading">#</a></h3>
+<p>Usage information:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span><span data-line="1">usage: edgy [-h] [-c RUN_CONFIGS] [--runs-dir TEST_RUNS_DIRECTORY]
+</span><span data-line="2">            [--run-timestamp TEST_RUN_TIMESTAMP] [-j JOB_COUNT] [-T TIMEOUT_SECONDS]
+</span><span data-line="3">            [-A] [-D] [-E] [-M] [-R] [-n MAX_FAIL_COUNT] [--pick PICK_COUNT]
+</span><span data-line="4">            [--disp-run-dir] [-W] [--crash-avoidance] [--no-flakey-tests]
+</span><span data-line="5">            [--replay {all-failing,output-mismatch,regress,unexpected}]
+</span><span data-line="6">            [--slow-tests NUM_SLOW_TESTS_REPORTED] [--fully-random-order]
+</span><span data-line="7">            [--cmd] [--verbose] [filters]
+</span><span data-line="8">
+</span><span data-line="9">EDG test runner.
+</span><span data-line="10">
+</span><span data-line="11">positional arguments:
+</span><span data-line="12">  filters               the test filter to apply; "all" for all suites
+</span><span data-line="13">
+</span><span data-line="14">options:
+</span><span data-line="15">  -h, --help            show this help message and exit
+</span><span data-line="16">  -c, --config RUN_CONFIGS
+</span><span data-line="17">                        the run configurations to apply
+</span><span data-line="18">  --runs-dir TEST_RUNS_DIRECTORY
+</span><span data-line="19">                        override the directory where tests runs are stored
+</span><span data-line="20">  --run-timestamp TEST_RUN_TIMESTAMP
+</span><span data-line="21">                        override the timestamp when creating a new test run (does
+</span><span data-line="22">                        not apply to replay runs)
+</span><span data-line="23">  -j, --jobs JOB_COUNT  the number of concurrent jobs
+</span><span data-line="24">  -T, --timeout TIMEOUT_SECONDS
+</span><span data-line="25">                        the number of seconds to wait for tests before killing them
+</span><span data-line="26">                        (0 to disable)
+</span><span data-line="27">  -A                    include slow tests (marked by an "_" prefix)
+</span><span data-line="28">  -D, --debug-failures  print debug commands for failures
+</span><span data-line="29">  -E, --no-expectations
+</span><span data-line="30">                        disable expectations
+</span><span data-line="31">  -M, --meticulous      disable faster mode (on by default) and run all expensive
+</span><span data-line="32">                        checking
+</span><span data-line="33">  -R, --regress         silence non-regressive changes
+</span><span data-line="34">  -n, --max-failure-count MAX_FAIL_COUNT
+</span><span data-line="35">                        the maximum number of failures
+</span><span data-line="36">  --pick PICK_COUNT     the maximum number of tests to run (this option implies
+</span><span data-line="37">                        --fully-random-order)
+</span><span data-line="38">  --disp-run-dir        print the directory where the run output is being stored
+</span><span data-line="39">  -W, --record          record tests
+</span><span data-line="40">  --crash-avoidance     avoid tests that are likely to crash the compiler (this option
+</span><span data-line="41">                        also implies --no-flakey-tests)
+</span><span data-line="42">  --no-flakey-tests     do not run tests that are known to be flakey
+</span><span data-line="43">  --replay {all-failing,output-mismatch,regress,unexpected}
+</span><span data-line="44">                        rerun tests from the last run
+</span><span data-line="45">  --slow-tests NUM_SLOW_TESTS_REPORTED
+</span><span data-line="46">                        the number of the slowest tests to report
+</span><span data-line="47">  --fully-random-order  completely randomize test execution order (this can help lower
+</span><span data-line="48">                        system pressure by mixing more "intensive" test suites with
+</span><span data-line="49">                        less intensive test suites)
+</span><span data-line="50">  --cmd                 print all run test commands
+</span><span data-line="51">  --verbose             enable verbose mode
+</span></pre></div>
+</div>
+<section id="setup-requirements">
+<h4><span class="section-number">26.2.1.1. </span>Setup Requirements<a class="headerlink" href="#setup-requirements" title="Link to this heading">#</a></h4>
+<p><code class="docutils literal notranslate"><span class="pre">edgy</span></code> was designed to be usable from any directory.  To facilitate this,
+the <code class="docutils literal notranslate"><span class="pre">EDG_TEST_HOME</span></code> environment variable must be set to the directory
+where the tests subdirectory and <code class="docutils literal notranslate"><span class="pre">.edgy/config.json</span></code> are.</p>
+<p>In the typical configuration, <code class="docutils literal notranslate"><span class="pre">CPFE</span></code> should be set to the C-generating
+back end binary being tested and <code class="docutils literal notranslate"><span class="pre">CPFE_CP</span></code> should be set to the
+C++-generating back end binary being tested.</p>
+</section>
+<section id="filtering">
+<h4><span class="section-number">26.2.1.2. </span>Filtering<a class="headerlink" href="#filtering" title="Link to this heading">#</a></h4>
+<p><code class="docutils literal notranslate"><span class="pre">`edgy</span></code> works off of one or more (comma-separated) filters.  These
+filters are typically test suite names, e.g.,</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">edgy<span class="w"> </span>regressions,stdlib
+</span></pre></div>
+</div>
+<section id="filter-reduction">
+<h5><span class="section-number">26.2.1.2.1. </span>Filter Reduction<a class="headerlink" href="#filter-reduction" title="Link to this heading">#</a></h5>
+<p>These can be reduced by adding addition path components.  For instance, if
+you want to run the tests in the <code class="docutils literal notranslate"><span class="pre">modules</span></code> directory of the
+<code class="docutils literal notranslate"><span class="pre">regressions</span></code> test suite, you can do so via</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">edgy<span class="w"> </span>regressions/modules
+</span></pre></div>
+</div>
+<p>You can also elaborate on this to dive down to a single test, e.g.,
+<code class="docutils literal notranslate"><span class="pre">regressions/foo.sft.cpp</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">edgy<span class="w"> </span>regressions/modules/foo.sft.cpp
+</span></pre></div>
+</div>
+</section>
+<section id="special-filters">
+<h5><span class="section-number">26.2.1.2.2. </span>Special Filters<a class="headerlink" href="#special-filters" title="Link to this heading">#</a></h5>
+<p>There are also a couple of special filters, the primary one is <code class="docutils literal notranslate"><span class="pre">all</span></code>
+(which simply means all the test suites <code class="docutils literal notranslate"><span class="pre">edgy</span></code> knows about), e.g.,</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">edgy<span class="w"> </span>all
+</span></pre></div>
+</div>
+<p>An additional very useful one is the <code class="docutils literal notranslate"><span class="pre">mine</span></code> filter.  This filter is
+configured by setting the <code class="docutils literal notranslate"><span class="pre">EDGY_MY_TESTS</span></code> environment variable to a
+comma-separated list of test suites.  For instance, if concerned primarily
+with <code class="docutils literal notranslate"><span class="pre">regressions</span></code> and the <code class="docutils literal notranslate"><span class="pre">stdlib</span></code> impact in your work, this might be
+a reasonable use:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="nb">export</span><span class="w"> </span><span class="nv">EDGY_MY_TESTS</span><span class="o">=</span>regressions,stdlib
+</span><span data-line="2">edgy<span class="w"> </span>mine
+</span></pre></div>
+</div>
+<p>Note that special filters cannot be reduced (e.g., <code class="docutils literal notranslate"><span class="pre">edgy</span> <span class="pre">mine/xyz</span></code>
+does not work).</p>
+</section>
+<section id="negative-filters">
+<h5><span class="section-number">26.2.1.2.3. </span>Negative Filters<a class="headerlink" href="#negative-filters" title="Link to this heading">#</a></h5>
+<p>Negative filters can be applied as well. These start with a <code class="docutils literal notranslate"><span class="pre">!</span></code> and are
+applied as a reduction of positive filters, e.g.,</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">edgy<span class="w"> </span>regressions,!regressions/modules
+</span></pre></div>
+</div>
+<p>Here we’re running all tests in the <code class="docutils literal notranslate"><span class="pre">regressions</span></code> suite except for the
+tests in the <code class="docutils literal notranslate"><span class="pre">modules</span></code> subdirectory.</p>
+</section>
+<section id="file-loaded-filters">
+<h5><span class="section-number">26.2.1.2.4. </span>File-Loaded Filters<a class="headerlink" href="#file-loaded-filters" title="Link to this heading">#</a></h5>
+<p>Filters can also be loaded from a file:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">$&gt;<span class="w"> </span>cat<span class="w"> </span>my_filters.txt
+</span><span data-line="2">regressions
+</span><span data-line="3">!regressions/modules
+</span><span data-line="4">$&gt;<span class="w"> </span>edgy<span class="w"> </span>@my_filters.txt
+</span></pre></div>
+</div>
+<p>The above is logically equivalent to the above negative filter example (the
+filters are just spelled out in a file on a line-separated basis).</p>
+<p>This feature is particularly useful for working with fine-grained lists of
+tests (such as <code class="docutils literal notranslate"><span class="pre">edgy</span></code>’s <code class="docutils literal notranslate"><span class="pre">.elog</span></code> files).</p>
+</section>
+</section>
+<section id="live-feedback">
+<h4><span class="section-number">26.2.1.3. </span>Live Feedback<a class="headerlink" href="#live-feedback" title="Link to this heading">#</a></h4>
+<section id="test-run-status">
+<h5><span class="section-number">26.2.1.3.1. </span>Test Run Status<a class="headerlink" href="#test-run-status" title="Link to this heading">#</a></h5>
+<p>Progress reporting is provided by a (fairly rapidly) updating status line:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span><span data-line="1">588/83,651 (0%) in 00:00:04 ~127/sec (00:10:54 remaining)
+</span></pre></div>
+</div>
+<p>This status line shows:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span><span data-line="1">&lt;number of completed tests&gt;/&lt;number of tests to run total&gt;
+</span><span data-line="2">(&lt;percentage of tests completed&gt;%) in &lt;elapsed time&gt;
+</span><span data-line="3">~&lt;tests per second&gt;/sec
+</span><span data-line="4">(&lt;estimated time remaining at current test per second&gt; remaining)
+</span></pre></div>
+</div>
+</section>
+<section id="problem-reporting">
+<h5><span class="section-number">26.2.1.3.2. </span>Problem Reporting<a class="headerlink" href="#problem-reporting" title="Link to this heading">#</a></h5>
+<p>Any encountered problems are reported above the status line as they’re
+discovered.</p>
+<p>A completed run might look something like:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="o">-</span><span class="w"> </span><span class="n">regressions</span><span class="o">/</span><span class="n">foo</span><span class="p">.</span><span class="n">sft</span><span class="p">.</span><span class="n">cpp</span><span class="w"> </span><span class="n">cp</span><span class="o">::</span><span class="n">ABORT</span><span class="o">:</span>
+</span><span data-line="2"><span class="o">+</span><span class="w"> </span><span class="n">regressions</span><span class="o">/</span><span class="n">foo</span><span class="p">.</span><span class="n">sft</span><span class="p">.</span><span class="n">cpp</span><span class="w"> </span><span class="n">cp</span><span class="o">::</span><span class="n">PASS</span><span class="o">--</span><span class="n">OUTPUT</span><span class="w"> </span><span class="n">MISMATCH</span><span class="o">:</span>
+</span></pre></div>
+</div>
+<p>“+” is used to indicate an unexpected problem, while “-” is used to indicate an
+unsatisfied expectation (the above is an example of what might happen if there
+was a regression resulting in a crash that has been resolved).</p>
+<p>When multiple configurations are in use, the configuration is specified in
+parens prior to the test “name”, e.g.:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="n">edg_x86_64</span><span class="p">)</span><span class="w"> </span><span class="n">regressions</span><span class="o">/</span><span class="n">foo</span><span class="p">.</span><span class="n">sft</span><span class="p">.</span><span class="n">cpp</span><span class="w"> </span><span class="n">fp</span><span class="o">::</span><span class="n">PASS</span><span class="o">--</span><span class="n">OUTPUT</span><span class="w"> </span><span class="n">MISMATCH</span><span class="o">:</span>
+</span><span data-line="2"><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="n">edg_x86_64_cp</span><span class="p">)</span><span class="w"> </span><span class="n">regressions</span><span class="o">/</span><span class="n">foo</span><span class="p">.</span><span class="n">sft</span><span class="p">.</span><span class="n">cpp</span><span class="w"> </span><span class="n">fp</span><span class="o">::</span><span class="n">PASS</span><span class="o">--</span><span class="n">OUTPUT</span><span class="w"> </span><span class="n">MISMATCH</span><span class="o">:</span>
+</span></pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">edgy</span></code> also will print “commentary” in this output without using a marking
+character.  These are used to report extra information that might be
+good to know (e.g., that a particular test ran very slowly), e.g.,</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span><span data-line="1">+ regressions/foo.sft.cpp fp::PASS--OUTPUT MISMATCH:
+</span><span data-line="2">  Consider marking regressions/foo.sft.cpp slow (Took: 00:01:04)
+</span></pre></div>
+</div>
+</section>
+<section id="test-termination">
+<h5><span class="section-number">26.2.1.3.3. </span>Test Termination<a class="headerlink" href="#test-termination" title="Link to this heading">#</a></h5>
+<p><code class="docutils literal notranslate"><span class="pre">edgy</span></code> supports early termination when it receives <code class="docutils literal notranslate"><span class="pre">SIGINT</span></code> (Ctrl + C
+in most shells) or <code class="docutils literal notranslate"><span class="pre">SIGTERM</span></code>.  Early termination will make edgy quickly
+terminate all spawned process groups (and thus their processes).  Any tests
+terminated in this fashion will be reported to the user with an “X” prefix,
+e.g.,</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span><span data-line="1">X regressions/foo.sft.cpp
+</span><span data-line="2">X stdlib/bar/test.mft.cpp
+</span><span data-line="3">X regressions/baz/test.mft.cpp
+</span></pre></div>
+</div>
+<p>Note: This is particularly helpful both for killing (and finding) tests that
+are stuck in an infinite loop if your tests aren’t terminating.</p>
+</section>
+</section>
+<section id="failure-debug-mode">
+<h4><span class="section-number">26.2.1.4. </span>Failure Debug Mode<a class="headerlink" href="#failure-debug-mode" title="Link to this heading">#</a></h4>
+<p><code class="docutils literal notranslate"><span class="pre">edgy</span></code> has a failure debug mode (enabled via <code class="docutils literal notranslate"><span class="pre">-D</span></code> or
+<code class="docutils literal notranslate"><span class="pre">--debug-failures</span></code>) that enables additional “commentary” for failed
+tests, aimed at debugging issues with said tests.</p>
+<p>For exposition purposes the below section uses <code class="docutils literal notranslate"><span class="pre">&lt;TEST_ROOT&gt;</span></code> for the path
+represented by <code class="docutils literal notranslate"><span class="pre">EDG_TEST_HOME</span></code> and <code class="docutils literal notranslate"><span class="pre">&lt;BUILD_BIN&gt;</span></code> for the location of
+the directory containing the front end <code class="docutils literal notranslate"><span class="pre">cpfe</span></code> binary.  Additionally <code class="docutils literal notranslate"><span class="pre">\</span></code>
+lines have been added to wrap lines.</p>
+<p>As an example, commentary from this option typically looks something like:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span><span data-line="1">RUN_TEST_DEFAULT_CONFIG="edg_x86_64" LC_ALL="C" CDISP="&lt;BUILD_BIN&gt;" \
+</span><span data-line="2">  edg-run-test -o \
+</span><span data-line="3">  &lt;TEST_ROOT&gt;/runs/2026.06.25-17.14.55/edg_x86_64/regressions
+</span><span data-line="4">  --driver-debug --faster -t \
+</span><span data-line="5">  &lt;TEST_ROOT&gt;/tests/regressions \
+</span><span data-line="6">  &lt;TEST_ROOT&gt;/tests/regressions/foo.sft.cpp
+</span></pre></div>
+</div>
+<p>This can be copied verbatim and when executed will print something like
+the following:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span><span data-line="1">Source file clone:
+</span><span data-line="2">cd $(clone-test-to-tmp &lt;TEST_ROOT&gt;/tests/regressions/foo.sft.cpp)
+</span><span data-line="3">&lt;BUILD_BIN&gt;/cpfe -DTEST_NUMBER=1 --c++20 Test_name.c
+</span></pre></div>
+</div>
+<p>This combined information can then be used to set up a test directory, and a
+debug command, following the general setup:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span><span data-line="1">&lt;make test directory&gt;
+</span><span data-line="2">&lt;set environment variables&gt; &lt;debugger command&gt; &lt;front end invocation&gt;
+</span></pre></div>
+</div>
+<p>Using the above sample output, that would look something like:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span><span data-line="1">cd $(clone-test-to-tmp &lt;TEST_ROOT&gt;/tests/regressions/foo.sft.cpp)
+</span><span data-line="2">RUN_TEST_DEFAULT_CONFIG="edg_x86_64" LC_ALL="C" CDISP="&lt;BUILD_BIN&gt;" \
+</span><span data-line="3">  gdb --args &lt;BUILD_BIN&gt;/cpfe -DTEST_NUMBER=1 --c++20 Test_name.c
+</span></pre></div>
+</div>
+<p>This will quickly give you a debugger invocation (modulo any bugs/missing
+features for test directory setup driver debug) that should exactly reproduce
+the circumstances that resulted in <code class="docutils literal notranslate"><span class="pre">edgy</span></code> seeing what it saw.</p>
+<p>Note that many tests may not have a <code class="docutils literal notranslate"><span class="pre">Source</span> <span class="pre">file</span> <span class="pre">clone</span></code> line reported by
+the test executor. In these cases it’s perfectly safe to omit this (i.e.,
+<code class="docutils literal notranslate"><span class="pre">&lt;make</span> <span class="pre">test</span> <span class="pre">directory&gt;</span></code> may not always be a part of the pattern).</p>
+</section>
+<section id="regress-mode">
+<span id="id1"></span><h4><span class="section-number">26.2.1.5. </span>Regress Mode<a class="headerlink" href="#regress-mode" title="Link to this heading">#</a></h4>
+<p><code class="docutils literal notranslate"><span class="pre">edgy</span></code> has a test regression reporting mode (enabled via <code class="docutils literal notranslate"><span class="pre">-R</span></code> or
+<code class="docutils literal notranslate"><span class="pre">--regress</span></code>).  This is aimed at reporting only those tests whose status
+changed to something worse and is particularly useful for noisy tests where
+there may be lots of valid <code class="docutils literal notranslate"><span class="pre">--OUTPUT-MISMATCH</span></code>s.  The severity ranking
+used to determine what’s “worse” is represented in the following table:</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Test Status</p></th>
+<th class="head"><p>Severity Ranking</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">PASS</span></code></p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FAIL</span></code></p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">BADC</span></code></p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CATASTROPHE</span></code></p></td>
+<td><p>2</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ABORT</span></code></p></td>
+<td><p>3</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">RUNTIME</span> <span class="pre">ABORT</span></code></p></td>
+<td><p>3</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>As an example, a <code class="docutils literal notranslate"><span class="pre">FAIL</span></code> to an <code class="docutils literal notranslate"><span class="pre">ABORT</span></code> will be reported, but an
+<code class="docutils literal notranslate"><span class="pre">ABORT</span></code> to a <code class="docutils literal notranslate"><span class="pre">FAIL</span></code> will not be reported.  Similarly, <code class="docutils literal notranslate"><span class="pre">FAIL</span></code> to
+<code class="docutils literal notranslate"><span class="pre">BADC</span></code> (or vice versa) will not be reported.</p>
+</section>
+<section id="failure-limiting">
+<h4><span class="section-number">26.2.1.6. </span>Failure Limiting<a class="headerlink" href="#failure-limiting" title="Link to this heading">#</a></h4>
+<p><code class="docutils literal notranslate"><span class="pre">edgy</span></code> has a failure limit mode (enabled via <code class="docutils literal notranslate"><span class="pre">-n</span></code> <em>MAX_FAIL_COUNT</em> or
+<code class="docutils literal notranslate"><span class="pre">--max-failure-count</span></code> <em>MAX_FAIL_COUNT</em>, where <em>MAX_FAIL_COUNT</em> is an
+integer) that stops test execution after <em>MAX_FAIL_COUNT</em> tests have
+been reported as problematic.  This is compatible with regression mode, and
+will only count reported regressions.</p>
+</section>
+<section id="re-record-mode">
+<h4><span class="section-number">26.2.1.7. </span>Re-record Mode<a class="headerlink" href="#re-record-mode" title="Link to this heading">#</a></h4>
+<p><code class="docutils literal notranslate"><span class="pre">edgy</span></code> has a mode for updating test recordings and patching expectations
+in the process (enabled via <code class="docutils literal notranslate"><span class="pre">-W</span></code> or <code class="docutils literal notranslate"><span class="pre">--record</span></code>).</p>
+<p>As this mode is intended for usage only to update output, <code class="docutils literal notranslate"><span class="pre">edgy</span></code> does not
+check expectations or otherwise report test status during re-recording.
+The process for using re-record mode is something akin to the following:</p>
+<ol class="arabic simple">
+<li><p>Run the tests</p></li>
+<li><p>Review the changes</p></li>
+<li><p>Determine if any tests’ expectations or output need to be updated</p></li>
+<li><p>Rerecord the tests that need to be updated (e.g,
+<code class="docutils literal notranslate"><span class="pre">edgy</span> <span class="pre">-W</span> <span class="pre">regressions/foo.sft.cpp</span></code>)</p></li>
+</ol>
+</section>
+<section id="no-expectations-mode">
+<h4><span class="section-number">26.2.1.8. </span>No Expectations Mode<a class="headerlink" href="#no-expectations-mode" title="Link to this heading">#</a></h4>
+<p><code class="docutils literal notranslate"><span class="pre">edgy</span></code> has a no expectations mode (enabled via <code class="docutils literal notranslate"><span class="pre">-E</span></code> or
+<code class="docutils literal notranslate"><span class="pre">--no-expectations</span></code>) which as the name implies disables expectations.
+This is useful for seeing true test statuses (i.e., seeing all failures,
+including failures that were previously marked as expected).</p>
+</section>
+<section id="no-flakey-tests-mode">
+<h4><span class="section-number">26.2.1.9. </span>No Flakey Tests Mode<a class="headerlink" href="#no-flakey-tests-mode" title="Link to this heading">#</a></h4>
+<p><code class="docutils literal notranslate"><span class="pre">edgy</span></code> has a “no flakey tests” mode (enabled via <code class="docutils literal notranslate"><span class="pre">--no-flakey-tests</span></code>)
+which, as the name implies, skips known flakey tests.  This is useful for
+avoiding problematic tests that are known to regularly misdiagnose problems
+in your configuration.</p>
+<p>For this to work, the configuration in use must have the flakey tests
+listed in the <code class="docutils literal notranslate"><span class="pre">$EDG_TEST_HOME/flakey-tests</span></code> directory.  For example, to
+mark <code class="docutils literal notranslate"><span class="pre">regressions/baz/foo.sft.cpp</span></code> flakey in the <code class="docutils literal notranslate"><span class="pre">foo-bar</span></code>
+configuration, one would add a file
+<code class="docutils literal notranslate"><span class="pre">$EDG_TEST_HOME/flakey-tests/foo-bar/regressions.txt</span></code> with the contents:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span><span data-line="1">baz/foo.sft.cpp
+</span></pre></div>
+</div>
+<p>Note: It’s recommended (but not required) to organize this file alphabetically
+for easier maintenance.</p>
+</section>
+<section id="replay-mode">
+<h4><span class="section-number">26.2.1.10. </span>Replay mode<a class="headerlink" href="#replay-mode" title="Link to this heading">#</a></h4>
+<p><code class="docutils literal notranslate"><span class="pre">edgy</span></code> has a mode for replaying a portion of the previous test run
+(enabled via <code class="docutils literal notranslate"><span class="pre">--replay</span></code>).  It’s important to note that the “runs” that
+are replayed are the original “run” not a “replay”, i.e., replay 2 is not
+run against replay 1 but is run against the last run that wasn’t a replay
+run.</p>
+<p>Replay mode is compatible with the normal <code class="docutils literal notranslate"><span class="pre">edgy</span></code> options (e.g., filters).
+Replay mode itself supports the following sub-options:</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Option</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">all-failing</span></code></p></td>
+<td><p>All tests without <code class="docutils literal notranslate"><span class="pre">PASS</span></code> status/all tests that
+appear in the previous run’s log files.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">output-mismatch</span></code></p></td>
+<td><p>All tests with <code class="docutils literal notranslate"><span class="pre">OUTPUT</span> <span class="pre">MISMATCH</span></code> status (including
+tests that are otherwise passing).</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">regress</span></code></p></td>
+<td><p>All tests that had a status regression vs the current
+configuration’s expectations (see the
+<a class="reference internal" href="#regress-mode"><span class="std std-ref">Regress Mode</span></a> section for more information
+about status regressions).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">unexpected</span></code></p></td>
+<td><p>All tests that are reporting a status differing from
+the current configuration’s expectations.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Replay results are stored in the last test execution’s run output directory
+(typically <code class="docutils literal notranslate"><span class="pre">tests/runs/</span></code><em>some-timestamp</em>) in their own <code class="docutils literal notranslate"><span class="pre">replays</span></code>
+subdirectory.  Every time a replay is performed a new subdirectory will be
+created within the respective replays subdirectory for the replay output.
+This gives replay runs a few special characteristics:</p>
+<ul class="simple">
+<li><p>Test selections are stable across all replay runs (in other words, if you
+have run “T” you’re replaying, replay “{N, N + 1, …}” will not affect each
+other’s output/test selections).</p></li>
+<li><p>Replays can be run many times without resulting in <code class="docutils literal notranslate"><span class="pre">edgy</span></code>’s test run
+cleanup deleting anything.</p></li>
+</ul>
+<p>As a visual aid, this is the expected directory structure for a run with two
+replays in the <code class="docutils literal notranslate"><span class="pre">runs</span></code> directory:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span><span data-line="1">.
+</span><span data-line="2">├── 2026.06.07-16.19.15
+</span><span data-line="3">│   ├── replays
+</span><span data-line="4">│   │   ├── 1
+</span><span data-line="5">│   │   │   └── edg_x86_64
+</span><span data-line="6">│   │   │       ├── regressions
+</span><span data-line="7">│   │   │       │   ├── test-a.rt
+</span><span data-line="8">│   │   │       │   ├── test-b.rt
+</span><span data-line="9">│   │   │       │   └── test-c.rt
+</span><span data-line="10">│   │   │       └── regressions.log
+</span><span data-line="11">│   │   └── 2
+</span><span data-line="12">│   │       └── edg_x86_64
+</span><span data-line="13">│   │           ├── regressions
+</span><span data-line="14">│   │           │   ├── test-a.rt
+</span><span data-line="15">│   │           │   ├── test-b.rt
+</span><span data-line="16">│   │           │   └── test-c.rt
+</span><span data-line="17">│   │           └── regressions.log
+</span><span data-line="18">│   └── edg_x86_64
+</span><span data-line="19">│       ├── regressions
+</span><span data-line="20">│       │   ├── test-a.rt
+</span><span data-line="21">│       │   ├── test-b.rt
+</span><span data-line="22">│       │   └── test-c.rt
+</span><span data-line="23">│       └── regressions.log
+</span><span data-line="24">...
+</span></pre></div>
+</div>
+<section id="replaying-failed-test">
+<h5><span class="section-number">26.2.1.10.1. </span>Replaying Failed Test<a class="headerlink" href="#replaying-failed-test" title="Link to this heading">#</a></h5>
+<p>As an example, consider you’ve run a test suite:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span><span data-line="1">edgy regressions
+</span></pre></div>
+</div>
+<p>This then revealed 5 of the 500 tests are failing.  You then make a change, and
+then want to run those 5 tests again to see if you’ve fixed the problem:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span><span data-line="1">edgy --replay all-failing
+</span></pre></div>
+</div>
+<p>This runs only the 5 failing tests.</p>
+</section>
+<section id="replaying-subset-of-failed-test">
+<h5><span class="section-number">26.2.1.10.2. </span>Replaying Subset of Failed Test<a class="headerlink" href="#replaying-subset-of-failed-test" title="Link to this heading">#</a></h5>
+<p>As an example, consider you’ve run a test suite:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span><span data-line="1">edgy regressions
+</span></pre></div>
+</div>
+<p>This then revealed 50 of the 500 tests are failing, but you’re only
+interested in the 10 tests in <code class="docutils literal notranslate"><span class="pre">regressions/foo</span></code>.  You then make a change,
+and then want to run those 10 tests again to see if you’ve fixed the
+problem:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span><span data-line="1">edgy --replay all-failing regressions/foo
+</span></pre></div>
+</div>
+<p>This runs only the 10 failing tests.</p>
+</section>
+<section id="replaying-mismatched">
+<h5><span class="section-number">26.2.1.10.3. </span>Replaying Mismatched<a class="headerlink" href="#replaying-mismatched" title="Link to this heading">#</a></h5>
+<p>As an example, consider you’ve run a test suite:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span><span data-line="1">edgy regressions
+</span></pre></div>
+</div>
+<p>This then revealed 5 of the 500 tests have an output mismatch due to changes
+you made.  You review the changes, and decide you want to rerecord these
+tests:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span><span data-line="1">edgy --replay output-mismatch -W
+</span></pre></div>
+</div>
+<p>This runs only the 5 tests with the output mismatch, rerecording them and
+updating expectations in the process.</p>
+</section>
+<section id="replaying-regressions">
+<h5><span class="section-number">26.2.1.10.4. </span>Replaying Regressions<a class="headerlink" href="#replaying-regressions" title="Link to this heading">#</a></h5>
+<p>As an example, consider you’re working with volatile code that’s failing many
+tests, and you’re using regression mode to focus down the reported tests:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span><span data-line="1">edgy -R regressions
+</span></pre></div>
+</div>
+<p>This then revealed 5 of the 500 tests are regressing while 50 are unexpected
+status changes, and 200 are failing.  The other replay modes will not help you
+realistically narrow down the set of test output being reviewed.  This is where
+regress replays shine:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span><span data-line="1">edgy --replay regress
+</span></pre></div>
+</div>
+<p>This runs only the 5 tests that actually have regressive status changes,
+allowing you to evaluate much more effectively whether your iterative
+changes are improvements.</p>
+</section>
+<section id="replaying-unexpected">
+<h5><span class="section-number">26.2.1.10.5. </span>Replaying Unexpected<a class="headerlink" href="#replaying-unexpected" title="Link to this heading">#</a></h5>
+<p>As an example, consider you’ve run a test suite:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span><span data-line="1">edgy regressions
+</span></pre></div>
+</div>
+<p>This then revealed 5 of the 500 tests differ from their expected status or
+otherwise have an output mismatch.  You review the changes, and decide you want
+to rerecord these tests:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span><span data-line="1">edgy --replay unexpected -W
+</span></pre></div>
+</div>
+<p>This runs only the 5 tests, rerecording them and updating expectations in the
+process.</p>
+</section>
+</section>
+<section id="slow-test-reporting">
+<h4><span class="section-number">26.2.1.11. </span>Slow Test Reporting<a class="headerlink" href="#slow-test-reporting" title="Link to this heading">#</a></h4>
+<p><code class="docutils literal notranslate"><span class="pre">edgy</span></code> has a slow test reporting mode (enabled via <code class="docutils literal notranslate"><span class="pre">--slow-tests</span></code>
+<em>NUM_SLOW_TESTS_REPORTED</em>, where <em>NUM_SLOW_TESTS_REPORTED</em> is an integer)
+that reports the <em>NUM_SLOW_TESTS_REPORTED</em> slowest test executions.  This
+is compatible with all modes (with the exception of re-record mode which does
+not record the necessary timings).</p>
+</section>
+<section id="verbose-mode">
+<h4><span class="section-number">26.2.1.12. </span>Verbose Mode<a class="headerlink" href="#verbose-mode" title="Link to this heading">#</a></h4>
+<p><code class="docutils literal notranslate"><span class="pre">edgy</span></code> has a verbose mode (enabled via <code class="docutils literal notranslate"><span class="pre">--verbose</span></code>) that enables
+printing of additional details.  Verbose mode provides additional
+information about environment variables, what cleanup actions are being
+taken, and remarks for failure debugging are turned on for every tests
+(regardless of its pass/fail status).  This can be useful for initial
+setup, or when attempting to get a debug invocation for one or more test(s)
+that aren’t currently failing.</p>
+</section>
+<section id="copying-tested-binaries">
+<h4><span class="section-number">26.2.1.13. </span>Copying Tested Binaries<a class="headerlink" href="#copying-tested-binaries" title="Link to this heading">#</a></h4>
+<p>By default <code class="docutils literal notranslate"><span class="pre">edgy</span></code> copies the executables being tested for each test run.
+This allows for (some degree of) working on the front end while testing
+occurs as updated binaries will not impact testing.</p>
+<p>If the environment variable <code class="docutils literal notranslate"><span class="pre">EDG_TEST_NO_COPY_</span></code><em>X</em> is set or
+<code class="docutils literal notranslate"><span class="pre">TEST_</span></code><em>X</em> (where <em>X</em> is the environment variable corresponding
+to the tested binary – typically <code class="docutils literal notranslate"><span class="pre">CPFE</span></code> or <code class="docutils literal notranslate"><span class="pre">CPFE_CP</span></code>) is set, this
+functionality is disabled.</p>
+</section>
+<section id="test-run-cleanup">
+<h4><span class="section-number">26.2.1.14. </span>Test Run Cleanup<a class="headerlink" href="#test-run-cleanup" title="Link to this heading">#</a></h4>
+<p>If the environment variable <code class="docutils literal notranslate"><span class="pre">EDG_TEST_RUNS_KEPT</span></code> is set to a valid
+integer <em>N</em> (e.g., 10), <code class="docutils literal notranslate"><span class="pre">edgy</span></code> will only keep the last <em>N</em> entries in the
+run directory.</p>
+<p>Note: This does not take into account directory names, it simply deletes
+directories in the <code class="docutils literal notranslate"><span class="pre">runs</span></code> directory based on their modification time.
+Make sure you don’t have any subdirectories in the <code class="docutils literal notranslate"><span class="pre">runs</span></code> directory that
+should be kept around before setting this environment variable.</p>
+</section>
+<section id="multi-configuration-support">
+<h4><span class="section-number">26.2.1.15. </span>Multi-Configuration Support<a class="headerlink" href="#multi-configuration-support" title="Link to this heading">#</a></h4>
+<p><code class="docutils literal notranslate"><span class="pre">edgy</span></code>, as previously noted, has support for simultaneous testing of
+different configurations.  The configurations that can be tested, as well as
+the default set of configurations to test, is configured in the
+<code class="docutils literal notranslate"><span class="pre">.edgy/config.json</span></code> file.</p>
+<p>To manually specify which configurations to run, the <code class="docutils literal notranslate"><span class="pre">-c</span></code> flag can be
+used with a comma-separated list of configurations, e.g.:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span><span data-line="1">edgy -c edg_x86_64,edg_x86_64_cp regressions
+</span></pre></div>
+</div>
+<p>This will run the regression test suite, in both the <code class="docutils literal notranslate"><span class="pre">edg_x86_64</span></code> and
+<code class="docutils literal notranslate"><span class="pre">edg_x86_64_cp</span></code> configurations (which is also the default as edgy is
+typically configured).</p>
+</section>
+</section>
+<section id="edg-run-test">
+<h3><span class="section-number">26.2.2. </span>edg-run-test<a class="headerlink" href="#edg-run-test" title="Link to this heading">#</a></h3>
+<p>Usage information:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span><span data-line="1">usage: edg-run-test [-h] [-d] [-r] [--driver-debug] [--faster] [-q] [-t TOP_DIR]
+</span><span data-line="2">                    [-o OUTPUT_DIR] test_files [test_files ...]
+</span><span data-line="3">
+</span><span data-line="4">EDG Python based test executor.
+</span><span data-line="5">
+</span><span data-line="6">positional arguments:
+</span><span data-line="7">  test_files            the paths to the test files to run
+</span><span data-line="8">
+</span><span data-line="9">options:
+</span><span data-line="10">  -h, --help            show this help message and exit
+</span><span data-line="11">  -d, --debug           keep the output files
+</span><span data-line="12">  -r, --record, --silent-record
+</span><span data-line="13">                        update the expected test output to be the output from this run.
+</span><span data-line="14">  --driver-debug        add --driver_debug to the test's command line arguments. The
+</span><span data-line="15">                        resulting additional output will be printed to stdout with the
+</span><span data-line="16">                        original test file replacing the generic name. This makes the
+</span><span data-line="17">                        underlying command more easily accessible so that it may be
+</span><span data-line="18">                        more easily fed to a debugger (e.g., gdb) or checked for
+</span><span data-line="19">                        correctness.
+</span><span data-line="20">  --faster              enable command line flags that might speed up the compilation
+</span><span data-line="21">                        of the test files
+</span><span data-line="22">  -q                    only display log output for errors
+</span><span data-line="23">  -t, --top-dir TOP_DIR
+</span><span data-line="24">                        the path to the contextually "top" directory
+</span><span data-line="25">  -o OUTPUT_DIR         the path where output will be stored
+</span></pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">edg-run-test</span></code> is a considerably simpler tool than <code class="docutils literal notranslate"><span class="pre">edgy</span></code>.  Consider
+the following edgy command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">edgy<span class="w"> </span>regressions
+</span></pre></div>
+</div>
+<p>Assuming <code class="docutils literal notranslate"><span class="pre">EDG_TEST_HOME</span></code> is <code class="docutils literal notranslate"><span class="pre">/edg/tests</span></code>, the corresponding
+<code class="docutils literal notranslate"><span class="pre">edg-run-test</span></code> invocation would be approximately the following:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">edg-run-test<span class="w"> </span>-t<span class="w"> </span>/edg/tests/tests/regressions<span class="w"> </span><span class="se">\</span>
+</span><span data-line="2"><span class="w">  </span>/edg/tests/tests/regressions/**/*.sft.c<span class="w">   </span><span class="se">\</span>
+</span><span data-line="3"><span class="w">  </span>/edg/tests/tests/regressions/**/*.sft.cpp<span class="w"> </span><span class="se">\</span>
+</span><span data-line="4"><span class="w">  </span>/edg/tests/tests/regressions/**/*.mft.c<span class="w">   </span><span class="se">\</span>
+</span><span data-line="5"><span class="w">  </span>/edg/tests/tests/regressions/**/*.mft.cpp
+</span></pre></div>
+</div>
+<p>Here <code class="docutils literal notranslate"><span class="pre">TEST_ROOT</span></code> is specified by <code class="docutils literal notranslate"><span class="pre">-t</span></code> so that any <code class="docutils literal notranslate"><span class="pre">.run_test_flags</span></code> file
+can be correctly processed.</p>
+<p>Of note, <code class="docutils literal notranslate"><span class="pre">edg-run-test</span></code> does not support expectations or have a notion of
+configuration, so this will report the status of all tests regardless of
+expected output.</p>
+<p>Additionally, by default all statuses are reported; <code class="docutils literal notranslate"><span class="pre">-q</span></code> can be used to
+reduce the output to something closer to what’s given by <code class="docutils literal notranslate"><span class="pre">edgy</span></code>.</p>
+<p>The tested binary is the binary found at the <code class="docutils literal notranslate"><span class="pre">CPFE</span></code> environment variable by
+default.  However, alternative environment variables can be tested by
+specifying the <code class="docutils literal notranslate"><span class="pre">PRIMARY_CPFE</span></code> environment variable to a different environment
+variable (e.g., <code class="docutils literal notranslate"><span class="pre">CPFE_CUSTOM</span></code>).</p>
+<p>The occasional advantage of <code class="docutils literal notranslate"><span class="pre">edg-run-test</span></code> over <code class="docutils literal notranslate"><span class="pre">edgy</span></code> is simplicity.
+It’s possible to author a new test outside of the test tree and quickly
+execute and iterate on the test before moving the file(s) to include the
+test in a test suite.</p>
+</section>
+</section>
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"><div class="navigation-prev">
+    <a href="../code_style/">
+      <i class="i-lucide chevron-left"></i>
+      <div class="page-info">
+        <span>Previous</span><div class="title"><span class="section-number">25. </span>Coding Style Guide</div></div>
+    </a>
+  </div></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>EDG 7.0, 7/20/26 - ©2026, Edison Design Group, Inc.</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials"></div>
+    </div>
+  </div>
+</footer>
+      <script src="../_static/documentation_options.js?v=618d875b"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/shibuya.js?v=50760d75"></script></body>
+</html>

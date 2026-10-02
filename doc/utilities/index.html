@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="violet" data-content_root="../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>22. Utility Programs - CPFE 7.0 documentation</title><link rel="index" title="Index" href="../genindex/" /><link rel="search" title="Search" href="../search/" /><link rel="next" title="23. C-Generating Back End" href="../c_gen_be/" /><link rel="prev" title="21. Runtime Library" href="../runtime/" />
+      <link rel="canonical" href="https://edgcpp.org/doc/utilities/" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e1a1ceaf" />
+    <link rel="stylesheet" type="text/css" href="../_static/shibuya.css?v=2ceb65ce" />
+    <link media="print" rel="stylesheet" type="text/css" href="../_static/print.css?v=20ff2c19" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=8971ef7f" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://edgcpp.org/doc/utilities/"/>
+  <meta property="og:title" content="22. Utility Programs"/>
+    <meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="../">
+      <img class="light-logo" src="../_static/doc-logo-light.png" alt="CPFE" height="28" loading="lazy" />
+      <img class="dark-logo" src="../_static/doc-logo-dark.png" alt="CPFE" height="28" loading="lazy" />
+      <strong>CPFE</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="../search/" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials"></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2"></span>
+          <span class="hamburger_3"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../build/">1. Configuring and Building the C++ Front End</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ext_intf/">2. External Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../int_overview/">3. Overview of Internal Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../il/">4. Intermediate Language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lower_il/">5. IL Lowering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../symbol_tbl/">6. Symbol Table</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lex_pp/">7. Lexical Analysis and Preprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tables/">8. Table Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../expr/">9. Expression Scanning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../decls/">10. Declarations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../class_decl/">11. Class Declarations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../statements/">12. Statement Scanning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../templates/">13. Templates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../exceptions/">14. Exception Handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pragma/">15. Pragmas and Attributes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/">16. Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../trans_unit/">17. Multiple Translation Units</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../admin/">18. Administrative Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../err_msgs/">19. Error Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../includes/">20. ANSI C and C++ Include Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../runtime/">21. Runtime Library</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">22. Utility Programs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../c_gen_be/">23. C-Generating Back End</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cp_gen_be/">24. C++-Generating Back End</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../code_style/">25. Coding Style Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../testing/">26. EDG Testing Framework</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#edg-prelink">22.1. <code class="docutils literal notranslate"><span class="pre">edg_prelink</span></code></a></li>
+<li><a class="reference internal" href="#edg-munch">22.2. <code class="docutils literal notranslate"><span class="pre">edg_munch</span></code></a></li>
+<li><a class="reference internal" href="#edg-decode">22.3. <code class="docutils literal notranslate"><span class="pre">edg_decode</span></code></a></li>
+<li><a class="reference internal" href="#mk-errinfo">22.4. <code class="docutils literal notranslate"><span class="pre">mk_errinfo</span></code></a></li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../"><span itemprop="name">CPFE</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name"><span class="section-number">22. </span>Utility Programs</strong>
+        <meta itemprop="position" content="2" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="relative min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+  <div class="copy-page-wrapper relative pb-4 lg:absolute lg:top-8 lg:right-6 xl:right-12">
+  <div id="copy-page-trigger">
+    <button
+      type="button"
+      class="js-copy px-3 py-1 inline-flex items-center gap-1"
+      data-url="https://edgcpp.org/doc/_sources/utilities.rst.txt"
+    >
+      <i class="i-lucide" data-icon="copy"></i>
+      <span>Copy page</span>
+    </button>
+    <button class="js-menu px-2 py-1" type="button" aria-label="More actions"
+      aria-haspopup="menu" aria-expanded="false" aria-controls="copy-page-content">
+      <i class="i-lucide chevron-down"></i>
+    </button>
+  </div>
+  <div id="copy-page-content" role="menu" aria-orientation="vertical" aria-hidden="true">
+    <div role="presentation">
+      <div class="flex flex-col" role="group">
+        <button class="js-copy" type="button" role="menuitem"
+          data-url="https://edgcpp.org/doc/_sources/utilities.rst.txt">
+          <span class="iconify-icon">
+            <i class="i-lucide" data-icon="copy"></i>
+          </span>
+          <span>Copy page</span>
+        </button>
+        <a role="menuitem" href="https://edgcpp.org/doc/_sources/utilities.rst.txt" target="_blank" rel="nofollow"><iconify-icon icon="bi:code-slash"></iconify-icon>
+            <span>View Source</span></a><a role="menuitem" href="https://chatgpt.com/?hints=search&q=Read%20https%3A//edgcpp.org/doc/_sources/utilities.rst.txt%20so%20I%20can%20ask%20questions%20about%20it." target="_blank" rel="nofollow">
+          <iconify-icon icon="bi:openai"></iconify-icon>
+          <span>Open in ChatGPT</span>
+        </a><a role="menuitem" href="https://claude.ai/new?q=Read%20https%3A//edgcpp.org/doc/_sources/utilities.rst.txt%20so%20I%20can%20ask%20questions%20about%20it." target="_blank" rel="nofollow">
+          <iconify-icon icon="bi:claude"></iconify-icon>
+          <span>Open in Claude</span>
+        </a></div>
+    </div>
+  </div>
+</div><article class="yue" role="main">
+          <section id="utility-programs">
+<span id="id1"></span><h1><span class="section-number">22. </span>Utility Programs<a class="headerlink" href="#utility-programs" title="Link to this heading">#</a></h1>
+<p>Several utility programs are provided with the front end.  Most of the utility
+programs help with various link-time issues and are meant to be called from a
+driver program or script.  One (<code class="docutils literal notranslate"><span class="pre">mk_errinfo</span></code>) is a tool program used when
+modifying the front end.  The source for these programs is in the <code class="docutils literal notranslate"><span class="pre">util</span></code>
+directory of the release structure.</p>
+<section id="edg-prelink">
+<h2><span class="section-number">22.1. </span><code class="docutils literal notranslate"><span class="pre">edg_prelink</span></code><a class="headerlink" href="#edg-prelink" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">edg_prelink.c</span></code> contains the “prelinker” program.  <code class="docutils literal notranslate"><span class="pre">edg_prelink.h</span></code> contains
+related declarations.  The prelinker is invoked at link time to manage
+automatic instantiation of template entities.  It is given a complete list of
+the object files and libraries that are to be linked together.  It examines the
+external names defined and referenced within those files, and finds cases where
+template entities are referenced but not defined.  It then examines information
+in the object files that describes instantiations that could have been done
+during compilation, and assigns the needed instantiations to appropriate files.
+<code class="docutils literal notranslate"><span class="pre">edg_prelink</span></code> then invokes the compiler again to compile those files, which
+will do the necessary instantiations.</p>
+<p>The prelinker uses UNIX commands like <code class="docutils literal notranslate"><span class="pre">nm</span></code> to extract information about
+object files, so it may need adaptation to run in other environments.</p>
+<p>The invocation of the prelinker looks like</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">edg_prelink</span></code> [ <em>options</em> ] <em>files</em></div>
+</div>
+</div></blockquote>
+<p>where the <em>files</em> list includes all object files and libraries, and the
+<em>options</em> are:</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">-a</span></code> <em>n</em></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Specify whether a definition list file should be created.  A
+definition list file is created if <em>n</em> is nonzero.  The default is
+specified by the <code class="docutils literal notranslate"><span class="pre">PL_DEFAULT_USE_DEFINITION_LIST_FILE</span></code> configuration
+flag.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">-b</span></code></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">List object files mode.  This mode is used when the driver needs to
+get a list of object files including any instantiation object files
+created in one instantiation perobject mode.  The prelinker simply
+creates an object file list that is written to the file specified by
+the <code class="docutils literal notranslate"><span class="pre">-o</span></code> option.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">-c</span></code> <em>command</em></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Specify the version of the <code class="docutils literal notranslate"><span class="pre">nm</span></code> command to be used.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">-D</span></code></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Do not assign instantiation to nonlocal object files.  Instantiations
+may only be assigned to object files in the current directory.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">-f</span></code> <em>fmt</em></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Specify the <code class="docutils literal notranslate"><span class="pre">nm</span></code> format to be used.  <em>fmt</em> is one of <code class="docutils literal notranslate"><span class="pre">solaris</span></code>,
+<code class="docutils literal notranslate"><span class="pre">SGI</span></code>, <code class="docutils literal notranslate"><span class="pre">SVR4</span></code>, <code class="docutils literal notranslate"><span class="pre">HPUX</span></code>, <code class="docutils literal notranslate"><span class="pre">gnu</span></code>, <code class="docutils literal notranslate"><span class="pre">CLIX,</span> <span class="pre">MacOSX</span></code>, or<code class="docutils literal notranslate"><span class="pre">MacOSX64</span></code>.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">-i</span></code></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Ignore <code class="docutils literal notranslate"><span class="pre">nm</span></code> output lines that are not formatted properly.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">-L</span></code> <em>directory</em></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Specify a library directory to be searched for libraries.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">-m</span></code></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Do not demangle identifier names that are displayed.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">-n</span></code></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Update the instantiation list but don’t recompile the files.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">-N</span></code></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">If a file from a nonlocal directory needs to be recompiled, do the
+compilation in the current directory.  An updated list of object files
+and library names is written to the file specified by the <code class="docutils literal notranslate"><span class="pre">-o</span></code>
+option so that the driver program can tell that alternate versions of
+some of the object files should be used.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">-o</span></code> <em>file-name</em></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Write an updated list of object files and library names is written to
+the file specified by <em>file-name</em>.  This option must be specified when
+the <code class="docutils literal notranslate"><span class="pre">-N</span></code> or -O option is used.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">-O</span></code></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">One instantiation per object mode is being used.  A list of object
+files, including the instantiation object files associated with the
+object files specified on the prelinker command line, is written to
+the file specified by the <code class="docutils literal notranslate"><span class="pre">-o</span></code> option.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">-q</span></code></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Turns off verbose mode.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">-r</span></code></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Don’t stop after a certain number of iterations.  (The instantiation
+process is iterative: a recompilation may bring up new template
+entities that need to be instantiated, which requires another
+recompilation, etc.  Some recursive templates can cause iteration that
+never terminates, because each iteration introduces another new entity
+that wasn’t previously there.  By default, this process is stopped
+after a certain number of iterations.)</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">-R</span></code> <em>number</em></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Override the number of reserved instantiation information file lines
+to be used.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">-s</span></code> <em>number</em></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Specifies whether the prelinker should check for entities that are
+referenced as both explicit specializations and generated
+instantiations.  If <em>number</em> is zero the check is disabled, otherwise
+the check is enabled.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">-S</span></code></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Suppress instantiation flags in the object files.  This causes the
+prelinker to recompile all of the local object files with the
+<code class="docutils literal notranslate"><span class="pre">--suppress_instantiation_flags</span></code> option.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">-u</span></code></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Specify whether external names have an added leading underscore.  The
+command-line option selects the opposite of the configuration flag
+<code class="docutils literal notranslate"><span class="pre">TARG_EXTERNAL_NAMES_GET_UNDERSCORE_ADDED</span></code>.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">-v</span></code></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Verbose mode.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">-d</span></code><em>n</em></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Set the debug level to <em>n</em>.</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The <em>files</em> list may also have the following options intermixed with the file
+names:</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">-l</span></code><em>xxx</em></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Specify a library (e.g., <code class="docutils literal notranslate"><span class="pre">-lstd</span></code>).</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">-B</span></code><em>linkage</em></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Specify the kind of linking to be done (e.g., static or dynamic).  The
+linkage kind is not checked for validity.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">--</span></code></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Marks the end of the list of file names that is passed back to the
+driver when the <code class="docutils literal notranslate"><span class="pre">-N</span></code> option is used.</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="edg-munch">
+<h2><span class="section-number">22.2. </span><code class="docutils literal notranslate"><span class="pre">edg_munch</span></code><a class="headerlink" href="#edg-munch" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">edg_munch</span></code> is the EDG version of the USL <code class="docutils literal notranslate"><span class="pre">munch</span></code> utility.  Its source
+code is in <code class="docutils literal notranslate"><span class="pre">edg_munch.c</span></code>, with associated declarations in
+<code class="docutils literal notranslate"><span class="pre">edg_munch.h</span></code>.  <code class="docutils literal notranslate"><span class="pre">edg_munch</span></code> implements a lowest-common-denominator
+method for getting global initialization and termination code executed on
+systems that have no special support for that.  <a class="footnote-reference brackets" href="#f1" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p>
+<p><code class="docutils literal notranslate"><span class="pre">edg_munch</span></code> operates by reading as input a file that is the output of <code class="docutils literal notranslate"><span class="pre">nm</span></code>
+run on a linked executable program.  It looks for names beginning with
+<code class="docutils literal notranslate"><span class="pre">__sti__</span></code> or <code class="docutils literal notranslate"><span class="pre">__std__</span></code>, those being, respectively, initialization and
+termination routines to be called at runtime.  It generates a C program that
+defines a data structure containing a list of pointers to the initialization
+and termination routines.  This generated program is then compiled and linked
+in with the executable.  The data structure is consulted at runtime by startup
+code invoked from <code class="docutils literal notranslate"><span class="pre">_main</span></code>, and the routines on the list are invoked at the
+appropriate times.</p>
+<p><code class="docutils literal notranslate"><span class="pre">edg_munch</span></code> takes only a single option: <code class="docutils literal notranslate"><span class="pre">-u</span></code>, if used, specifies whether
+external names have an added leading underscore.  The command-line option
+selects the opposite of the configuration flag
+<code class="docutils literal notranslate"><span class="pre">TARG_EXTERNAL_NAMES_GET_UNDERSCORE_ADDED</span></code>.</p>
+</section>
+<section id="edg-decode">
+<h2><span class="section-number">22.3. </span><code class="docutils literal notranslate"><span class="pre">edg_decode</span></code><a class="headerlink" href="#edg-decode" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">edg_decode</span></code> is a name demangler.  The demangling code is in <code class="docutils literal notranslate"><span class="pre">decode.c</span></code>,
+with associated declarations in <code class="docutils literal notranslate"><span class="pre">decode.h</span></code>.  A main program that uses the
+demangling code is provided in <code class="docutils literal notranslate"><span class="pre">edg_decode.c</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">edg_decode</span></code> reads input from <code class="docutils literal notranslate"><span class="pre">stdin</span></code> and writes output to <code class="docutils literal notranslate"><span class="pre">stdout</span></code>.
+Things that look like mangled names in the input are demangled.  Everything
+else is passed through unchanged.  This makes the program suitable, for
+example, as a filter for the output of a linker: error messages in general are
+passed through unaltered, but mangled names are demangled.  For example, using
+the cfront-like ABI,</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span><span data-line="1">ld: Undefined symbol
+</span><span data-line="2">   _f__Fif
+</span></pre></div>
+</div>
+<p>is turned into</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span><span data-line="1">ld: Undefined symbol
+</span><span data-line="2">   f(int, float)
+</span></pre></div>
+</div>
+<p>Mangled names that are ill-formed in some way are also passed through
+unchanged.</p>
+<p><code class="docutils literal notranslate"><span class="pre">edg_decode</span></code> usually has only a single option: <code class="docutils literal notranslate"><span class="pre">-u</span></code>, if used, specifies
+whether external names have an added leading underscore.  The command-line
+option selects the opposite of the configuration flag
+<code class="docutils literal notranslate"><span class="pre">TARG_EXTERNAL_NAMES_GET_UNDERSCORE_ADDED</span></code>.  When the IA-64 ABI is used,
+however, there is also a <code class="docutils literal notranslate"><span class="pre">-g</span></code> option, which selects the opposite of the
+configuration flag DEFAULT_EMULATE_GNU_ABI_BUGS, which when TRUE extends the
+demangling to cover some invalid mangled names put out by g++ 3.2 (and the EDG
+front end, when configured to emulate those bugs).</p>
+<p>The demangling is intended to work only on names of external entities.  There
+is some name mangling done for internal entities, or by the C-generating back
+end, that this program does not try to decode.</p>
+<p>In the cfront-like ABI, names that contain double underscores in the source
+code will probably not be demangled correctly.  This is an unfortunate
+consequence of using a mangling scheme that is based on the one used by cfront.
+The standard forbids use of double underscores in names in user code, reserving
+such names for the implementation, so the effect of this shortcoming is
+limited.  Implementors should try to avoid using such names for entities with
+external linkage.  Double underscores at the beginnings of external names do,
+however, work correctly.  In the IA-64 ABI, a similar problem applies to names
+that begin with “<code class="docutils literal notranslate"><span class="pre">_Z</span></code>”.</p>
+<p>The name demangling is also available through a callable interface, which is
+used in <code class="docutils literal notranslate"><span class="pre">edg_prelink</span></code>.  See routine <code class="docutils literal notranslate"><span class="pre">decode_identifier</span></code>.</p>
+</section>
+<section id="mk-errinfo">
+<span id="id3"></span><h2><span class="section-number">22.4. </span><code class="docutils literal notranslate"><span class="pre">mk_errinfo</span></code><a class="headerlink" href="#mk-errinfo" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">mk_errinfo</span></code> translates a text file containing error message codes and
+associated descriptions into a pair of header files that represent this
+information in a manner more readily used by the front end.</p>
+<p>The invocation of the <code class="docutils literal notranslate"><span class="pre">mk_errinfo</span></code> is typically</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">mk_errinfo<span class="w"> </span>error_msg.txt<span class="w"> </span>error_tag.txt<span class="w"> </span>err_codes.h<span class="w"> </span>err_data.h
+</span></pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">error_msg.txt</span></code> file defines the diagnostic messages generated by the
+front end.  This file, along with <code class="docutils literal notranslate"><span class="pre">error_tag.txt</span></code>, is processed by
+<code class="docutils literal notranslate"><span class="pre">mk_errinfo</span></code> to generate the <code class="docutils literal notranslate"><span class="pre">err_codes.h</span></code> and <code class="docutils literal notranslate"><span class="pre">err_data.h</span></code> include
+files.  <code class="docutils literal notranslate"><span class="pre">mk_errinfo</span></code> may also be used to automatically generate the file used
+to generate the <a class="reference internal" href="../err_msgs/#error-messages"><span class="std std-ref">Error Messages</span></a> appendix of this manual.</p>
+<p>When used to generate a documentation file, the invocation is typically one of
+the following:</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">mk_errinfo</span> <span class="pre">-d</span> <span class="pre">error_msg.txt</span> <span class="pre">error_tag.txt</span></code> <em>generated.tex</em></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">mk_errinfo</span> <span class="pre">-mml</span> <span class="pre">error_msg.txt</span> <span class="pre">error_tag.txt</span></code> <em>generated.mml</em></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">mk_errinfo</span> <span class="pre">-rst</span> <span class="pre">error_msg.txt</span> <span class="pre">error_tag.txt</span></code> <em>generated.rst</em></div>
+</div>
+</div></blockquote>
+<p><em>generated.tex</em> is the name of the generated output file containing the
+documentation in LaTeX format.  <em>generated.mml</em> is the name of the generated
+output file containing the documentation in MML (Maker Markup Language), which
+can be used to create a FrameMaker document. <em>generated.rst</em> is the name of
+the generated output file containing the documentation in reStructuredText
+format, which can be used with Sphinx and various other tools.</p>
+<p><code class="docutils literal notranslate"><span class="pre">error_msg.txt</span></code> contains lines that have the following form:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span><span data-line="1">error_code;tag;"text"
+</span></pre></div>
+</div>
+<p>The error code is the enumeration element name that is used by the front end.
+The file must be specified in enumeration order.  To preserve the numbering of
+error codes, errors may not be inserted in the middle of the file, nor may
+lines be removed.  If an error message is no longer in use, the line on which
+it is defined should be prefixed with the string <code class="docutils literal notranslate"><span class="pre">REMOVED</span></code>.  This will retain
+its sequence number but eliminate it from the generated tables.</p>
+<p>The tag is an alias for a given error code to be used by the end-user to name
+that error in the command-line options that change the severities of
+diagnostics.  If no tag is specified, the error code (with the <code class="docutils literal notranslate"><span class="pre">ec_</span></code> removed)
+is used as the tag.</p>
+<p>Some messages are used as part of the formatting of other messages (for
+example, the messages used to provide error context information).  These
+messages should have a tag of <code class="docutils literal notranslate"><span class="pre">INTERNAL</span></code>.  This prevents the message from
+being entered in the tag table and also prevents the message from appearing in
+the automatically generated documentation file.</p>
+<p>The text string contains a quoted string similar to one that would be used in a
+C program to define the equivalent string.  Any quote characters within the
+text string must be escaped.</p>
+<p>The text string includes markers indicating the location of fill-ins in the
+message (e.g., <code class="docutils literal notranslate"><span class="pre">%t</span></code> for a type).  Full information on those fill-in codes can
+be found in <a class="reference internal" href="../admin/#error-reporting"><span class="std std-ref">Error Reporting</span></a>.</p>
+<p>The message text may include supplementary information that is only used to
+improve the automatically generated documentation file (which is formatted
+into the <a class="reference internal" href="../err_msgs/#error-messages"><span class="std std-ref">Error Messages</span></a> appendix of this manual).  For example, an
+error text string might look like this</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span><span data-line="1">"a message with %s\='fill-in' included"
+</span></pre></div>
+</div>
+<p>The string <code class="docutils literal notranslate"><span class="pre">\='fill-in'</span></code> is used when creating the documentation file as the
+value to be substituted for the <code class="docutils literal notranslate"><span class="pre">%s</span></code>.  This string is removed from the error
+text information when the <code class="docutils literal notranslate"><span class="pre">err_data.h</span></code> file is created.</p>
+<p><code class="docutils literal notranslate"><span class="pre">error_tag.txt</span></code> is used to supply additional tags that may be used as aliases
+for diagnostic messages.  This mechanism is intended to be used by customers
+who are packaging the front end as part of their product and allows them to
+assign their own set of error tags without the need to modify the distributed
+<code class="docutils literal notranslate"><span class="pre">error_msg.txt</span></code> file.  Note that these tags are used in addition to (not in
+place of) the default tags specified in the <code class="docutils literal notranslate"><span class="pre">error_msg.txt</span></code> file.</p>
+<p>Each line should be formatted as:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span><span data-line="1">error_code;tag
+</span></pre></div>
+</div>
+<p>The error code is the enumeration element name used by the front end.  The tag
+is the alias being assigned.  There may be more than one alias that references
+a given enumerator.</p>
+<p>In both <code class="docutils literal notranslate"><span class="pre">error_msg.txt</span></code> and <code class="docutils literal notranslate"><span class="pre">error_tag.txt</span></code>, blank lines are ignored and
+lines that begin with a “<code class="docutils literal notranslate"><span class="pre">#</span></code>” are treated as comments.</p>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="f1" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">1</a><span class="fn-bracket">]</span></span>
+<p>The <em>patch</em> approach, by comparison, is more machine-dependent and
+more efficient, but still doesn’t require special linker support.
+The code generated by the EDG front end will work with USL’s
+<code class="docutils literal notranslate"><span class="pre">patch</span></code>, but EDG does not provide its own version of <code class="docutils literal notranslate"><span class="pre">patch</span></code>.</p>
+</aside>
+</aside>
+</section>
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"><div class="navigation-prev">
+    <a href="../runtime/">
+      <i class="i-lucide chevron-left"></i>
+      <div class="page-info">
+        <span>Previous</span><div class="title"><span class="section-number">21. </span>Runtime Library</div></div>
+    </a>
+  </div><div class="navigation-next">
+    <a href="../c_gen_be/">
+      <div class="page-info">
+        <span>Next</span>
+        <div class="title"><span class="section-number">23. </span>C-Generating Back End</div>
+      </div>
+      <i class="i-lucide chevron-right"></i>
+    </a>
+  </div></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>EDG 7.0, 7/20/26 - ©2026, Edison Design Group, Inc.</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials"></div>
+    </div>
+  </div>
+</footer>
+      <script src="../_static/documentation_options.js?v=618d875b"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/shibuya.js?v=50760d75"></script></body>
+</html>

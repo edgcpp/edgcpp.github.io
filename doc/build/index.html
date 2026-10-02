@@ -1,0 +1,1439 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="violet" data-content_root="../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>1. Configuring and Building the C++ Front End - CPFE 7.0 documentation</title><link rel="index" title="Index" href="../genindex/" /><link rel="search" title="Search" href="../search/" /><link rel="next" title="2. External Interface" href="../ext_intf/" /><link rel="prev" title="C/C++ Front End Documentation" href="../" />
+      <link rel="canonical" href="https://edgcpp.org/doc/build/" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e1a1ceaf" />
+    <link rel="stylesheet" type="text/css" href="../_static/shibuya.css?v=2ceb65ce" />
+    <link media="print" rel="stylesheet" type="text/css" href="../_static/print.css?v=20ff2c19" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=8971ef7f" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://edgcpp.org/doc/build/"/>
+  <meta property="og:title" content="1. Configuring and Building the C++ Front End"/>
+    <meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="../">
+      <img class="light-logo" src="../_static/doc-logo-light.png" alt="CPFE" height="28" loading="lazy" />
+      <img class="dark-logo" src="../_static/doc-logo-dark.png" alt="CPFE" height="28" loading="lazy" />
+      <strong>CPFE</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="../search/" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials"></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2"></span>
+          <span class="hamburger_3"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">1. Configuring and Building the C++ Front End</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ext_intf/">2. External Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../int_overview/">3. Overview of Internal Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../il/">4. Intermediate Language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lower_il/">5. IL Lowering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../symbol_tbl/">6. Symbol Table</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lex_pp/">7. Lexical Analysis and Preprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tables/">8. Table Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../expr/">9. Expression Scanning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../decls/">10. Declarations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../class_decl/">11. Class Declarations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../statements/">12. Statement Scanning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../templates/">13. Templates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../exceptions/">14. Exception Handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pragma/">15. Pragmas and Attributes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/">16. Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../trans_unit/">17. Multiple Translation Units</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../admin/">18. Administrative Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../err_msgs/">19. Error Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../includes/">20. ANSI C and C++ Include Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../runtime/">21. Runtime Library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../utilities/">22. Utility Programs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../c_gen_be/">23. C-Generating Back End</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cp_gen_be/">24. C++-Generating Back End</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../code_style/">25. Coding Style Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../testing/">26. EDG Testing Framework</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#directories-and-files-in-a-release">1.1. Directories and Files in a Release</a></li>
+<li><a class="reference internal" href="#configuring-the-front-end">1.2. Configuring the Front End</a><ul>
+<li><a class="reference internal" href="#the-defines-h-file">1.2.1. The <code class="docutils literal notranslate"><span class="pre">defines.h</span></code> File</a></li>
+<li><a class="reference internal" href="#the-dettarg-utility">1.2.2. The <code class="docutils literal notranslate"><span class="pre">dettarg</span></code> Utility</a></li>
+<li><a class="reference internal" href="#lang-feat-h-host-envir-h-targ-def-h-and-target-h">1.2.3. <code class="docutils literal notranslate"><span class="pre">lang_feat.h</span></code>, <code class="docutils literal notranslate"><span class="pre">host_envir.h</span></code>, <code class="docutils literal notranslate"><span class="pre">targ_def.h</span></code>, and <code class="docutils literal notranslate"><span class="pre">target.h</span></code></a></li>
+<li><a class="reference internal" href="#basics-h-and-build-environment-configuration">1.2.4. <code class="docutils literal notranslate"><span class="pre">basics.h</span></code> and Build Environment Configuration</a></li>
+<li><a class="reference internal" href="#commonly-used-configuration-macros">1.2.5. Commonly-used Configuration Macros</a><ul>
+<li><a class="reference internal" href="#optional-components">1.2.5.1. Optional Components</a></li>
+<li><a class="reference internal" href="#support-for-source-language-dialects">1.2.5.2. Support for Source Language Dialects</a></li>
+<li><a class="reference internal" href="#il-features">1.2.5.3. IL Features</a></li>
+<li><a class="reference internal" href="#target-platform-options">1.2.5.4. Target Platform Options</a></li>
+<li><a class="reference internal" href="#front-end-behaviors">1.2.5.5. Front End Behaviors</a></li>
+<li><a class="reference internal" href="#development-aids">1.2.5.6. Development Aids</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#target-specific-configuration">1.2.6. Target-Specific Configuration</a></li>
+<li><a class="reference internal" href="#replaceable-code">1.2.7. Replaceable Code</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#building-the-front-end">1.3. Building the Front End</a><ul>
+<li><a class="reference internal" href="#using-the-top-level-makefile">1.3.1. Using the Top-Level Makefile</a></li>
+<li><a class="reference internal" href="#building-the-front-end-only">1.3.2. Building the Front End Only</a></li>
+<li><a class="reference internal" href="#building-support-for-c-cli-and-c-cx-modes">1.3.3. Building Support for C++/CLI and C++/CX Modes</a></li>
+<li><a class="reference internal" href="#building-and-using-the-il-display-program">1.3.4. Building and Using the IL Display Program</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#driving-the-front-end">1.4. Driving the Front End</a><ul>
+<li><a class="reference internal" href="#the-eccp-script">1.4.1. The <code class="docutils literal notranslate"><span class="pre">eccp</span></code> script</a></li>
+<li><a class="reference internal" href="#the-edgcc-driver-for-windows">1.4.2. The <code class="docutils literal notranslate"><span class="pre">edgcc</span></code> Driver for Windows</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#configuring-and-building-the-run-time-support-library">1.5. Configuring and Building the Run-Time Support Library</a></li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../"><span itemprop="name">CPFE</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name"><span class="section-number">1. </span>Configuring and Building the C++ Front End</strong>
+        <meta itemprop="position" content="2" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="relative min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+  <div class="copy-page-wrapper relative pb-4 lg:absolute lg:top-8 lg:right-6 xl:right-12">
+  <div id="copy-page-trigger">
+    <button
+      type="button"
+      class="js-copy px-3 py-1 inline-flex items-center gap-1"
+      data-url="https://edgcpp.org/doc/_sources/build.rst.txt"
+    >
+      <i class="i-lucide" data-icon="copy"></i>
+      <span>Copy page</span>
+    </button>
+    <button class="js-menu px-2 py-1" type="button" aria-label="More actions"
+      aria-haspopup="menu" aria-expanded="false" aria-controls="copy-page-content">
+      <i class="i-lucide chevron-down"></i>
+    </button>
+  </div>
+  <div id="copy-page-content" role="menu" aria-orientation="vertical" aria-hidden="true">
+    <div role="presentation">
+      <div class="flex flex-col" role="group">
+        <button class="js-copy" type="button" role="menuitem"
+          data-url="https://edgcpp.org/doc/_sources/build.rst.txt">
+          <span class="iconify-icon">
+            <i class="i-lucide" data-icon="copy"></i>
+          </span>
+          <span>Copy page</span>
+        </button>
+        <a role="menuitem" href="https://edgcpp.org/doc/_sources/build.rst.txt" target="_blank" rel="nofollow"><iconify-icon icon="bi:code-slash"></iconify-icon>
+            <span>View Source</span></a><a role="menuitem" href="https://chatgpt.com/?hints=search&q=Read%20https%3A//edgcpp.org/doc/_sources/build.rst.txt%20so%20I%20can%20ask%20questions%20about%20it." target="_blank" rel="nofollow">
+          <iconify-icon icon="bi:openai"></iconify-icon>
+          <span>Open in ChatGPT</span>
+        </a><a role="menuitem" href="https://claude.ai/new?q=Read%20https%3A//edgcpp.org/doc/_sources/build.rst.txt%20so%20I%20can%20ask%20questions%20about%20it." target="_blank" rel="nofollow">
+          <iconify-icon icon="bi:claude"></iconify-icon>
+          <span>Open in Claude</span>
+        </a></div>
+    </div>
+  </div>
+</div><article class="yue" role="main">
+          <section id="configuring-and-building-the-c-front-end">
+<h1><span class="section-number">1. </span>Configuring and Building the C++ Front End<a class="headerlink" href="#configuring-and-building-the-c-front-end" title="Link to this heading">#</a></h1>
+<p>This chapter is an introduction to configuring and building the front end and
+the various tools that come with it.  Bringing up the front end on a new
+platform typically can be done in a few hours, and if the platform is close
+enough to a system for which sample configurations are available (e.g., Linux,
+Windows, etc.) that initial process can be reduced to a matter of minutes.</p>
+<p>The front end can be configured for a variety of uses.  For example, it could
+be part of a compiler with a custom code generator, or a compiler with a
+portable C-generating back end (the latter is provided).  Alternatively, it
+could be part of a source analysis tool (without a code generator) or of a
+source transformation/translation tool (using the supplied C/C++-generating
+back end).  Some of the tools supplied with the front end will not be needed
+for some of these applications.  For example, a source analysis tool is
+unlikely to need the supplied prelinker tool to perform automatic
+instantiations.  The details of the build process are therefore likely going to
+depend on the application.  However, the overall structure of the source code
+is simple enough that customizing the build process should be straightforward.</p>
+<p>The source code implementing the front end and associated tools is written in
+C++11 (i.e., ISO/IEC 14882:2011) and can be compiled using relatively current
+C++ compilers.  The front end has been compiled with g++ 4.8.1, clang 3.3, and
+Microsoft Visual Studio 2015 (build 19.00.24215.1).  The front end does not
+explicitly throw or catch exceptions and does not use C++ features that would
+requite runtime type information (RTTI), so those features can be disabled when
+compiling the front end (for compilers that support that).  (The sample
+run-time support library is written in C++ and (if needed) is normally compiled
+using the front end itself.  When building on Microsoft Windows, a component is
+also available to read metadata in C++/CLI mode: This is written in C++ for the
+Microsoft C++ compiler.)</p>
+<section id="directories-and-files-in-a-release">
+<h2><span class="section-number">1.1. </span>Directories and Files in a Release<a class="headerlink" href="#directories-and-files-in-a-release" title="Link to this heading">#</a></h2>
+<p>After unpacking a release, its top-level directory should contain the following
+directories and files:</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">Makefile</span></code></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">In a Unix-like environment (including Windows-hosted environments like
+Cygwin or MinGW), the <code class="docutils literal notranslate"><span class="pre">make</span></code> utility can be used to build the front
+end and its supporting tools and components.  This top-level
+<code class="docutils literal notranslate"><span class="pre">Makefile</span></code> runs the <code class="docutils literal notranslate"><span class="pre">make</span></code> tool in the various subdirectories as
+needed.  It is geared primarily toward building a compiler using the
+C-generating back end along with the sample run-time support library.
+A <code class="docutils literal notranslate"><span class="pre">make</span></code> process using this top-level <code class="docutils literal notranslate"><span class="pre">Makefile</span></code> may therefore
+terminate with errors for other situations; in that case, the
+<code class="docutils literal notranslate"><span class="pre">Makefile</span></code>s in the appropriate subdirectories (especially
+<code class="docutils literal notranslate"><span class="pre">misc/</span></code> and <code class="docutils literal notranslate"><span class="pre">src/</span></code>) are still likely to be useful.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">src/</span></code></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">The directory containing the source files of the C++ front end and its
+optional components (such as the C- and C++-generating back ends).
+This directory contains a subdirectory <code class="docutils literal notranslate"><span class="pre">disp/</span></code> used to build the
+stand-alone IL display utility.  In addition to source code, the
+<code class="docutils literal notranslate"><span class="pre">src/</span></code> directory also holds the <code class="docutils literal notranslate"><span class="pre">Changes</span></code> file, which describes
+the various changes made to the front end in the current and previous
+releases.  Note that most of the source files have the <code class="docutils literal notranslate"><span class="pre">.c</span></code> suffix
+that would normally indicate a C source file.  Starting with the 6.0
+release, these files contain C++ source code and must be compiled
+using a C++ compiler (with the C++11 dialect).  The original filenames
+have been maintained to make patching files easier.  If desired,
+symbolic links can be added to accommodate build environments as
+necessary.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">bin/</span></code></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Initially, this directory contains a script <code class="docutils literal notranslate"><span class="pre">eccp</span></code> that can be used
+to run the front end much like typical C++ compilers in Unix-like
+environments (such as <code class="docutils literal notranslate"><span class="pre">CC</span></code> and <code class="docutils literal notranslate"><span class="pre">g++</span></code>).  See
+“<a class="reference internal" href="#the-eccp-script"><span class="std std-ref">The eccp script</span></a>” for details.  Once the front end is built (in
+the <code class="docutils literal notranslate"><span class="pre">src/</span></code> directory), it can be moved here for invocation by
+<code class="docutils literal notranslate"><span class="pre">eccp</span></code> (this is done automatically if the top-level <code class="docutils literal notranslate"><span class="pre">Makefile</span></code> is
+used).</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sample_edg_eccp_config/</span></code></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">The <code class="docutils literal notranslate"><span class="pre">eccp</span></code> script can be configured in various ways.  This directory
+contains sample configuration files for some popular Unix-like
+operating systems (Linux, MacOS X, and Solaris).  It also includes a
+script <code class="docutils literal notranslate"><span class="pre">make_g++_incl_paths</span></code> (to be run from the <code class="docutils literal notranslate"><span class="pre">lib/</span></code> directory)
+to establish the location of <code class="docutils literal notranslate"><span class="pre">g++</span></code>‘s header files (in cases where
+<code class="docutils literal notranslate"><span class="pre">eccp</span></code> should rely on a native <code class="docutils literal notranslate"><span class="pre">g++</span></code> installation for system and
+standard header files).</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">include/</span></code></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">This directory contains prototype implementations for a few standard
+C++ header files that are closely tied to the compiler’s internals.
+(For example, the contents of the <code class="docutils literal notranslate"><span class="pre">&lt;typeinfo&gt;</span></code> header must match the
+compiler’s understanding of the <code class="docutils literal notranslate"><span class="pre">std::type_info</span></code> type.)</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">lib_src/</span></code></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">This directory contains C++ source code implementing a minimal C++
+run-time support library (in support of C++ features like exception
+handling, the <code class="docutils literal notranslate"><span class="pre">dynamic_cast</span></code> operator, and <code class="docutils literal notranslate"><span class="pre">operator</span> <span class="pre">new</span></code>).  The
+library also includes support for certain extensions to the C89
+language (like operations on complex floating-point types and support
+for variable-length arrays).  All of this code is primarily meant for
+demonstration purposes, and is probably not suitable for end-user
+products: It is very portable, but not very efficient.  It is usually
+not needed for non-compiler applications such as source analysis or
+source-to-source translation.  This directory also contains a
+<code class="docutils literal notranslate"><span class="pre">Changes</span></code> file describing the history of the run-time support
+library.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">lib/</span></code></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Initially, this directory only contains a file
+<code class="docutils literal notranslate"><span class="pre">predefined_macros.txt</span></code>.  This file is read by the front end to
+predefine certain macros.  It is typically used to define macros that
+are defined by compilers being emulated (see
+<code class="docutils literal notranslate"><span class="pre">make_predef_macro_table</span></code> and <code class="docutils literal notranslate"><span class="pre">make_win_predef_macro_table.c</span></code> for
+utilities that automatically generate a set of predefined macros for
+GNU and Microsoft compilers, respectively).  Once the run-time support
+library is built (in the <code class="docutils literal notranslate"><span class="pre">lib_src/</span></code> directory), it can be moved here
+so the <code class="docutils literal notranslate"><span class="pre">eccp</span></code> script can find it (this is done automatically if the
+top-level <code class="docutils literal notranslate"><span class="pre">Makefile</span></code> is used).  Note that this directory is only
+used when an unnamed “legacy” target configuration is specified – see
+<code class="docutils literal notranslate"><span class="pre">lib_</span></code><em>target</em><code class="docutils literal notranslate"><span class="pre">/</span></code> below for cases where a named target
+configuration is used.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">lib_</span></code><em>target</em><code class="docutils literal notranslate"><span class="pre">/</span></code></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Target-specific version of the <code class="docutils literal notranslate"><span class="pre">lib/</span></code> directory described above
+used when the “<code class="docutils literal notranslate"><span class="pre">--target</span></code> <em>target</em>” command-line option is
+specified.  This directory can have the same
+<code class="docutils literal notranslate"><span class="pre">predefined_macros.txt</span></code> and <code class="docutils literal notranslate"><span class="pre">libC.a</span></code> files as <code class="docutils literal notranslate"><span class="pre">lib/</span></code>, or can
+be different as required by the specific target.  If a
+target-specific version of <code class="docutils literal notranslate"><span class="pre">libC.a</span></code> is required, it must be
+built manually (see <code class="docutils literal notranslate"><span class="pre">lib_src/Makefile</span></code>).</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">misc/</span></code></div>
+</div>
+</td>
+<td><p>This directory contains sources for four utility programs (and a
+<code class="docutils literal notranslate"><span class="pre">Makefile</span></code> to build them) to build and configure the front end:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">make_predef_macro_table</span></code>: A script to generate a predefined macros
+file (like <code class="docutils literal notranslate"><span class="pre">lib/predefined_macros.txt</span></code>) to match a given version of
+<code class="docutils literal notranslate"><span class="pre">gcc/g++</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">make_win_predef_macro_table.c</span></code>: A program to generate a
+predefined macros file (like <code class="docutils literal notranslate"><span class="pre">lib/predefined_macros.txt</span></code>) to match
+a given version of Microsoft Visual Studio.  Note that this program
+is not built by the <code class="docutils literal notranslate"><span class="pre">Makefile</span></code> (and must be built manually if
+required).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mk_errinfo.c</span></code>: A program to translate the files describing the
+diagnostics emitted by the front end to plain C++ code.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dettarg.c</span></code>: A utility to determine basic configuration settings for
+a target platform (e.g., the size and alignment of various integer
+types).  See “<a class="reference internal" href="#the-detarg-utility"><span class="std std-ref">The dettarg Utility</span></a>” below.</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">util/</span></code></div>
+</div>
+</td>
+<td><p>This directory contains sources for three utility programs (and a
+<code class="docutils literal notranslate"><span class="pre">Makefile</span></code> to build them) that can be used in conjunction with the
+front end (e.g., by the <code class="docutils literal notranslate"><span class="pre">eccp</span></code> script):</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">edg_prelink.c</span></code>: A program that implements automatic template
+instantiation by re-running the front end to generate missing
+instantiations.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">edg_decode.c</span></code>: A name demangler (which can, for example, be used on
+the output of a linker to make that output more readable). It is
+an interface for the actual demangling logic, which is contained
+in <code class="docutils literal notranslate"><span class="pre">decode.c</span></code> to allow its use in other programs as well.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">edg_munch.c</span></code>: A utility that generates a C program that will call
+all required start-up initialization routines.  This is needed only
+if your linker does not provide a way to invoke code automatically at
+program start-up time.</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">doc/</span></code></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">This directory contains a PDF version of this document (<code class="docutils literal notranslate"><span class="pre">plm.pdf</span></code>).</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">README</span></code></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">A plain text file summarizing some of the information in this chapter.</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="configuring-the-front-end">
+<h2><span class="section-number">1.2. </span>Configuring the Front End<a class="headerlink" href="#configuring-the-front-end" title="Link to this heading">#</a></h2>
+<p>A large number of behaviors of the front end can be configured by appropriately
+defining various configuration macros.  These macros can affect which
+components of the front end are enabled, which dialects are supported, what
+host and target platform characteristics are assumed, and so forth.  See
+<a class="reference internal" href="#macro-defaults"><span class="std std-ref">lang_feat.h, host_envir.h, targ_def.h, and target.h</span></a> below for information about where all the macros are
+documented.</p>
+<p>Beginning with version 4.10.1 of the front end, a facility to provide for
+run-time selection of a target configuration (through the use of the
+<code class="docutils literal notranslate"><span class="pre">--target</span></code> command-line option) is provided.  To support this run-time
+target-configuration feature, a number of the configuration macros have
+been designated as “target-specific”.  See
+<a class="reference internal" href="#target-specific-configuration"><span class="std std-ref">Target-Specific Configuration</span></a> for more information.</p>
+<section id="the-defines-h-file">
+<h3><span class="section-number">1.2.1. </span>The <code class="docutils literal notranslate"><span class="pre">defines.h</span></code> File<a class="headerlink" href="#the-defines-h-file" title="Link to this heading">#</a></h3>
+<p>It is highly recommended that the front end be configured by defining the
+appropriate macros in the <code class="docutils literal notranslate"><span class="pre">src/defines.h</span></code> file.  Occasionally, it may be
+expedient to set the macros directly through <code class="docutils literal notranslate"><span class="pre">src/Makefile</span></code> or a similar
+build-system mechanism (e.g., to enable debugging facilities), but modifying
+other front end sources to set the configuration macros is not a recommended
+option.</p>
+<p>Sample configuration files are provided in the <code class="docutils literal notranslate"><span class="pre">src/</span></code> directory for Linux,
+MacOS X, Solaris, and Windows (<code class="docutils literal notranslate"><span class="pre">defines.h.linux</span></code>, <code class="docutils literal notranslate"><span class="pre">defines.h.macosx</span></code>,
+<code class="docutils literal notranslate"><span class="pre">defines.h.solaris</span></code>, and <code class="docutils literal notranslate"><span class="pre">defines.h.win32</span></code>, respectively).  These are
+recommended starting points when building the front end on these platforms: For
+example, to build the front end on MacOS X, one can start by copying
+<code class="docutils literal notranslate"><span class="pre">src/defines.h.macosx</span></code> to <code class="docutils literal notranslate"><span class="pre">src/defines.h</span></code>.</p>
+<p>A partial configuration file <code class="docutils literal notranslate"><span class="pre">src/defines.h.proto</span></code> is also provided: It
+contains the macros needed to enable the modern IA-64 ABI (also called the
+Itanium ABI), but it must be complemented by additional target characteristics
+(which can be obtained by running the <code class="docutils literal notranslate"><span class="pre">dettarg</span></code> utility described next).</p>
+</section>
+<section id="the-dettarg-utility">
+<span id="the-detarg-utility"></span><h3><span class="section-number">1.2.2. </span>The <code class="docutils literal notranslate"><span class="pre">dettarg</span></code> Utility<a class="headerlink" href="#the-dettarg-utility" title="Link to this heading">#</a></h3>
+<p>File <code class="docutils literal notranslate"><span class="pre">misc/dettarg.c</span></code> is a simple C++ program that can be compiled, linked,
+and run on a system for which the compiler is targeted to determine some basic
+characteristics (like endianness, size and alignment of fundamental types, and
+so forth) of that target platform.  The output produced by <code class="docutils literal notranslate"><span class="pre">dettarg</span></code> is in a
+form suitable for addition to the <code class="docutils literal notranslate"><span class="pre">src/defines.h</span></code> file.</p>
+</section>
+<section id="lang-feat-h-host-envir-h-targ-def-h-and-target-h">
+<span id="macro-defaults"></span><h3><span class="section-number">1.2.3. </span><code class="docutils literal notranslate"><span class="pre">lang_feat.h</span></code>, <code class="docutils literal notranslate"><span class="pre">host_envir.h</span></code>, <code class="docutils literal notranslate"><span class="pre">targ_def.h</span></code>, and <code class="docutils literal notranslate"><span class="pre">target.h</span></code><a class="headerlink" href="#lang-feat-h-host-envir-h-targ-def-h-and-target-h" title="Link to this heading">#</a></h3>
+<p>A typical <code class="docutils literal notranslate"><span class="pre">src/defines.h</span></code> file will not explicitly set all the configuration
+macros available in the front end.  Instead, most macros are just left to their
+default values.  These defaults are specified in four header files.  Perhaps
+more importantly, these header files are also the place where all the
+configuration macros are documented (in comments preceding the directives
+determining the default values).  The header files are as follows:</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">src/lang_feat.h</span></code></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Configuration macros controlling language features.  Some macros
+control a single language feature detail, whereas others control whole
+dialects.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">src/host_envir.h</span></code></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Configuration macros that determine characteristics of the host
+platform (the platform on which the front end runs).</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">src/targ_def.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">src/target.h</span></code></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Configuration macros describing characteristics of the target platform
+(the platform for which code must be generated).  Many of these macros
+have names that begin with <code class="docutils literal notranslate"><span class="pre">TARG_</span></code>.  Characteristics that are
+entirely fixed at the time the front end is built are normally
+documented in <code class="docutils literal notranslate"><span class="pre">targ_def.h</span></code>, whereas <code class="docutils literal notranslate"><span class="pre">target.h</span></code> describes target
+characteristics that can be overridden for every invocation of the
+front end.</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>These descriptions are generally correct, but occasionally a configuration
+macro may need to be placed in a header that doesn’t quite match that macro’s
+function.  For example, <code class="docutils literal notranslate"><span class="pre">targ_def.h</span></code> contains some macros that would more
+naturally belong to <code class="docutils literal notranslate"><span class="pre">lang_feat.h</span></code>, but the default value of the macro depends
+on a target platform characteristic.</p>
+<p>Note that these files should not be modified to set configuration options.
+Instead, the appropriate macros should be defined in <code class="docutils literal notranslate"><span class="pre">src/defines.h</span></code> or
+perhaps in a <code class="docutils literal notranslate"><span class="pre">Makefile</span></code> or similar build system tool.</p>
+</section>
+<section id="basics-h-and-build-environment-configuration">
+<h3><span class="section-number">1.2.4. </span><code class="docutils literal notranslate"><span class="pre">basics.h</span></code> and Build Environment Configuration<a class="headerlink" href="#basics-h-and-build-environment-configuration" title="Link to this heading">#</a></h3>
+<p>The front end is written in portable C++11 (except for one file in the
+Microsoft dialect if the capability of reading Microsoft metadata for
+C++/CLI is needed).  The <code class="docutils literal notranslate"><span class="pre">basics.h</span></code> header adds abstractions to allow
+most of the remainder of the front end source code to be written without
+concern for variations in system headers.  The build environment type can
+often be determined by the preprocessor tests in <code class="docutils literal notranslate"><span class="pre">basics.h</span></code>, but when
+that is not the case, one should define one of the following build
+environment macros (on the command-line or in <code class="docutils literal notranslate"><span class="pre">src/defines.h</span></code>):
+<code class="docutils literal notranslate"><span class="pre">__ANSIC__</span></code> (for ANSI C; also used for Borland and Microsoft C under
+MS-DOS and Windows), <code class="docutils literal notranslate"><span class="pre">__SYSV__</span></code> (for System V), <code class="docutils literal notranslate"><span class="pre">__BSD__</span></code> (for Berkeley
+4.n), <code class="docutils literal notranslate"><span class="pre">__VMS__</span></code> (for VAX/VMS C; this will cause <code class="docutils literal notranslate"><span class="pre">__SYSV__</span></code> to be
+defined, but the <code class="docutils literal notranslate"><span class="pre">__VMS__</span></code> flag will control some minor variations from
+System V).</p>
+<p>Some ANSI library functions do not exist in all system libraries.  This problem
+is handled by remapping such function calls (via macros) to functions that do
+exist.  For example, traditional Berkeley UNIX does not have <code class="docutils literal notranslate"><span class="pre">memcpy</span></code>, but
+does have <code class="docutils literal notranslate"><span class="pre">bcopy</span></code>; the front end source is written using calls to <code class="docutils literal notranslate"><span class="pre">memcpy</span></code>,
+but when it is compiled with the <code class="docutils literal notranslate"><span class="pre">__BSD__</span></code> flag set, a macro <code class="docutils literal notranslate"><span class="pre">memcpy</span></code>
+transforms those calls into calls to <code class="docutils literal notranslate"><span class="pre">bcopy</span></code>.  Another function of the build
+environment macros is controlling inclusion of appropriate header files.  Even
+when identical functions exist on different host systems, they are sometimes
+defined by different header files (e.g., Berkeley systems use <code class="docutils literal notranslate"><span class="pre">&lt;strings.h&gt;</span></code>
+instead of the ANSI/System V <code class="docutils literal notranslate"><span class="pre">&lt;string.h&gt;</span></code>).  <code class="docutils literal notranslate"><span class="pre">basics.h</span></code> includes the
+appropriate definitions for the most common functions (standard I/O, string and
+block operations, and character typing); any other required headers are
+included only in those source files that need them, with appropriate
+conditional compilation surrounding the <code class="docutils literal notranslate"><span class="pre">#include</span></code>s.</p>
+<p>Very occasionally, the macro definitions in <code class="docutils literal notranslate"><span class="pre">basics.h</span></code> must be modified
+directly (i.e., by editing <code class="docutils literal notranslate"><span class="pre">basics.h</span></code>).  Specifically, when <code class="docutils literal notranslate"><span class="pre">__ANSIC__</span></code> is
+not set, some <code class="docutils literal notranslate"><span class="pre">#define</span></code>s in <code class="docutils literal notranslate"><span class="pre">basics.h</span></code> must establish values for about a
+dozen of the most useful values (specifically, <code class="docutils literal notranslate"><span class="pre">CHAR_BIT</span></code>, <code class="docutils literal notranslate"><span class="pre">CHAR_MIN</span></code>,
+<code class="docutils literal notranslate"><span class="pre">CHAR_MAX</span></code>, <code class="docutils literal notranslate"><span class="pre">UCHAR_MAX</span></code>, <code class="docutils literal notranslate"><span class="pre">SHRT_MAX</span></code>, <code class="docutils literal notranslate"><span class="pre">INT_MAX</span></code>, <code class="docutils literal notranslate"><span class="pre">LONG_MAX</span></code>,
+<code class="docutils literal notranslate"><span class="pre">LONG_MIN</span></code>, and <code class="docutils literal notranslate"><span class="pre">ULONG_MAX</span></code>).  These should be set to proper values for the
+host.  <code class="docutils literal notranslate"><span class="pre">sizeof_t</span></code> should also be defined as the integral type to be used for
+sizes of things.  Usually this is the same as <code class="docutils literal notranslate"><span class="pre">size_t</span></code>, but it might be
+different if <code class="docutils literal notranslate"><span class="pre">size_t</span></code> is too small (e.g., 16 bits).  These values cannot be
+set in <code class="docutils literal notranslate"><span class="pre">defines.h</span></code> or on the compilation command line.</p>
+<p>Finally, <code class="docutils literal notranslate"><span class="pre">basics.h</span></code> also determines the default values of some macros that
+control the presence of code aiding in the development of the front end (e.g.,
+<code class="docutils literal notranslate"><span class="pre">DEBUG</span></code> for debugging aids and <code class="docutils literal notranslate"><span class="pre">CHECKING</span></code> for internal consistency checks).</p>
+<p>The front end requires a minimal C++ standard library.  Prior to release 6.0,
+the front end was written in C and used various host C standard library
+functions (e.g., for file I/O).  When switching to C++, it was decided not to
+use the additional portions of the C++ standard library that became available
+(e.g., <code class="docutils literal notranslate"><span class="pre">std::string</span></code>) as this would add a burden to our customers and would
+require testing against many versions of the C++ standard library.  Instead, a
+small subset of library-like utility functions was developed for the front end
+(in <code class="docutils literal notranslate"><span class="pre">util.h</span></code>).  As a result, the portion of a C++ standard library that the
+front end requires is about the same as that provided by a C standard library.</p>
+</section>
+<section id="commonly-used-configuration-macros">
+<h3><span class="section-number">1.2.5. </span>Commonly-used Configuration Macros<a class="headerlink" href="#commonly-used-configuration-macros" title="Link to this heading">#</a></h3>
+<p>The following subsections describe a selection of macros that commonly appear
+in <code class="docutils literal notranslate"><span class="pre">src/defines.h</span></code>.  This list is not meant to be exhaustive.  Many (but not
+all) configuration macros are used to initialize global variables with a
+similar name, and it is the value of the variable that controls a particular
+behavior.  For example, <code class="docutils literal notranslate"><span class="pre">GCC_IS_GENERATED_CODE_TARGET</span></code> (described below)
+initializes the global variable <code class="docutils literal notranslate"><span class="pre">gcc_is_generated_code_target</span></code>.  This allows
+particular behaviors to be controlled at run time (via the command line or via
+custom code additions).</p>
+<p>Note that none of the configuration macros described below are
+“target-specific” (so, for example, there can’t be one target configuration
+where <code class="docutils literal notranslate"><span class="pre">DO_IL_LOWERING</span></code> is TRUE and another where it is FALSE).</p>
+<section id="optional-components">
+<h4><span class="section-number">1.2.5.1. </span>Optional Components<a class="headerlink" href="#optional-components" title="Link to this heading">#</a></h4>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">BACK_END_SHOULD_BE_CALLED</span></code></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">TRUE if a back end should be called (the call is to a function
+<code class="docutils literal notranslate"><span class="pre">back_end</span></code>).</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">DO_IL_LOWERING</span></code></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">TRUE if IL lowering (rewriting C++-specific constructs in the
+intermediate language in C form) should be done.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">BACK_END_IS_C_GEN_BE</span></code></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">TRUE if the C-generating back end should be used.  If FALSE, some
+other back end must be supplied or <code class="docutils literal notranslate"><span class="pre">BACK_END_SHOULD_BE_CALLED</span></code> must
+be FALSE.  The C-generating back end takes the lowered IL for a
+translation unit and generates a C source file suitable for
+compilation to binary code by a native C compiler.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">BACK_END_IS_CP_GEN_BE</span></code></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">TRUE if the C++/C-generating back end should be used.  If FALSE, some
+other back end must be supplied or <code class="docutils literal notranslate"><span class="pre">BACK_END_SHOULD_BE_CALLED</span></code> must
+be FALSE.  The C++/C-generating back end is intended for
+source-to-source transformation applications.  It takes the unlowered
+IL for a translation unit and generates a source file that is similar
+to the original C or C++ input.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">MINIMAL_INLINING</span></code></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">TRUE if minimal inlining of function calls should be done during IL
+lowering.  This option is intended mostly for use with the
+C-generating back end, and is limited to inlining calls to very simple
+functions that are defined inline in the source.</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="support-for-source-language-dialects">
+<h4><span class="section-number">1.2.5.2. </span>Support for Source Language Dialects<a class="headerlink" href="#support-for-source-language-dialects" title="Link to this heading">#</a></h4>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">GNU_EXTENSIONS_ALLOWED</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">DEFAULT_GNU_COMPATIBILITY</span></code></div>
+<div class="line"><br /></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Control whether compatibility with GNU’s <code class="docutils literal notranslate"><span class="pre">gcc</span></code> and <code class="docutils literal notranslate"><span class="pre">g++</span></code> compilers
+should be enabled, either by default or only when the <code class="docutils literal notranslate"><span class="pre">--gcc</span></code> or
+<code class="docutils literal notranslate"><span class="pre">--g++</span></code> command-line options are specified.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">MICROSOFT_EXTENSIONS_ALLOWED</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">DEFAULT_MICROSOFT_COMPATIBILITY</span></code></div>
+<div class="line"><br /></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Control whether compatibility with Microsoft’s C and C++ compilers
+should be enabled, either by default or only when the <code class="docutils literal notranslate"><span class="pre">--microsoft</span></code>
+command-line option is specified.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">SUN_EXTENSIONS_ALLOWED</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">DEFAULT_SUN_COMPATIBILITY</span></code></div>
+<div class="line"><br /></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Control whether compatibility with Sun CC should be enabled, either by
+default or only when the <code class="docutils literal notranslate"><span class="pre">--sun</span></code> command-line option is specified.</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Setting an …<code class="docutils literal notranslate"><span class="pre">_ALLOWED</span></code> macro to TRUE makes the corresponding
+<code class="docutils literal notranslate"><span class="pre">DEFAULT_</span></code>…  macro TRUE by default.  If the front end is configured to
+support multiple dialects, the <code class="docutils literal notranslate"><span class="pre">DEFAULT_</span></code>…  macros must be set explicitly
+to avoid selecting more than one dialect as the default.</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">CPPCLI_ENABLING_POSSIBLE</span></code></div>
+<div class="line"><br /></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Control whether a mode compatible with Microsoft’s C++/CLI extensions
+should be available through the command-line option <code class="docutils literal notranslate"><span class="pre">--cppcli</span></code>.
+Setting this option to TRUE requires that
+<code class="docutils literal notranslate"><span class="pre">MICROSOFT_EXTENSIONS_ALLOWED</span></code> also be TRUE.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">DEFAULT_CPPCLI_ENABLED</span></code></div>
+<div class="line"><br /></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">TRUE if C++/CLI extensions should be enabled by default when Microsoft
+extensions are enabled.</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="il-features">
+<h4><span class="section-number">1.2.5.3. </span>IL Features<a class="headerlink" href="#il-features" title="Link to this heading">#</a></h4>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">EXTRA_SOURCE_POSITIONS_IN_IL</span></code></div>
+<div class="line"><br /></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">TRUE if certain additional IL entries, besides those that already have
+<code class="docutils literal notranslate"><span class="pre">a_source_correspondence</span></code> fields, should contain source position
+information.  For example, expression nodes will record the starting
+and ending position of the corresponding expression, as well as the
+position of that expression’s top-level operator.  Note that this can
+increase the size of the IL substantially.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">EXPR_RANGE_MODIFIERS_IN_IL</span></code></div>
+<div class="line"><br /></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">TRUE to extend the tracking of source ranges for expressions by
+including position information for operators that generally do not
+appear in the IL, such as <code class="docutils literal notranslate"><span class="pre">*</span></code>, <code class="docutils literal notranslate"><span class="pre">&amp;</span></code>, and <code class="docutils literal notranslate"><span class="pre">()</span></code>.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">RECORD_MACROS_IN_IL</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">FULLY_RESOLVED_MACRO_POSITIONS</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">MACRO_INVOCATION_TREE_IN_IL</span></code></div>
+<div class="line"><br /></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Indicate whether extra information should be recorded in the IL to
+track macros and their expansions.  Setting either of the latter two
+configuration macros to TRUE can increase the size of the IL
+substantially.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">PROTOTYPE_INSTANTIATIONS_IN_IL</span></code></div>
+<div class="line"><br /></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">TRUE if prototype template instantiations (i.e., the parsed generic
+form of templates) should be recorded in the main IL tree.</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="target-platform-options">
+<h4><span class="section-number">1.2.5.4. </span>Target Platform Options<a class="headerlink" href="#target-platform-options" title="Link to this heading">#</a></h4>
+<p>Note that although these configuration macros deal with issues related to the
+target, they are not considered “target-specific” (because these values cannot
+differ between target configurations).</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">IA64_ABI</span></code></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Controls whether the IA-64 ABI standard is used for code generation
+and object layout.  This is a “modern” C++ object layout (unlike the
+cfront layout), and is a good starting point even on architectures
+other than IA-64 (Itanium).  This ABI is used by many versions of g++
+(3.2 and later).  For a complete specification, see
+<code class="docutils literal notranslate"><span class="pre">www.codesourcery.com/cxx-abi</span></code>.  See also other macro names
+beginning with <code class="docutils literal notranslate"><span class="pre">IA64_ABI</span></code>, some of which enable compatibility with
+the ARM EABI variant of the <code class="docutils literal notranslate"><span class="pre">IA64_ABI</span></code>.  If <code class="docutils literal notranslate"><span class="pre">IA64_ABI</span></code> is set to
+FALSE (or 0), a cfront-like ABI is used instead.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">DEFAULT_GNU_ABI_VERSION</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">DEFAULT_EMULATE_GNU_ABI_BUGS</span></code></div>
+<div class="line"><br /></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Control the emulation of the GNU variant of the IA-64 ABI.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">GCC_IS_GENERATED_CODE_TARGET</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">GNU_TARGET_VERSION_NUMBER</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">MSVC_IS_GENERATED_CODE_TARGET</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">MSVC_TARGET_VERSION_NUMBER</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">SUN_IS_GENERATED_CODE_TARGET</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">SUN_TARGET_VERSION_NUMBER</span></code></div>
+<div class="line"><br /></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Control whether the code generated by the C- or C++-generating back
+end should target a specific GNU, Microsoft, or Sun compiler.  This is
+information is used to avoid limitations of those compilers and to
+exploit extensions provided by those compilers.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">CP_GEN_BE_TARGET_MATCHES_SOURCE_DIALECT</span></code></div>
+<div class="line"><br /></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">TRUE if the C++-generating back end should generate code that matches
+the dialect selected for the front end.  (E.g., if the front end is
+set to parse GNU code, the back end can generate GNU <code class="docutils literal notranslate"><span class="pre">__attribute</span></code>
+constructs, whereas if the front end is set to accept Microsoft
+extensions, the back end might generate <code class="docutils literal notranslate"><span class="pre">__declspec</span></code> specifiers.)</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="front-end-behaviors">
+<h4><span class="section-number">1.2.5.5. </span>Front End Behaviors<a class="headerlink" href="#front-end-behaviors" title="Link to this heading">#</a></h4>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">MAKE_FRONT_END_CALLABLE</span></code></div>
+<div class="line"><br /></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">TRUE if, instead of having its own main program, the front end is to
+be linked as part of some other main program.  When this flag is set,
+the <code class="docutils literal notranslate"><span class="pre">EDG_MAIN</span></code> macro provides the name of the main entry point into
+the front end.The front end can then be called repeatedly by the same
+process (each call reinitializes the front end’s internal state).</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">COMPILE_MULTIPLE_SOURCE_FILES</span></code></div>
+<div class="line"><br /></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Indicates that the front end should be capable of compiling a list of
+source files in a single invocation.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">IL_SHOULD_BE_WRITTEN_TO_FILE</span></code></div>
+<div class="line"><br /></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">TRUE if the intermediate language should be written to a file; FALSE
+if the intermediate language is passed in memory to the back end
+(assuming <code class="docutils literal notranslate"><span class="pre">BACK_END_SHOULD_BE_CALLED</span></code> is TRUE).</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">USING_DRIVER</span></code></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Indicates that the front end is being run from a driver program.
+Setting this flag suppresses termination messages (like
+“<code class="docutils literal notranslate"><span class="pre">Compilation</span> <span class="pre">terminated.</span></code>”) written to the error output file
+because it is expected that the driver will write those.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">MULTIBYTE_CHARS_IN_SOURCE_SUPPORTED</span></code></div>
+<div class="line"><br /></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">TRUE if multibyte character sequences (e.g., like Unicode UTF-8 or
+those in the Japanese SJIS encoding) are supported in comments,
+string literals, identifiers, and character constants.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">USE_OWN_SJIS_MULTIBYTE_CHAR_PROCESSING</span></code></div>
+<div class="line"><br /></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">TRUE if, instead of the routines in the standard C library (e.g.,
+<code class="docutils literal notranslate"><span class="pre">mblen</span></code>), custom routines in <code class="docutils literal notranslate"><span class="pre">host_envir.c</span></code> should be used to deal
+with Japanese SJIS multibyte characters in source code.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">LOCALE_TO_SET_WHEN_MULTIBYTE_CHARS_ENABLED</span></code></div>
+<div class="line"><br /></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Indicates the locale to be established by a call to <code class="docutils literal notranslate"><span class="pre">setlocale</span></code> to
+get the desired processing of multibyte characters from the C library
+while reading the source code.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">UNICODE_SOURCE_SUPPORTED</span></code></div>
+<div class="line"><br /></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">TRUE if the multibyte character set to be supported is Unicode encoded
+as UTF-8.  UTF-16 is also accepted, and is translated to UTF-8
+immediately on input.</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="development-aids">
+<h4><span class="section-number">1.2.5.6. </span>Development Aids<a class="headerlink" href="#development-aids" title="Link to this heading">#</a></h4>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">DEBUG</span></code></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Enables additional code in the front end to simplify debugging.  This
+includes flow/event tracing options, routines that can be called from
+a debugger to examine the IL, and an option to output the settings of
+the configuration macros.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">CHECKING</span></code></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Enables inexpensive internal consistency checking.  Recommended even
+in production builds.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">EXPENSIVE_CHECKING</span></code></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Enables more expensive internal consistency checking.  (Not generally
+recommended for production builds.)</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">WRITE_CPPCLI_PORTABLE_ASSEMBLIES</span></code></div>
+<div class="line"><br /></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">When TRUE, this enables an internal command-line option “<code class="docutils literal notranslate"><span class="pre">--set_flag</span>
+<span class="pre">generate_portable_assemblies</span></code>” that causes a front end built with
+support for C++/CLI (for Microsoft Windows) to write out all
+assemblies used in the compilation (likely including <code class="docutils literal notranslate"><span class="pre">mscorlib.dll</span></code>)
+to be written in the current directory in a format that is readable on
+non-Windows platforms (i.e., with a front end not built with
+<code class="docutils literal notranslate"><span class="pre">EDG_WIN32</span></code> set to TRUE).  Since the assemblies are written in the
+current directory with their original file name (e.g.,
+“<code class="docutils literal notranslate"><span class="pre">mscorlib.dll</span></code>”), care should be taken that no required assemblies
+are in the current directory when the front end is invoked in this
+way.</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<section id="target-specific-configuration">
+<span id="id1"></span><h3><span class="section-number">1.2.6. </span>Target-Specific Configuration<a class="headerlink" href="#target-specific-configuration" title="Link to this heading">#</a></h3>
+<p>A target configuration is defined by giving appropriate values to a set of
+configuration macros (dubbed the target-specific configuration macros).
+Multiple target configurations can be specified when the front end is built;
+the <code class="docutils literal notranslate"><span class="pre">--target</span></code> command-line option is used to select a non-default target
+configuration when the front end is invoked.  The <code class="docutils literal notranslate"><span class="pre">--dump_legacy_as_target</span></code>
+command-line option can be used to display the set of target-configuration
+macros.</p>
+<p>Each target-specific configuration macro has a “legacy” version, i.e., one
+without any target-specific suffix, as well as a version for each target
+configuration that is specified when the front end is built.  Non-legacy
+configuration macro names are formed by appending an underscore and the target
+configuration name to the legacy configuration macro name.  For example, the
+legacy macro <code class="docutils literal notranslate"><span class="pre">TARG_LITTLE_ENDIAN</span></code> would have a corresponding
+<code class="docutils literal notranslate"><span class="pre">TARG_LITTLE_ENDIAN_win32</span></code> configuration macro for the <code class="docutils literal notranslate"><span class="pre">win32</span></code> target
+configuration.</p>
+<p>By default, the legacy configuration has no name, but one may be specified by
+setting <code class="docutils literal notranslate"><span class="pre">LEGACY_TARGET_CONFIGUATION_NAME</span></code> to the desired name.  The default
+target configuration can be specified by giving its name as the definition of
+the <code class="docutils literal notranslate"><span class="pre">DEFAULT_TARGET_CONFIGURATION_NAME</span></code> configuration macro; otherwise, the
+legacy target configuration will be used as the default.</p>
+<p>Note that specifying a named target configuration (either explicitly or through
+defaults) requires that an <code class="docutils literal notranslate"><span class="pre">$EDG_BASE/lib_</span></code><em>target</em><code class="docutils literal notranslate"><span class="pre">/</span></code> directory be
+present at run time.  Having target-specific <code class="docutils literal notranslate"><span class="pre">$EDG_BASE/lib_</span></code><em>target</em><code class="docutils literal notranslate"><span class="pre">/</span></code> directories allows each target configuration to have different predefined
+macros (e.g., to define <code class="docutils literal notranslate"><span class="pre">_M_IX86</span></code> in one and <code class="docutils literal notranslate"><span class="pre">_M_X64</span></code> in another).</p>
+<p>A legacy configuration can be configured manually (by specifying values for
+each target-specific macro), or automatically (by using the <code class="docutils literal notranslate"><span class="pre">dettarg</span></code> tool
+and defaults that many configuration macros have).  The
+<code class="docutils literal notranslate"><span class="pre">--dump_configuration</span></code> command-line option provides a convenient display of
+all configuration macros and their settings.</p>
+<p>A non-legacy target configuration is most easily generated as a derivative from
+an existing legacy target configuration using the <code class="docutils literal notranslate"><span class="pre">--dump_legacy_as_target</span></code>
+command-line option.  This option takes a target configuration name and
+generates a list of the target-specific macro names for the given target
+configuration name along with the values of the legacy configuration.  This
+file (after verifying that <code class="docutils literal notranslate"><span class="pre">TARGET_CONFIGURATION_</span></code><em>number</em> is unique) can
+then be included in <code class="docutils literal notranslate"><span class="pre">defines.h</span></code> as the basis for a new target configuration.
+Additional target configurations can be generated from different legacy
+configurations in the same manner, or by using an existing target configuration
+as a template (and changing the target configuration name in each macro, along
+with the <code class="docutils literal notranslate"><span class="pre">TARGET_CONFIGURATION_</span></code><em>number</em>).  Note that all target-specific
+configurations must share the same non-target-specific configuration, so for
+instance, it’s not possible to have an IA-64 ABI target configuration and a
+Cfront target configuration in the same front end configuration (because
+<code class="docutils literal notranslate"><span class="pre">IA64_ABI</span></code> is not a target-specific configuration macro and must have the
+same value across all target configurations).</p>
+<p>Note that it is inadvisable to use a target-specific global variable as the
+value for a target-specific configuration macro.  For example:</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">#define</span> <span class="pre">TARG_IA64_VTABLE_ENTRY_INT_KIND</span> <span class="pre">targ_ptrdiff_t_int_kind</span></code></p>
+</div></blockquote>
+<p>is subject to race conditions (because <code class="docutils literal notranslate"><span class="pre">targ_ptrdiff_t_int_kind</span></code> may or may
+not have been initialized before its value is used to set
+<code class="docutils literal notranslate"><span class="pre">targ_ia64_vtable_entry_int_kind</span></code>).  The following will work as expected:</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">#define</span> <span class="pre">TARG_IA64_VTABLE_ENTRY_INT_KIND</span> <span class="pre">TARG_PTRDIFF_T_INT_KIND</span></code></p>
+</div></blockquote>
+<p>An important aspect of this architecture is that each legacy configuration
+macro has an associated global variable whose value is set at initialization
+time to the value of the (legacy or per-target) configuration macro for the
+selected target.  Because of this, it is imperative that user modifications to
+the front end use the run-time value of global variables rather than the
+compile-time values of legacy configuration macros.</p>
+</section>
+<section id="replaceable-code">
+<h3><span class="section-number">1.2.7. </span>Replaceable Code<a class="headerlink" href="#replaceable-code" title="Link to this heading">#</a></h3>
+<p>Occasionally, some customizations are needed that cannot simply be expressed
+through configuration macros.  Those may require instead that various routines
+be replaced with custom code.  The following files in <code class="docutils literal notranslate"><span class="pre">src/</span></code> are written with
+such modifications in mind:</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">fixed_pt.c</span></code></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Routines implementing operations on fixed-point values (only supported
+in some configurations).</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">float_pt.c</span></code></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Routines implementing operations on floating-point values.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">host_envir.c</span></code></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Includes routines dealing with operations on files and directories.
+Signal handlers can also be set up there.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sys_predef.c</span></code></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Routines to predefine platform-specific entities (macros, types,
+routines, etc.)</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<section id="building-the-front-end">
+<h2><span class="section-number">1.3. </span>Building the Front End<a class="headerlink" href="#building-the-front-end" title="Link to this heading">#</a></h2>
+<section id="using-the-top-level-makefile">
+<h3><span class="section-number">1.3.1. </span>Using the Top-Level Makefile<a class="headerlink" href="#using-the-top-level-makefile" title="Link to this heading">#</a></h3>
+<p>Assuming a Unix-like environment, a complete demonstration compiler can be
+configured and built using a sequence of shell commands like the one shown
+below (for a typical Linux platform, but other Unix-like environments are
+similar).  The sequence assumes that the current directory is the top-level
+directory of a freshly unpacked release.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">cp<span class="w"> </span>sample_edg_eccp_config/edg_eccp_config.linux<span class="w"> </span>edg_eccp_config
+</span><span data-line="2">cp<span class="w"> </span>src/defines.h.linux<span class="w"> </span>src/defines.h
+</span><span data-line="3"><span class="nb">cd</span><span class="w"> </span>lib
+</span><span data-line="4">../sample_edg_eccp_config/make_g++_incl_paths
+</span><span data-line="5">../misc/make_predef_macro_table
+</span><span data-line="6"><span class="nb">cd</span><span class="w"> </span>..
+</span><span data-line="7"><span class="nb">export</span><span class="w"> </span><span class="nv">EDG_BASE</span><span class="o">=</span><span class="sb">`</span><span class="nb">pwd</span><span class="sb">`</span><span class="w"> </span><span class="c1"># or setenv EDG_BASE `pwd`</span>
+</span><span data-line="8">make
+</span></pre></div>
+</div>
+<p>This builds a front end with a C-generating back end, along with a run-time
+support library and helper tools such as the prelinker and demangler.  The
+entire toolset can be driven with the <code class="docutils literal notranslate"><span class="pre">eccp</span></code> script (see
+“<a class="reference internal" href="#the-eccp-script"><span class="std std-ref">The eccp script</span></a>”).</p>
+</section>
+<section id="building-the-front-end-only">
+<h3><span class="section-number">1.3.2. </span>Building the Front End Only<a class="headerlink" href="#building-the-front-end-only" title="Link to this heading">#</a></h3>
+<p>In an environment with a Unix-like <code class="docutils literal notranslate"><span class="pre">make</span></code> utility, the front end can be
+compiled and linked by running</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">make<span class="w"> </span>edgcpfe
+</span></pre></div>
+</div>
+<p>in the <code class="docutils literal notranslate"><span class="pre">src/</span></code> directory (after constructing an appropriate <code class="docutils literal notranslate"><span class="pre">defines.h</span></code> file
+and editing <code class="docutils literal notranslate"><span class="pre">src/Makefile</span></code> to select the desired compiler and compiler
+options for building the front end).  This can be useful to update the front
+end for modifications after building the complete tool set, or when only the
+front end program itself is desired.  If <code class="docutils literal notranslate"><span class="pre">make</span></code> is not available, the front
+end can be built using the following manual steps.</p>
+<ul>
+<li><div class="line-block">
+<div class="line">Configure the <code class="docutils literal notranslate"><span class="pre">defines.h</span></code> file.  For example, under Windows the following
+is a useful starting point:</div>
+</div>
+<div class="highlight-powershell notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="nb">copy </span><span class="n">src</span><span class="p">\</span><span class="n">defines</span><span class="p">.</span><span class="n">h</span><span class="p">.</span><span class="n">win32</span> <span class="n">src</span><span class="p">\</span><span class="n">defines</span><span class="p">.</span><span class="nb">h</span>
+</span></pre></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">In the <code class="docutils literal notranslate"><span class="pre">misc/</span></code> directory, compile and link the <code class="docutils literal notranslate"><span class="pre">mk_errinfo</span></code> program
+into a <code class="docutils literal notranslate"><span class="pre">mk_errinfo</span></code> executable file.  For example, using a Windows
+command line and the Microsoft C++ compiler:</div>
+</div>
+<div class="highlight-powershell notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="nb">cd </span><span class="n">misc</span>
+</span><span data-line="2"><span class="n">cl</span> <span class="p">/</span><span class="n">TP</span> <span class="p">/</span><span class="n">I</span><span class="p">..\</span><span class="n">src</span> <span class="n">mk_errinfo</span><span class="p">.</span><span class="n">c</span>
+</span><span data-line="3"><span class="nb">cd </span><span class="p">..</span>
+</span></pre></div>
+</div>
+<div class="line-block">
+<div class="line">See <a class="reference internal" href="../utilities/#mk-errinfo"><span class="std std-ref">mk_errinfo</span></a> for additional information about <code class="docutils literal notranslate"><span class="pre">mk_errinfo</span></code> and
+the format of its input files.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">In the <code class="docutils literal notranslate"><span class="pre">src/</span></code> directory, translate the diagnostic messages using the
+<code class="docutils literal notranslate"><span class="pre">mk_errinfo</span></code> program that was built in the previous step.  For example,
+using a Windows command line</div>
+</div>
+<div class="highlight-powershell notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="nb">cd </span><span class="n">src</span>
+</span><span data-line="2"><span class="p">..\</span><span class="n">misc</span><span class="p">\</span><span class="n">mk_errinfo</span> <span class="n">error_msg</span><span class="p">.</span><span class="n">txt</span> <span class="n">error_tag</span><span class="p">.</span><span class="n">txt</span> <span class="n">err_codes</span><span class="p">.</span><span class="nb">h </span><span class="n">err_data</span><span class="p">.</span><span class="nb">h</span>
+</span></pre></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">Still in the <code class="docutils literal notranslate"><span class="pre">src/</span></code> directory, compile and link all the <code class="docutils literal notranslate"><span class="pre">.c</span></code> and
+<code class="docutils literal notranslate"><span class="pre">.cpp</span></code> files.  For example:</div>
+</div>
+<div class="highlight-powershell notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">cl</span> <span class="p">/</span><span class="n">TP</span> <span class="p">/</span><span class="n">EHsc</span> <span class="p">/</span><span class="n">Feedgcpfe</span><span class="p">.</span><span class="n">exe</span> <span class="p">*.</span><span class="n">c</span> <span class="p">*.</span><span class="nb">cpp </span><span class="p">/</span><span class="n">link</span> <span class="n">mscoree</span><span class="p">.</span><span class="n">lib</span> <span class="n">oleaut32</span><span class="p">.</span><span class="n">lib</span>
+</span></pre></div>
+</div>
+</li>
+</ul>
+</section>
+<section id="building-support-for-c-cli-and-c-cx-modes">
+<h3><span class="section-number">1.3.3. </span>Building Support for C++/CLI and C++/CX Modes<a class="headerlink" href="#building-support-for-c-cli-and-c-cx-modes" title="Link to this heading">#</a></h3>
+<p>C++/CLI is a Microsoft extension to C++ that simplifies writing C++-like
+programs for Microsoft’s “.NET” environment.  It is formally specified by the
+ECMA standard ECMA-372.  The front end can support this extension, provided it
+is built on a sufficiently recent Microsoft Windows platform with a compiler
+that is sufficiently compatible with Microsoft’s “Visual C++” compiler.  This
+support is currently limited to producing high-level IL.  The C++-generating
+back end can consume this IL (and render the C++/CLI constructs it describes),
+but lowering and the C-generating back end are not available in C++/CLI mode.</p>
+<p>C++/CX is a Microsoft extension to C++ similar to C++/CLI, but it targets the
+“Windows Runtime” (WinRT) platform instead of the “.NET” environment.  Unlike
+C++/CLI, there is no formal document specifying this extension.  The front end
+can also support C++/CX, with the same caveats as those mentioned for C++/CLI
+support (in particular, IL lowering is not available for C++/CX mode).</p>
+<p>To include support for C++/CLI and/or C++/CX the configuration macros
+<code class="docutils literal notranslate"><span class="pre">CPPCLI_ENABLING_POSSIBLE</span></code> and/or <code class="docutils literal notranslate"><span class="pre">CPPCX_ENABLING_POSSIBLE</span></code> (respectively)
+must be set to TRUE.  (The macros <code class="docutils literal notranslate"><span class="pre">MICROSOFT_EXTENSIONS_ALLOWED</span></code> and
+<code class="docutils literal notranslate"><span class="pre">EDG_WIN32</span></code> must also be TRUE when building such configurations.) In addition
+to compiling the C files constituting the front end proper (as explained
+above), support for C++/CLI and/or C++/CX requires that the C++ source file
+<code class="docutils literal notranslate"><span class="pre">ms_metadata.cpp</span></code> be compiled as C++ and the resulting object file must be
+added to the set of files linked into the final front end executable (or
+library).  The system libraries <code class="docutils literal notranslate"><span class="pre">mscoree.lib</span></code> and <code class="docutils literal notranslate"><span class="pre">oleaut32.lib</span></code> are then
+also required in the final executable.</p>
+<p>Compiling <code class="docutils literal notranslate"><span class="pre">ms_metadata.cpp</span></code> requires Visual C++ 2012 or later (or a C++
+compiler and libraries that are sufficiently compatible with that).  The free
+“Express” version of Visual C++ is not sufficient because it doesn’t include
+the ATLMFC library, which <code class="docutils literal notranslate"><span class="pre">ms_metadata.cpp</span></code> depends on.</p>
+</section>
+<section id="building-and-using-the-il-display-program">
+<h3><span class="section-number">1.3.4. </span>Building and Using the IL Display Program<a class="headerlink" href="#building-and-using-the-il-display-program" title="Link to this heading">#</a></h3>
+<p>For educational and debugging purposes, the front end comes with a utility
+named <code class="docutils literal notranslate"><span class="pre">edgcpdisp</span></code> that reads a file containing the IL produced when the front
+end compiles one or more source files and displays it in a human-readable form.
+(In order to use this facility, of course, the front end must be configured to
+write an IL file, i.e., <code class="docutils literal notranslate"><span class="pre">IL_SHOULD_BE_WRITTEN_TO_FILE</span></code> must be set to TRUE in
+<code class="docutils literal notranslate"><span class="pre">defines.h</span></code> or in <code class="docutils literal notranslate"><span class="pre">src/Makefile</span></code>.)</p>
+<p>Because the IL file written by the front end is essentially a binary dump of
+the IL data structures, it is necessary for the front end and <code class="docutils literal notranslate"><span class="pre">edgcpdisp</span></code> to
+be built on the same platform and using the same configuration options.  (Many
+of the IL data structures contain fields that are present only in certain
+configurations.)</p>
+<p>In an environment with a Unix-like <code class="docutils literal notranslate"><span class="pre">make</span></code> utility, <code class="docutils literal notranslate"><span class="pre">edgcpdisp</span></code> is
+automatically built (with a configuration that correctly matches that of the
+front end) when <code class="docutils literal notranslate"><span class="pre">make</span></code> is run for the default target in either the top-level
+or <code class="docutils literal notranslate"><span class="pre">src/</span></code>directory.  It can also be built separately by using <code class="docutils literal notranslate"><span class="pre">make</span></code> in
+the <code class="docutils literal notranslate"><span class="pre">src/disp/</span></code>directory.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">make</span></code> is not available, <code class="docutils literal notranslate"><span class="pre">edgcpdisp</span></code> can be built after the front end is
+built (as described in the preceding section) in the <code class="docutils literal notranslate"><span class="pre">src/</span></code>directory by
+compiling a subset of the source files with <code class="docutils literal notranslate"><span class="pre">STANDALONE_IL_DISPLAY</span></code> set to
+TRUE.  For example, on a Windows platform using the Microsoft C++ compiler, the
+command would be (all on one line):</p>
+<div class="highlight-powershell notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">cl</span> <span class="p">/</span><span class="n">TP</span> <span class="p">/</span><span class="n">Feedgcpdisp</span><span class="p">.</span><span class="n">exe</span> <span class="n">-DSTANDALONE_IL_DISPLAY</span> <span class="n">const_ints</span><span class="p">.</span><span class="n">c</span>  <span class="n">debug</span><span class="p">.</span><span class="n">c</span>      <span class="p">\</span>
+</span><span data-line="2">   <span class="n">error</span><span class="p">.</span><span class="n">c</span> <span class="n">fixed_pt</span><span class="p">.</span><span class="n">c</span> <span class="n">float_pt</span><span class="p">.</span><span class="n">c</span> <span class="n">host_envir</span><span class="p">.</span><span class="n">c</span>  <span class="n">il</span><span class="p">.</span><span class="n">c</span> <span class="n">il_display</span><span class="p">.</span><span class="n">c</span> <span class="n">il_read</span><span class="p">.</span><span class="n">c</span> <span class="p">\</span>
+</span><span data-line="3">   <span class="n">il_to_str</span><span class="p">.</span><span class="n">c</span> <span class="n">il_walk</span><span class="p">.</span><span class="n">c</span>  <span class="n">mem_manage</span><span class="p">.</span><span class="n">c</span> <span class="n">target</span><span class="p">.</span><span class="n">c</span> <span class="n">types</span><span class="p">.</span><span class="n">c</span> <span class="n">fe_init</span><span class="p">.</span><span class="n">c</span>
+</span></pre></div>
+</div>
+<p>Displaying the IL for a source file <code class="docutils literal notranslate"><span class="pre">x.cpp</span></code> can be accomplished with the
+following commands:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">edgcpfe<span class="w"> </span>--output<span class="w"> </span>x.cil<span class="w"> </span>x.cpp
+</span><span data-line="2">edgcpdisp<span class="w"> </span>x.cil
+</span></pre></div>
+</div>
+<p>(In configurations that do IL lowering, <code class="docutils literal notranslate"><span class="pre">x.cil</span></code> will contain the lowered IL.
+To view the unlowered IL, see the <code class="docutils literal notranslate"><span class="pre">--no_il_lowering</span></code> front-end command-line
+option described in the next chapter.)</p>
+</section>
+</section>
+<section id="driving-the-front-end">
+<h2><span class="section-number">1.4. </span>Driving the Front End<a class="headerlink" href="#driving-the-front-end" title="Link to this heading">#</a></h2>
+<p>For many applications, it is useful to invoke the front end through another
+“driver” program.  One such driver is the <code class="docutils literal notranslate"><span class="pre">bin/eccp</span></code> script that is part of
+every release.  Another is the <code class="docutils literal notranslate"><span class="pre">edgcc</span></code> program that can be downloaded
+separately from the EDG download site.</p>
+<section id="the-eccp-script">
+<span id="id2"></span><h3><span class="section-number">1.4.1. </span>The <code class="docutils literal notranslate"><span class="pre">eccp</span></code> script<a class="headerlink" href="#the-eccp-script" title="Link to this heading">#</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">bin/</span></code> directory contains a (Bourne) shell script <code class="docutils literal notranslate"><span class="pre">eccp</span></code> that
+allows the front end to be used much like most Unix-hosted compilers.  It
+invokes the front end – which must be configured with the C-generating back
+end – with various default options, and then compiles any generated C files
+through a “native” C compiler (e.g., the GNU <code class="docutils literal notranslate"><span class="pre">gcc</span></code> compiler) and a native
+linker.  The script accepts Unix-like compiler options (such as <code class="docutils literal notranslate"><span class="pre">-c</span></code>,
+<code class="docutils literal notranslate"><span class="pre">-o</span></code>, <code class="docutils literal notranslate"><span class="pre">-O</span></code>, <code class="docutils literal notranslate"><span class="pre">-g</span></code>, <code class="docutils literal notranslate"><span class="pre">-I</span></code>, <code class="docutils literal notranslate"><span class="pre">-L</span></code>, and <code class="docutils literal notranslate"><span class="pre">-l</span></code>) and also passes through
+most of the options handled by the front end proper (see <a class="reference internal" href="../ext_intf/#cli"><span class="std std-ref">Command Line</span></a>).</p>
+<p>The script can be moved anywhere, but it normally looks for various components
+(the front end, the prelinker, etc.) under a directory designated by the
+environment variable <code class="docutils literal notranslate"><span class="pre">EDG_BASE</span></code>.  The <code class="docutils literal notranslate"><span class="pre">eccp</span></code> script can be edited to set a
+default substitute value for the <code class="docutils literal notranslate"><span class="pre">EDG_BASE</span></code> variable.  Normally, the value of
+<code class="docutils literal notranslate"><span class="pre">EDG_BASE</span></code> is the top level directory of a fully-built release tree (although
+the <code class="docutils literal notranslate"><span class="pre">src/</span></code> and <code class="docutils literal notranslate"><span class="pre">lib_src/</span></code> directories are not used by <code class="docutils literal notranslate"><span class="pre">eccp</span></code>).  <code class="docutils literal notranslate"><span class="pre">eccp</span></code>
+will start by setting various environment variables by executing a script
+<code class="docutils literal notranslate"><span class="pre">$EDG_BASE/edg_eccp_config</span></code>.  Sample scripts for various platforms are
+provided in the <code class="docutils literal notranslate"><span class="pre">sample_edg_eccp_config/</span></code> directory.  Two environment
+variables commonly customized in the <code class="docutils literal notranslate"><span class="pre">edg_eccp_config</span></code> script are
+<code class="docutils literal notranslate"><span class="pre">EDG_DEFAULT_DEFINES</span></code> (to add options like <code class="docutils literal notranslate"><span class="pre">-D__unix__</span></code>) and
+<code class="docutils literal notranslate"><span class="pre">EDG_C_TO_OBJ_COMPILER</span></code> (to establish which “native” compiler to use; e.g.,
+<code class="docutils literal notranslate"><span class="pre">gcc</span></code>).</p>
+<p><code class="docutils literal notranslate"><span class="pre">eccp</span></code> may also invoke the prelinker (<code class="docutils literal notranslate"><span class="pre">util/edg_prelink</span></code>) to automatically
+instantiate templates (and, with some front end configurations, inline
+functions that need an out-of-line copy).  See
+<a class="reference internal" href="../templates/#template-auto-instantiation"><span class="std std-ref">Automatic Instantiation</span></a> for notes on this process.  The script will
+also run <code class="docutils literal notranslate"><span class="pre">util/edg_munch</span></code> if needed, and filter linker errors through
+<code class="docutils literal notranslate"><span class="pre">util/edg_decode</span></code>.</p>
+<p>See “<a class="reference internal" href="../utilities/#utility-programs"><span class="std std-ref">Utility Programs</span></a>” for more information on the utility programs
+<code class="docutils literal notranslate"><span class="pre">edg_prelink</span></code>, <code class="docutils literal notranslate"><span class="pre">edg_munch</span></code>, and <code class="docutils literal notranslate"><span class="pre">edg_decode</span></code> used by the <code class="docutils literal notranslate"><span class="pre">eccp</span></code> script.</p>
+</section>
+<section id="the-edgcc-driver-for-windows">
+<h3><span class="section-number">1.4.2. </span>The <code class="docutils literal notranslate"><span class="pre">edgcc</span></code> Driver for Windows<a class="headerlink" href="#the-edgcc-driver-for-windows" title="Link to this heading">#</a></h3>
+<p>A Windows program implementing a subset of <code class="docutils literal notranslate"><span class="pre">eccp</span></code>‘s functionality can be
+downloaded from the EDG download site.  The file to download is
+<code class="docutils literal notranslate"><span class="pre">nt_util.zip</span></code>.  In addition to source code for the driver program <code class="docutils literal notranslate"><span class="pre">edgcc</span></code>,
+it also contains source code for a Windows-hosted prelinker (<code class="docutils literal notranslate"><span class="pre">pl_nm</span></code>) and
+munch-like program (<code class="docutils literal notranslate"><span class="pre">munch_nm</span></code>).</p>
+<p>The plain text file <code class="docutils literal notranslate"><span class="pre">src/msinfo</span></code> contains additional notes for running the
+front end in the Windows environment.</p>
+</section>
+</section>
+<section id="configuring-and-building-the-run-time-support-library">
+<h2><span class="section-number">1.5. </span>Configuring and Building the Run-Time Support Library<a class="headerlink" href="#configuring-and-building-the-run-time-support-library" title="Link to this heading">#</a></h2>
+<p>Source code for a sample run-time support library is provided in the
+<code class="docutils literal notranslate"><span class="pre">lib_src/</span></code> directory.  This library is meant to be built using the front end
+(i.e., a compiler incorporating the EDG front end).  The library is useful for
+demonstration and debugging purposes.  However, it is normally not suitable for
+production compilers because it is written in portable C++ that cannot take
+advantage of more efficient platform-specific mechanisms (e.g., to implement
+exception handling).</p>
+<p>Similarly to the front end, the library can be configured through macro
+definitions placed in <code class="docutils literal notranslate"><span class="pre">lib_src/defines.h</span></code>.  Typically, however, few or no
+macros need to be defined because the <code class="docutils literal notranslate"><span class="pre">--build_runtime</span></code> option to the front
+end (used to build this library) causes most or all required macros to be
+predeclared.</p>
+<p>The macros that might need manual configuration are documented in
+<code class="docutils literal notranslate"><span class="pre">lib_src/config.h</span></code>.</p>
+<p>When using multiple target configurations, a version of the run-time support
+library must be built for each target configuration and installed in the
+appropriate <code class="docutils literal notranslate"><span class="pre">lib_</span></code><em>target</em><code class="docutils literal notranslate"><span class="pre">/</span></code> directory.  See <code class="docutils literal notranslate"><span class="pre">lib_src/Makefile</span></code> for
+directions to build target-specific versions of the library.</p>
+</section>
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"><div class="navigation-prev">
+    <a href="../">
+      <i class="i-lucide chevron-left"></i>
+      <div class="page-info">
+        <span>Previous</span><div class="title">Home</div></div>
+    </a>
+  </div><div class="navigation-next">
+    <a href="../ext_intf/">
+      <div class="page-info">
+        <span>Next</span>
+        <div class="title"><span class="section-number">2. </span>External Interface</div>
+      </div>
+      <i class="i-lucide chevron-right"></i>
+    </a>
+  </div></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>EDG 7.0, 7/20/26 - ©2026, Edison Design Group, Inc.</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials"></div>
+    </div>
+  </div>
+</footer>
+      <script src="../_static/documentation_options.js?v=618d875b"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/shibuya.js?v=50760d75"></script></body>
+</html>

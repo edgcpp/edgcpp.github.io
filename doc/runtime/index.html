@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="violet" data-content_root="../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>21. Runtime Library - CPFE 7.0 documentation</title><link rel="index" title="Index" href="../genindex/" /><link rel="search" title="Search" href="../search/" /><link rel="next" title="22. Utility Programs" href="../utilities/" /><link rel="prev" title="20. ANSI C and C++ Include Files" href="../includes/" />
+      <link rel="canonical" href="https://edgcpp.org/doc/runtime/" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e1a1ceaf" />
+    <link rel="stylesheet" type="text/css" href="../_static/shibuya.css?v=2ceb65ce" />
+    <link media="print" rel="stylesheet" type="text/css" href="../_static/print.css?v=20ff2c19" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=8971ef7f" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://edgcpp.org/doc/runtime/"/>
+  <meta property="og:title" content="21. Runtime Library"/>
+    <meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="../">
+      <img class="light-logo" src="../_static/doc-logo-light.png" alt="CPFE" height="28" loading="lazy" />
+      <img class="dark-logo" src="../_static/doc-logo-dark.png" alt="CPFE" height="28" loading="lazy" />
+      <strong>CPFE</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="../search/" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials"></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2"></span>
+          <span class="hamburger_3"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../build/">1. Configuring and Building the C++ Front End</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ext_intf/">2. External Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../int_overview/">3. Overview of Internal Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../il/">4. Intermediate Language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lower_il/">5. IL Lowering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../symbol_tbl/">6. Symbol Table</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lex_pp/">7. Lexical Analysis and Preprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tables/">8. Table Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../expr/">9. Expression Scanning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../decls/">10. Declarations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../class_decl/">11. Class Declarations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../statements/">12. Statement Scanning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../templates/">13. Templates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../exceptions/">14. Exception Handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pragma/">15. Pragmas and Attributes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/">16. Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../trans_unit/">17. Multiple Translation Units</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../admin/">18. Administrative Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../err_msgs/">19. Error Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../includes/">20. ANSI C and C++ Include Files</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">21. Runtime Library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../utilities/">22. Utility Programs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../c_gen_be/">23. C-Generating Back End</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cp_gen_be/">24. C++-Generating Back End</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../code_style/">25. Coding Style Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../testing/">26. EDG Testing Framework</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#the-building-runtime-option">21.1. The <code class="docutils literal notranslate"><span class="pre">--building_runtime</span></code> option</a></li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../"><span itemprop="name">CPFE</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name"><span class="section-number">21. </span>Runtime Library</strong>
+        <meta itemprop="position" content="2" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="relative min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+  <div class="copy-page-wrapper relative pb-4 lg:absolute lg:top-8 lg:right-6 xl:right-12">
+  <div id="copy-page-trigger">
+    <button
+      type="button"
+      class="js-copy px-3 py-1 inline-flex items-center gap-1"
+      data-url="https://edgcpp.org/doc/_sources/runtime.rst.txt"
+    >
+      <i class="i-lucide" data-icon="copy"></i>
+      <span>Copy page</span>
+    </button>
+    <button class="js-menu px-2 py-1" type="button" aria-label="More actions"
+      aria-haspopup="menu" aria-expanded="false" aria-controls="copy-page-content">
+      <i class="i-lucide chevron-down"></i>
+    </button>
+  </div>
+  <div id="copy-page-content" role="menu" aria-orientation="vertical" aria-hidden="true">
+    <div role="presentation">
+      <div class="flex flex-col" role="group">
+        <button class="js-copy" type="button" role="menuitem"
+          data-url="https://edgcpp.org/doc/_sources/runtime.rst.txt">
+          <span class="iconify-icon">
+            <i class="i-lucide" data-icon="copy"></i>
+          </span>
+          <span>Copy page</span>
+        </button>
+        <a role="menuitem" href="https://edgcpp.org/doc/_sources/runtime.rst.txt" target="_blank" rel="nofollow"><iconify-icon icon="bi:code-slash"></iconify-icon>
+            <span>View Source</span></a><a role="menuitem" href="https://chatgpt.com/?hints=search&q=Read%20https%3A//edgcpp.org/doc/_sources/runtime.rst.txt%20so%20I%20can%20ask%20questions%20about%20it." target="_blank" rel="nofollow">
+          <iconify-icon icon="bi:openai"></iconify-icon>
+          <span>Open in ChatGPT</span>
+        </a><a role="menuitem" href="https://claude.ai/new?q=Read%20https%3A//edgcpp.org/doc/_sources/runtime.rst.txt%20so%20I%20can%20ask%20questions%20about%20it." target="_blank" rel="nofollow">
+          <iconify-icon icon="bi:claude"></iconify-icon>
+          <span>Open in Claude</span>
+        </a></div>
+    </div>
+  </div>
+</div><article class="yue" role="main">
+          <section id="runtime-library">
+<h1><span class="section-number">21. </span>Runtime Library<a class="headerlink" href="#runtime-library" title="Link to this heading">#</a></h1>
+<p>The runtime library routines provide basic runtime support.  The source for
+these routines is in the <code class="docutils literal notranslate"><span class="pre">lib_src</span></code> directory of the release structure.</p>
+<p>“Basic” runtime support means support for operations built in to the C++
+language, like <code class="docutils literal notranslate"><span class="pre">new</span></code> and <code class="docutils literal notranslate"><span class="pre">delete</span></code>, and for operations for which code is
+generated by IL lowering, e.g., array initialization.  (This includes code
+generated by the lowering of C99 constructs.) It does not mean support for all
+libraries required by the C++ standard, e.g., <code class="docutils literal notranslate"><span class="pre">iostream</span></code>s.</p>
+<p>The front end supports two different runtime models.  A configuration macro is
+used to select the runtime model to be used.  The models supported are the
+IA-64 ABI and one that is an extension of the one used with <em>cfront</em>.</p>
+<p>The IA-64 model is a complete implementation of the IA-64 ABI, except that the
+exception handling implementation does not conform to the ABI (because
+producing a conforming implementation of exception handling requires back end
+support).</p>
+<p>The <em>cfront</em> runtime model is generally compatible with the one used by
+<em>cfront</em> version 3.0.2, and in fact the code generated by the front end in
+<em>cfront</em> object code compatibility mode will work with the libraries
+supplied with <em>cfront</em> (with one exception that is described below).
+Another way of saying the same thing: The runtime library is an independent
+implementation of the runtime interface defined by <em>cfront</em>.</p>
+<p>One incompatibility between our runtime support library and the one provided
+with <em>cfront</em> is the handling of static destructors.  The <em>cfront</em> static
+destruction mechanism does not conform to the C++ standard, which requires all
+static objects, including local static objects, to be destroyed in the reverse
+order of construction.  The EDG static destruction mechanism relies on a new
+data structure called the needed destructions list.  If a <em>cfront</em> runtime
+library is to be used, the <code class="docutils literal notranslate"><span class="pre">dtor_list.o</span></code> file from the EDG library must be
+included when a program is linked.  This may be done by explicitly including
+<code class="docutils literal notranslate"><span class="pre">dtor_list.o</span></code> in the link command generated by the driver, or by adding
+<code class="docutils literal notranslate"><span class="pre">dtor_list.o</span></code> to the library file containing the <em>cfront</em> libraries.</p>
+<p>In the area of exception handling, there is no standard <em>cfront</em> runtime
+model (because no version of <em>cfront</em> that supports exception handling was
+released by USL), so the model is invented by EDG, drawing on some
+published aspects of the implementation done by Hewlett-Packard.</p>
+<p>The runtime routines should be considered to be a sample implementation of a
+runtime library.  They are believed to be complete and to work correctly, but
+they might require adaptation to make them work correctly in a given
+environment, or to make them compatible with other runtime libraries or
+conventions on the target system.  In particular, if runtime compatibility with
+<em>cfront</em> is not required, there are probably better ways of doing some of these
+things.  Also, the target system may provide efficient support for things that
+can only be done in a clumsy way in a portable runtime library, e.g., getting
+start-up initialization code run automatically at the beginning of execution.</p>
+<section id="the-building-runtime-option">
+<h2><span class="section-number">21.1. </span>The <code class="docutils literal notranslate"><span class="pre">--building_runtime</span></code> option<a class="headerlink" href="#the-building-runtime-option" title="Link to this heading">#</a></h2>
+<p>Like the front end, the runtime contains a number of configuration flags.  In
+many cases, it is essential that the same values be used by both the front end
+and the runtime with which the generated code will be linked.  To help make
+sure the runtime is configured properly the <code class="docutils literal notranslate"><span class="pre">--building_runtime</span></code> option
+should be specified when compiling the runtime.  This causes additional
+preprocessing macros to be defined that pass the value of certain configuration
+flags from the front end to the runtime.  The following preprocessing macros
+are defined when the <code class="docutils literal notranslate"><span class="pre">--building_runtime</span></code> option is used:</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">__EDG_JMP_BUF_ELEMENT_TYPE</span></code></div>
+<div class="line"><br /></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">The name of the integer or floating point type that is used as the
+element type of the <code class="docutils literal notranslate"><span class="pre">jmp_buf</span></code> array used by <code class="docutils literal notranslate"><span class="pre">setjmp</span></code>.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">__EDG_JMP_BUF_NUM_ELEMENTS</span></code></div>
+<div class="line"><br /></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">The number of elements in the <code class="docutils literal notranslate"><span class="pre">jmp_buf</span></code> array used by <code class="docutils literal notranslate"><span class="pre">setjmp</span></code>.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">__EDG_DELTA_TYPE</span></code></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">The name of the integer type that is used to represent the offset in a
+virtual function table entry.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">__EDG_VIRTUAL_FUNCTION_INDEX_TYPE</span></code></div>
+<div class="line"><br /></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">The name of the integer type that is used to represent the index field
+in a virtual function table entry.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">__EDG_VAR_HANDLE_TYPE</span></code></div>
+<div class="line"><br /></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">The name of the integer type that is used to represent a “handle” in
+exception handling tables.  Defined only when <code class="docutils literal notranslate"><span class="pre">GENERATE_EH_TABLES</span></code>
+is TRUE.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">__EDG_REGION_NUMBER_TYPE</span></code></div>
+<div class="line"><br /></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">The type of a region number field in the exception handling tables.
+Defined only when <code class="docutils literal notranslate"><span class="pre">GENERATE_EH_TABLES</span></code> is TRUE.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">__EDG_ETS_FLAG_TYPE</span></code></div>
+<div class="line"><br /></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">The type used to pass exception types flags to the runtime library.
+Defined only when <code class="docutils literal notranslate"><span class="pre">GENERATE_EH_TABLES</span></code> is TRUE.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">__EDG_NULL_EH_REGION_NUMBER</span></code></div>
+<div class="line"><br /></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">The value used as the null region number value in the exception
+handling tables.  Defined only when <code class="docutils literal notranslate"><span class="pre">GENERATE_EH_TABLES</span></code> is TRUE.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">__EDG_LOWER_VARIABLE_LENGTH_ARRAYS</span></code></div>
+<div class="line"><br /></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Indicates whether or not the front end is configured to lower
+variable-length arrays.  Set to the value of <code class="docutils literal notranslate"><span class="pre">(VLA_ALLOWED</span> <span class="pre">&amp;&amp;</span>
+<span class="pre">LOWER_VARIABLE_LENGTH_ARRAYS)</span></code> in the front end.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">__EDG_IA64_ABI_USE_VARIANT_ARRAY_COOKIES</span></code></div>
+<div class="line"><br /></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Non-zero when the variant representation of array cookies is used in
+the IA-64 ABI.  Defined only when <code class="docutils literal notranslate"><span class="pre">IA64_ABI</span></code> is TRUE.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">__EDG_ELEM_COUNT_PARAM_TYPE</span></code></div>
+<div class="line"><br /></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">The type used to represent the <code class="docutils literal notranslate"><span class="pre">number_of_elements</span></code> argument in the
+Cfront-like ABI.  Defined only when <code class="docutils literal notranslate"><span class="pre">IA64_ABI</span></code> is FALSE.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">__EDG_ABI_COMPATIBILITY_VERSION</span></code></div>
+<div class="line"><br /></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">The value of <code class="docutils literal notranslate"><span class="pre">ABI_COMPATIBILITY_VERSION</span></code> used when the front end was
+built.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">__EDG_ABI_CHANGES_FOR_RTTI</span></code></div>
+<div class="line"><br /></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">The value of <code class="docutils literal notranslate"><span class="pre">ABI_CHANGES_FOR_RTTI</span></code> used when the front end was
+built.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">__EDG_ABI_CHANGES_FOR_ARRAY_NEW_AND_DELETE</span></code></div>
+<div class="line"><br /></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">The value of <code class="docutils literal notranslate"><span class="pre">ABI_CHANGES_FOR_ARRAY_NEW_AND_DELETE</span></code> used when the
+front end was built.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">__EDG_ABI_CHANGES_FOR_PLACEMENT_DELETE</span></code></div>
+<div class="line"><br /></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">The value of <code class="docutils literal notranslate"><span class="pre">ABI_CHANGES_FOR_PLACEMENT_DELETE</span></code> used when the front
+end was built.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">__EDG_BSD</span></code></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">The value of the <code class="docutils literal notranslate"><span class="pre">__BSD__</span></code> macro when the front end was built.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">__EDG_SYSV</span></code></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">The value of the <code class="docutils literal notranslate"><span class="pre">__SYSV__</span></code> macro when the front end was built.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">__EDG_ANSIC</span></code></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">The value of the<code class="docutils literal notranslate"><span class="pre">__ANSIC__</span></code> macro when the front end was built.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">__EDG_CPP11_IL_EXTENSIONS_SUPPORTED</span></code></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">The value of <code class="docutils literal notranslate"><span class="pre">CPP11_IL_EXTENSIONS_SUPPORTED</span></code> when the front end was
+built.</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"><div class="navigation-prev">
+    <a href="../includes/">
+      <i class="i-lucide chevron-left"></i>
+      <div class="page-info">
+        <span>Previous</span><div class="title"><span class="section-number">20. </span>ANSI C and C++ Include Files</div></div>
+    </a>
+  </div><div class="navigation-next">
+    <a href="../utilities/">
+      <div class="page-info">
+        <span>Next</span>
+        <div class="title"><span class="section-number">22. </span>Utility Programs</div>
+      </div>
+      <i class="i-lucide chevron-right"></i>
+    </a>
+  </div></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>EDG 7.0, 7/20/26 - ©2026, Edison Design Group, Inc.</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials"></div>
+    </div>
+  </div>
+</footer>
+      <script src="../_static/documentation_options.js?v=618d875b"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/shibuya.js?v=50760d75"></script></body>
+</html>

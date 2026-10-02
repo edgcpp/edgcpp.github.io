@@ -1,0 +1,1282 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="violet" data-content_root="../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>8. Table Management - CPFE 7.0 documentation</title><link rel="index" title="Index" href="../genindex/" /><link rel="search" title="Search" href="../search/" /><link rel="next" title="9. Expression Scanning" href="../expr/" /><link rel="prev" title="7. Lexical Analysis and Preprocessing" href="../lex_pp/" />
+      <link rel="canonical" href="https://edgcpp.org/doc/tables/" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e1a1ceaf" />
+    <link rel="stylesheet" type="text/css" href="../_static/shibuya.css?v=2ceb65ce" />
+    <link media="print" rel="stylesheet" type="text/css" href="../_static/print.css?v=20ff2c19" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=8971ef7f" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://edgcpp.org/doc/tables/"/>
+  <meta property="og:title" content="8. Table Management"/>
+    <meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="../">
+      <img class="light-logo" src="../_static/doc-logo-light.png" alt="CPFE" height="28" loading="lazy" />
+      <img class="dark-logo" src="../_static/doc-logo-dark.png" alt="CPFE" height="28" loading="lazy" />
+      <strong>CPFE</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="../search/" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials"></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2"></span>
+          <span class="hamburger_3"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../build/">1. Configuring and Building the C++ Front End</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ext_intf/">2. External Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../int_overview/">3. Overview of Internal Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../il/">4. Intermediate Language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lower_il/">5. IL Lowering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../symbol_tbl/">6. Symbol Table</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lex_pp/">7. Lexical Analysis and Preprocessing</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">8. Table Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../expr/">9. Expression Scanning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../decls/">10. Declarations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../class_decl/">11. Class Declarations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../statements/">12. Statement Scanning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../templates/">13. Templates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../exceptions/">14. Exception Handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pragma/">15. Pragmas and Attributes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/">16. Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../trans_unit/">17. Multiple Translation Units</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../admin/">18. Administrative Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../err_msgs/">19. Error Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../includes/">20. ANSI C and C++ Include Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../runtime/">21. Runtime Library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../utilities/">22. Utility Programs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../c_gen_be/">23. C-Generating Back End</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cp_gen_be/">24. C++-Generating Back End</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../code_style/">25. Coding Style Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../testing/">26. EDG Testing Framework</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#storage-allocation">8.1. Storage Allocation</a></li>
+<li><a class="reference internal" href="#constant-entries">8.2. Constant Entries</a></li>
+<li><a class="reference internal" href="#type-entries">8.3. Type Entries</a></li>
+<li><a class="reference internal" href="#other-declarative-entries">8.4. Other Declarative Entries</a></li>
+<li><a class="reference internal" href="#expressions">8.5. Expressions</a></li>
+<li><a class="reference internal" href="#statements">8.6. Statements</a></li>
+<li><a class="reference internal" href="#object-lifetimes">8.7. Object Lifetimes</a></li>
+<li><a class="reference internal" href="#source-sequence-entries">8.8. Source Sequence Entries</a></li>
+<li><a class="reference internal" href="#lists-of-entries">8.9. Lists of Entries</a></li>
+<li><a class="reference internal" href="#orphaned-entries">8.10. Orphaned Entries</a></li>
+<li><a class="reference internal" href="#source-file-information">8.11. Source File Information</a></li>
+<li><a class="reference internal" href="#debug-print-routines">8.12. Debug Print Routines</a><ul>
+<li><a class="reference internal" href="#types">8.12.1. Types</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#typerefs">8.13. Typerefs</a></li>
+<li><a class="reference internal" href="#asking-questions-about-types">8.14. Asking Questions About Types</a></li>
+<li><a class="reference internal" href="#taking-apart-types">8.15. Taking Apart Types</a></li>
+<li><a class="reference internal" href="#setting-sizes-and-alignments-of-types">8.16. Setting Sizes and Alignments of Types</a></li>
+<li><a class="reference internal" href="#modifying-type-trees">8.17. Modifying Type Trees</a></li>
+<li><a class="reference internal" href="#getting-information-about-base-classes">8.18. Getting Information About Base Classes</a></li>
+<li><a class="reference internal" href="#routines-that-implement-language-concepts">8.19. Routines that Implement Language Concepts</a></li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../"><span itemprop="name">CPFE</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name"><span class="section-number">8. </span>Table Management</strong>
+        <meta itemprop="position" content="2" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="relative min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+  <div class="copy-page-wrapper relative pb-4 lg:absolute lg:top-8 lg:right-6 xl:right-12">
+  <div id="copy-page-trigger">
+    <button
+      type="button"
+      class="js-copy px-3 py-1 inline-flex items-center gap-1"
+      data-url="https://edgcpp.org/doc/_sources/tables.rst.txt"
+    >
+      <i class="i-lucide" data-icon="copy"></i>
+      <span>Copy page</span>
+    </button>
+    <button class="js-menu px-2 py-1" type="button" aria-label="More actions"
+      aria-haspopup="menu" aria-expanded="false" aria-controls="copy-page-content">
+      <i class="i-lucide chevron-down"></i>
+    </button>
+  </div>
+  <div id="copy-page-content" role="menu" aria-orientation="vertical" aria-hidden="true">
+    <div role="presentation">
+      <div class="flex flex-col" role="group">
+        <button class="js-copy" type="button" role="menuitem"
+          data-url="https://edgcpp.org/doc/_sources/tables.rst.txt">
+          <span class="iconify-icon">
+            <i class="i-lucide" data-icon="copy"></i>
+          </span>
+          <span>Copy page</span>
+        </button>
+        <a role="menuitem" href="https://edgcpp.org/doc/_sources/tables.rst.txt" target="_blank" rel="nofollow"><iconify-icon icon="bi:code-slash"></iconify-icon>
+            <span>View Source</span></a><a role="menuitem" href="https://chatgpt.com/?hints=search&q=Read%20https%3A//edgcpp.org/doc/_sources/tables.rst.txt%20so%20I%20can%20ask%20questions%20about%20it." target="_blank" rel="nofollow">
+          <iconify-icon icon="bi:openai"></iconify-icon>
+          <span>Open in ChatGPT</span>
+        </a><a role="menuitem" href="https://claude.ai/new?q=Read%20https%3A//edgcpp.org/doc/_sources/tables.rst.txt%20so%20I%20can%20ask%20questions%20about%20it." target="_blank" rel="nofollow">
+          <iconify-icon icon="bi:claude"></iconify-icon>
+          <span>Open in Claude</span>
+        </a></div>
+    </div>
+  </div>
+</div><article class="yue" role="main">
+          <section id="table-management">
+<h1><span class="section-number">8. </span>Table Management<a class="headerlink" href="#table-management" title="Link to this heading">#</a></h1>
+<p>For a description of the intermediate language itself, see
+<a class="reference internal" href="../il/#intermediate-language"><span class="std std-ref">Intermediate Language</span></a>.</p>
+<p>The source file <code class="docutils literal notranslate"><span class="pre">il_alloc.c</span></code> contains routines to allocate and clear the
+intermediate language tables, and <code class="docutils literal notranslate"><span class="pre">il.c</span></code> contains routines to debug-print
+them.  These routines should always be used, so that new tables are always set
+to the proper default values and problems with undefined fields are avoided.
+<code class="docutils literal notranslate"><span class="pre">il_def.h</span></code>, <code class="docutils literal notranslate"><span class="pre">il_alloc.h</span></code>, and <code class="docutils literal notranslate"><span class="pre">il.h</span></code> contain associated declarations.</p>
+<p>Note that some of these routines should not be called from a back end, because
+the front end data structures they need are no longer set up properly at that
+point.  In general, routines that allocate new storage or new entries should
+not be called, and routines that answer questions about existing entries are
+okay to call.  The</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="cp">#if !STANDALONE_UTILITY_PROGRAM</span>
+</span></pre></div>
+</div>
+<p>guards indicate routines that should not be called by back ends.</p>
+<section id="storage-allocation">
+<h2><span class="section-number">8.1. </span>Storage Allocation<a class="headerlink" href="#storage-allocation" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">alloc_cil</span></code> has an interface like <code class="docutils literal notranslate"><span class="pre">malloc</span></code>; it allocates space in the
+current intermediate language memory region.  <code class="docutils literal notranslate"><span class="pre">new_il_region</span></code> begins a new
+intermediate language memory region.  <code class="docutils literal notranslate"><span class="pre">switch_il_region</span></code> switches to a
+previously-created region.  <code class="docutils literal notranslate"><span class="pre">alloc_il</span></code> allocates space in the file-scope
+intermediate language memory region.</p>
+<p>When the alternate IL file format is used, space is reserved preceding each IL
+entry so that the IL entry number can be stored there.</p>
+</section>
+<section id="constant-entries">
+<h2><span class="section-number">8.2. </span>Constant Entries<a class="headerlink" href="#constant-entries" title="Link to this heading">#</a></h2>
+<p>Constant entries (type <code class="docutils literal notranslate"><span class="pre">a_constant</span></code>) are usually allocated by
+<code class="docutils literal notranslate"><span class="pre">alloc_constant</span></code>; <code class="docutils literal notranslate"><span class="pre">fs_constant</span></code> is similar to it but allocates the constant
+entry at the file scope.  <code class="docutils literal notranslate"><span class="pre">make_zero_of_proper_type</span></code> makes a zero constant of
+a given type.  <code class="docutils literal notranslate"><span class="pre">clear_constant</span></code> and <code class="docutils literal notranslate"><span class="pre">set_constant_kind</span></code> are called to
+re-initialize existing constant entries, and <code class="docutils literal notranslate"><span class="pre">set_error_constant</span></code> changes an
+existing constant entry to an error constant.</p>
+<p>In most cases, a constant entry need not be unique – the same entry can be
+used for all occurrences of a given literal constant.  For these cases, one
+should call <code class="docutils literal notranslate"><span class="pre">alloc_shareable_constant</span></code> instead of <code class="docutils literal notranslate"><span class="pre">alloc_constant</span></code>.  (The
+interface is slightly different; one passes a filled-in constant entry rather
+than just a kind.) <code class="docutils literal notranslate"><span class="pre">alloc_shareable_constant</span></code> maintains
+<code class="docutils literal notranslate"><span class="pre">shareable_constants_table</span></code>, a hash table that is searched by hashing a
+constant entry to a bucket number (routine <code class="docutils literal notranslate"><span class="pre">hash_constant</span></code>), then searching a
+linked list of constants in that bucket to see if there is a match (comparison
+is done by <code class="docutils literal notranslate"><span class="pre">eq_constants</span></code>).  If an entry is found, it is reused.  If none is
+found, one is entered into the table.</p>
+<p>In cases where the constant entry cannot be shared (as when it must be linked
+into an initializer list), <code class="docutils literal notranslate"><span class="pre">alloc_unshared_constant</span></code> should be called
+instead.  It basically just calls <code class="docutils literal notranslate"><span class="pre">alloc_constant</span></code>, but adjusts a few things
+in the constant entry.</p>
+</section>
+<section id="type-entries">
+<h2><span class="section-number">8.3. </span>Type Entries<a class="headerlink" href="#type-entries" title="Link to this heading">#</a></h2>
+<p>Type entries (type <code class="docutils literal notranslate"><span class="pre">a_type</span></code>) are allocated by <code class="docutils literal notranslate"><span class="pre">alloc_type</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">integer_type</span></code>, <code class="docutils literal notranslate"><span class="pre">fixed_point_type</span></code>, <code class="docutils literal notranslate"><span class="pre">float_type</span></code>, <code class="docutils literal notranslate"><span class="pre">string_type</span></code>,
+<code class="docutils literal notranslate"><span class="pre">void_type</span></code>, and <code class="docutils literal notranslate"><span class="pre">error_type</span></code> can be called to create type entries for the
+most common types; these routines will reuse the entries once they have created
+them.  <code class="docutils literal notranslate"><span class="pre">make_pointer_type</span></code> creates a pointer type pointing to a given base
+type.  It uses the routine <code class="docutils literal notranslate"><span class="pre">get_based_type</span></code> to determine if a pointer to the
+type has already been created, and it calls <code class="docutils literal notranslate"><span class="pre">add_based_type_list_member</span></code> to
+record the fact that a pointer type has been allocated.
+<code class="docutils literal notranslate"><span class="pre">make_reference_type</span></code> is the similar routine for (lvalue) reference types,
+and <code class="docutils literal notranslate"><span class="pre">make_rvalue_reference_type</span></code> is the similar routine for rvalue reference
+types.  <code class="docutils literal notranslate"><span class="pre">ptr_to_member_type</span></code> is the similar routine for pointer-to-member
+types.</p>
+<p><code class="docutils literal notranslate"><span class="pre">make_qualified_type</span></code> is used to add type qualifiers to an existing type;
+<code class="docutils literal notranslate"><span class="pre">make_unqualified_type</span></code> is used to remove them.</p>
+<p><code class="docutils literal notranslate"><span class="pre">unknown_type</span></code> creates an unknown type entry; such an entry is used as a
+place-holder within the front end and the references to it must be eliminated
+before the back end is called.  Another type that is normally not seen by the
+back end (unless prototype instantiations are recorded in the IL) is the
+template parameter type, which is used in processing template declarations.</p>
+<p>There are several routines that allocate various pieces of the description of a
+class type:</p>
+<ul>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">alloc_derivation_step</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">alloc_base_class_derivation</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">alloc_overriding_virtual_function</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">alloc_base_class</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">alloc_list_entry_for_class</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">alloc_class_type_supplement</span></code></div>
+</div>
+</li>
+</ul>
+</section>
+<section id="other-declarative-entries">
+<h2><span class="section-number">8.4. </span>Other Declarative Entries<a class="headerlink" href="#other-declarative-entries" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">alloc_variable</span></code>, <code class="docutils literal notranslate"><span class="pre">alloc_field</span></code>, <code class="docutils literal notranslate"><span class="pre">alloc_label</span></code>, and <code class="docutils literal notranslate"><span class="pre">alloc_routine</span></code>
+allocate variable, field, label, and routine entries.  They do nothing terribly
+interesting.  <code class="docutils literal notranslate"><span class="pre">remove_from_routines_list</span></code> can be used to remove a routine
+from the routines list so that it can be added again at the position where its
+actual definition appears.</p>
+<p>Routines that allocate other IL entities resulting from declarations include:</p>
+<ul>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">alloc_param_type</span></code> allocates a param-entry pointed to from the routine
+type supplement of a <code class="docutils literal notranslate"><span class="pre">tk_routine</span></code> type entry.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">alloc_template</span></code>, <code class="docutils literal notranslate"><span class="pre">alloc_template_arg</span></code> and
+<code class="docutils literal notranslate"><span class="pre">alloc_template_param_type_descr</span></code> are used in template processing.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">alloc_namespace</span></code> allocates an entry to represent either a namespace or a
+namespace alias.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">alloc_using_decl</span></code> allocates an entry to represent a <code class="docutils literal notranslate"><span class="pre">using</span></code>-directive,
+a member <code class="docutils literal notranslate"><span class="pre">using</span></code>-declaration, or a nonmember <code class="docutils literal notranslate"><span class="pre">using</span></code>-declaration.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">alloc_macro</span></code> allocates an entry representing a macro definition (when
+<code class="docutils literal notranslate"><span class="pre">RECORD_MACROS_IN_IL</span></code> is set).</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">alloc_pragma</span></code> allocates an entry representing a <code class="docutils literal notranslate"><span class="pre">#pragma</span></code> declaration.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">alloc_asm_entry</span></code> allocates an entry representing an <code class="docutils literal notranslate"><span class="pre">asm</span></code> declaration.
+To support certain extensions (i.e., when <code class="docutils literal notranslate"><span class="pre">ASM_FUNCTION_ALLOWED</span></code> is set)
+<code class="docutils literal notranslate"><span class="pre">alloc_asm_function_body</span></code> is also available.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">alloc_scope</span></code> allocates a scope entry.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">alloc_ctor_init</span></code> allocates a constructor-initializer entry, a list of
+which is recorded in the scope entry associated with a constructor.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">alloc_temporary_variable</span></code> allocates a variable entry for a temporary.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">alloc_dynamic_init</span></code> allocates a dynamic initialization entry, used
+(among other things) to represent dynamic initialization on variable
+declarations.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">alloc_local_static_variable_init</span></code> allocates an entry used to represent
+the initialization of a function-local variable with static storage class.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">alloc_list_entry_for_routine</span></code> allocates an entry used to record a list
+of routine entries (used to support <code class="docutils literal notranslate"><span class="pre">friend</span></code> declarations).</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">alloc_exception_specification</span></code> allocates an entry that represents an
+exception specification in a function declaration.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">alloc_accessible_base_class</span></code> allocates an accessible base class entry
+(unused in implementations in which <code class="docutils literal notranslate"><span class="pre">ABI_CHANGES_FOR_RTTI</span></code> is set).</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">alloc_hidden_name</span></code> allocates a hidden-name entry (for use by the
+C++-generating back end, when <code class="docutils literal notranslate"><span class="pre">RECORD_HIDDEN_NAMES_IN_IL</span></code> is set).</div>
+</div>
+</li>
+</ul>
+</section>
+<section id="expressions">
+<h2><span class="section-number">8.5. </span>Expressions<a class="headerlink" href="#expressions" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">alloc_expr_node</span></code> allocates an expression node.</p>
+<p><code class="docutils literal notranslate"><span class="pre">set_expr_node_kind</span></code> and <code class="docutils literal notranslate"><span class="pre">clear_expr_node</span></code> re-initialize existing entries.
+<code class="docutils literal notranslate"><span class="pre">make_operator_node</span></code> creates an expression node for an operation.</p>
+<p><code class="docutils literal notranslate"><span class="pre">set_node_operator</span></code> changes the operator or type in an existing operation
+expression node.</p>
+<p><code class="docutils literal notranslate"><span class="pre">error_node</span></code> makes an error expression node (a new one on each call, since
+executable constructs cannot be shared).</p>
+<p>There are several utility routines that help in constructing expressions:</p>
+<ul>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">alloc_node_for_constant</span></code> builds an expression node that points to a
+constant entry.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">node_for_integer_constant</span></code> builds an expression node for an integer
+constant.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">var_lvalue_expr</span></code> builds an expression node for a variable as an lvalue.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">var_rvalue_expr</span></code> builds an expression node for a variable as an rvalue.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">var_addr_expr</span></code> builds an expression node for the address of a variable.
+The <code class="docutils literal notranslate"><span class="pre">address_taken</span></code> flag is set.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">function_lvalue_expr</span></code> builds an expression node for a function as an
+lvalue.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">function_rvalue_node</span></code> builds an expression node for a function as an
+rvalue, i.e., for the address of the function.  This is suitable for
+calling the function, but not for the “<code class="docutils literal notranslate"><span class="pre">&amp;</span></code>” operator applied to the
+function, because the <code class="docutils literal notranslate"><span class="pre">address_taken</span></code> flag is not set.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">function_addr_expr</span></code> builds an expression node for the address of a
+function.  The <code class="docutils literal notranslate"><span class="pre">address_taken</span></code> flag is set.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">rvalue_expr_for_lvalue</span></code> converts an lvalue expression to an rvalue.  It
+also works for function lvalues, but not for arrays.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">add_indirection_to_node</span></code> adds an indirection (”<code class="docutils literal notranslate"><span class="pre">*</span></code>” operator) to an
+expression.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">add_ref_indirection_to_node</span></code> adds the reference equivalent of
+“<code class="docutils literal notranslate"><span class="pre">*</span></code>” to an expression.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">add_address_of_to_node</span></code> adds a “<code class="docutils literal notranslate"><span class="pre">&amp;</span></code>” operator to an expression.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">add_reference_to_to_node</span></code> adds the reference equivalent of “<code class="docutils literal notranslate"><span class="pre">&amp;</span></code>” to an
+expression.  (Note that that is not a typo; the name really does have
+“<code class="docutils literal notranslate"><span class="pre">to_to_</span></code>” in it.)</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">field_lvalue_selection_expr</span></code> builds an expression for a field selection
+that produces an lvalue.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">field_rvalue_selection_expr</span></code> builds an expression for a field selection
+that produces an rvalue.</div>
+</div>
+</li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">copy_expr_tree</span></code> makes a copy of an expression tree.  When it does so, it can
+optionally “clone” any temporary variables found within the tree so that the
+copy uses different but equivalent temporaries.</p>
+<p>In addition, <code class="docutils literal notranslate"><span class="pre">alloc_lowered_eh_construct_node</span></code> allocates an expression node
+to represent one of several (partially) lowered exception handling constructs
+(used only when IL lowering is enabled and <code class="docutils literal notranslate"><span class="pre">DO_FULL_PORTABLE_EH_LOWERING</span></code> is
+configured to FALSE.</p>
+</section>
+<section id="statements">
+<h2><span class="section-number">8.6. </span>Statements<a class="headerlink" href="#statements" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">alloc_statement</span></code> allocates a statement (which may allocate a supplement of
+type <code class="docutils literal notranslate"><span class="pre">a_for_loop</span></code>, <code class="docutils literal notranslate"><span class="pre">a_switch_stmt_descr</span></code>, etc.).
+<code class="docutils literal notranslate"><span class="pre">alloc_switch_case_entry</span></code> allocates the entry used to represent one case
+(possibly, the “<code class="docutils literal notranslate"><span class="pre">default:</span></code>” case) of a <code class="docutils literal notranslate"><span class="pre">switch</span></code> statement.</p>
+</section>
+<section id="object-lifetimes">
+<h2><span class="section-number">8.7. </span>Object Lifetimes<a class="headerlink" href="#object-lifetimes" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">alloc_object_lifetime</span></code> allocates an object lifetime entry, and
+<code class="docutils literal notranslate"><span class="pre">bind_object_lifetime</span></code> binds it to a specified IL entry (a scope, an
+expression, a dynamic init, etc.).</p>
+<p>A dynamic init entry with a destructor is added to the destructions list of an
+object lifetime by <code class="docutils literal notranslate"><span class="pre">record_end_of_lifetime_destruction</span></code>, which calls
+<code class="docutils literal notranslate"><span class="pre">add_to_destructions_list</span></code>.  Conversely, it is removed from the list by
+<code class="docutils literal notranslate"><span class="pre">remove_from_destructions_list</span></code>.</p>
+<p>During front-end processing object lifetime entries are pushed onto the object
+lifetime stack (see <code class="docutils literal notranslate"><span class="pre">push_object_lifetime</span></code> and global variable
+<code class="docutils literal notranslate"><span class="pre">curr_object_lifetime</span></code>, which is the top of the stack) and popped off the
+stack when appropriate (see <code class="docutils literal notranslate"><span class="pre">pop_object_lifetime</span></code>).</p>
+<p>If, when it is popped off the object lifetime stack, the entry is not actually
+required in the IL (see <code class="docutils literal notranslate"><span class="pre">is_useless_object_lifetime</span></code>), it is unbound from the
+IL entry with which it is associated (see <code class="docutils literal notranslate"><span class="pre">unbind_object_lifetime</span></code>) and
+placed on an available list for reuse (see <code class="docutils literal notranslate"><span class="pre">free_object_lifetime</span></code>).</p>
+</section>
+<section id="source-sequence-entries">
+<h2><span class="section-number">8.8. </span>Source Sequence Entries<a class="headerlink" href="#source-sequence-entries" title="Link to this heading">#</a></h2>
+<p>Source-sequence entries are created only when
+<code class="docutils literal notranslate"><span class="pre">GENERATE_SOURCE_SOURCE_SEQUENCE_LISTS</span></code> is configured to TRUE.  See
+<a class="reference internal" href="../il/#intermediate-language"><span class="std std-ref">Intermediate Language</span></a> for additional information.</p>
+<p><code class="docutils literal notranslate"><span class="pre">f_update_source_sequence_list</span></code> creates new source sequence entries and adds
+them to the appropriate list.</p>
+<ul>
+<li><div class="line-block">
+<div class="line">For declarations it is called by <code class="docutils literal notranslate"><span class="pre">sym_update_source_sequence_list</span></code> (in
+<code class="docutils literal notranslate"><span class="pre">symbol_ref.c</span></code>), which also calls <code class="docutils literal notranslate"><span class="pre">alloc_src_seq_secondary_decl</span></code> when
+the declaration is not a primary declaration.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">For statements it is called by <code class="docutils literal notranslate"><span class="pre">stmt_update_source_sequence_list</span></code> (in
+<code class="docutils literal notranslate"><span class="pre">statements.c</span></code>).</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">In certain other cases – e.g., for the declaration of unnamed <code class="docutils literal notranslate"><span class="pre">enum</span></code>
+types, for which there is no symbol – it is called via macros
+<code class="docutils literal notranslate"><span class="pre">update_source_sequence_list</span></code> and <code class="docutils literal notranslate"><span class="pre">add_to_source_sequence_list</span></code>.</div>
+</div>
+</li>
+</ul>
+<p>Other functions called to create and manage source sequence lists include:</p>
+<ul>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">alloc_source_sequence_entry</span></code> allocates and initializes a source-sequence
+entry.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">add_source_sequence_entry_to_list</span></code> is called to add entries to the end
+of the list of the current scope stack entry (see <code class="docutils literal notranslate"><span class="pre">source_sequence_list</span></code>
+in <code class="docutils literal notranslate"><span class="pre">a_scope_stack_entry</span></code>).  When <code class="docutils literal notranslate"><span class="pre">pop_scope</span></code> is called, the list for a
+given scope stack entry is either appended to the list of the enclosing
+scope stack entry or, for function scopes and the file scope, moved to the
+associated IL scope (see <code class="docutils literal notranslate"><span class="pre">source_sequence_list</span></code> in <code class="docutils literal notranslate"><span class="pre">a_scope).</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">add_empty_source_sequence_entry</span></code> creates and adds a source sequence
+entry that does not yet point to an IL entry.  Such entries are
+placeholders to reserve a position in the list for a declarator when the
+particular IL entry it represents is not yet known; they do not persist
+beyond the front end.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">add_end_of_construct_source_sequence_entry</span></code> creates a source sequence
+entry to mark the end of a construct for a given entity (see
+<code class="docutils literal notranslate"><span class="pre">alloc_src_seq_end_of_construct)</span></code> and adds it to the current source
+sequence list.  (See also <a class="reference internal" href="../il/#src-seq-lists"><span class="std std-ref">Source Sequence Lists</span></a>.)</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">make_source_sequence_secondary_decl</span></code> creates a source sequence entry to
+represent a non-defining declaration (see <code class="docutils literal notranslate"><span class="pre">a_src_seq_secondary_decl</span></code>),
+and <code class="docutils literal notranslate"><span class="pre">set_src_seq_secondary_decl_fields</span></code> can be called to locate the entry
+on the current source sequence list (see
+<code class="docutils literal notranslate"><span class="pre">last_matching_source_sequence_entry</span></code>) and to update various of its
+pointers and flags.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">When either <code class="docutils literal notranslate"><span class="pre">CLASS</span></code>- or
+<code class="docutils literal notranslate"><span class="pre">NONCLASS_TEMPLATE_INSTANTIATIONS_IN_SOURCE_SEQUENCE_LISTS</span></code> is TRUE,
+<code class="docutils literal notranslate"><span class="pre">add_source_sequence_entry_for_partial_instantiation</span></code> is called to enter
+a secondary declaration entry to represent the declaration of a
+compiler-generated template specialization that stands for a template
+instantiation, and when the body of such a specialization is generated, its
+source sequence list is added by <code class="docutils literal notranslate"><span class="pre">insert_instantiation_src_seq_list</span></code>; in
+both cases, <code class="docutils literal notranslate"><span class="pre">find_instantiation_insert_scope</span></code> is called to locate the
+point at which the instantiation should be inserted in the source sequence
+list (since it is not necessarily at the end of the list for the current
+scope stack entry).</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">insert_src_seq_list</span></code> inserts a list into another list at a specified
+point; it is also called to append a list to another list.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">remove_from_source_sequence_list</span></code> removes a given source sequence entry
+from its list; see also macros <code class="docutils literal notranslate"><span class="pre">unlink_src_seq_entries</span></code> and
+<code class="docutils literal notranslate"><span class="pre">unlink_src_seq_entry</span></code> (which operate on source sequence lists and single
+entries, respectively).</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">fixup_function_scope_source_sequence_list</span></code> creates both a sublist header
+(see <code class="docutils literal notranslate"><span class="pre">alloc_src_seq_sublist</span></code>) and the source sequence entry that points
+to it.</div>
+</div>
+</li>
+</ul>
+</section>
+<section id="lists-of-entries">
+<h2><span class="section-number">8.9. </span>Lists of Entries<a class="headerlink" href="#lists-of-entries" title="Link to this heading">#</a></h2>
+<p>The routines</p>
+<ul>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">add_to_constants_list</span></code>,</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">add_to_types_list</span></code>,</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">add_to_variables_list</span></code>,</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">add_to_parameters_list</span></code>,</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">add_to_dynamic_inits_list</span></code>,</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">add_to_routines_list</span></code>, and</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">add_to_labels_list</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">add_to_namespaces_list</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">add_to_using_decls_list</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">add_to_asm_entries_list</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">add_to_templates_list</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">add_to_macros_list</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">add_to_pragma_list</span></code></div>
+</div>
+</li>
+</ul>
+<p>add entries of the indicated type to end of the list of similar entries under a
+scope entry.  The scope will vary depending on the type of entry and what the
+caller specifies.  In many cases it is either the current scope or the
+innermost namespace scope that is used (e.g., variables, constants, types).
+Routines that are not class members are added to the list for the file scope or
+a namespace scope.  Labels are always added to an <code class="docutils literal notranslate"><span class="pre">sck_function</span></code> scope.  And
+so forth.</p>
+<p>There is also an <code class="docutils literal notranslate"><span class="pre">add_to_scopes_list</span></code>; it is called by <code class="docutils literal notranslate"><span class="pre">create_block_scope</span></code>
+when a scope for a statement block is created.  Special handling is required
+because the IL scope for a block is not created until there is some declaration
+in that block.</p>
+</section>
+<section id="orphaned-entries">
+<h2><span class="section-number">8.10. </span>Orphaned Entries<a class="headerlink" href="#orphaned-entries" title="Link to this heading">#</a></h2>
+<p>Orphans are entries in the file scope memory region that are referenced only
+from function scope memory regions.  When the parents of such entries are
+written out and then removed from memory, the entries are orphaned because they
+are not attached to the rest of the file-scope IL tree.</p>
+<p>The orphan mechanism makes lists of such entries so that they can be found
+during traversal of the file-scope IL.  In the file scope, each entry is
+preceded by space for an orphan-list pointer.  When a potential orphan entry is
+encountered, for example when an entry in a function scope memory region points
+to an entry in the file scope memory region,
+<code class="docutils literal notranslate"><span class="pre">add_orphaned_file_scope_il_entry</span></code> is called.  It adds the potential orphan
+to a list of entries of its type headed by the proper element of the array
+<code class="docutils literal notranslate"><span class="pre">orphaned_file_scope_il_entries</span></code> and linked by the hidden pointer.  An entry
+is ignored if it is already on the list (which can be discerned from the fact
+that the orphan-list pointer is already non-NULL or the fact that the entry
+address matches the last-on-list pointer for that entry type).</p>
+<p>There is also a special mechanism for keeping track of the lists of local
+static variables and types in function and block scopes.  These are lists that
+are entirely in the file scope memory region but originate with a pointer that
+is in a function scope memory region.  To keep track of these, entries of type
+<code class="docutils literal notranslate"><span class="pre">a_scope_orphaned_list_header</span></code> are allocated in the file scope memory region
+and attached to the <code class="docutils literal notranslate"><span class="pre">il_header</span></code>.  Each entry contains a copy of the static
+variables and types pointers from a function or block scope, so that the lists
+can be visited in the file scope memory region even if the associated function
+scope memory region is no longer in memory.  See
+<code class="docutils literal notranslate"><span class="pre">add_scope_orphaned_il_lists</span></code>.</p>
+</section>
+<section id="source-file-information">
+<h2><span class="section-number">8.11. </span>Source File Information<a class="headerlink" href="#source-file-information" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">record_start_of_source_file</span></code> and <code class="docutils literal notranslate"><span class="pre">record_end_of_source_file</span></code> build
+information about the correspondence between source files and sequence numbers.
+Basically, this is a tree that shows the nesting of include files, with added
+entries to show the information provided by <code class="docutils literal notranslate"><span class="pre">#line</span></code> directives.  These
+routines are called from <code class="docutils literal notranslate"><span class="pre">push_input_stack</span></code> and <code class="docutils literal notranslate"><span class="pre">pop_input_stack</span></code> in
+<code class="docutils literal notranslate"><span class="pre">lexical.c</span></code>, and <code class="docutils literal notranslate"><span class="pre">proc_line</span></code> in <code class="docutils literal notranslate"><span class="pre">preproc.c</span></code>.
+<code class="docutils literal notranslate"><span class="pre">conv_seq_to_file_and_line</span></code> uses that data structure to map sequence numbers
+into file names and line numbers.</p>
+</section>
+<section id="debug-print-routines">
+<h2><span class="section-number">8.12. </span>Debug Print Routines<a class="headerlink" href="#debug-print-routines" title="Link to this heading">#</a></h2>
+<p>The following debug-print routines can be used to display intermediate language
+constructs for debugging purposes:</p>
+<ul>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">db_name</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">db_type_name</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">db_name_linkage</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">db_type</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">db_abbreviated_type</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">db_access_control</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">db_field</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">db_static_data_member</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">db_member_function</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">db_virtual_function_info</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">db_constant</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">db_variable</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">db_expression</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">db_dynamic_initializer</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">db_initializer</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">db_statement</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">db_statement_list</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">db_object_lifetime</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">db_object_lifetime_stack</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">db_scope</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">db_source_sequence_entry</span></code></div>
+</div>
+</li>
+</ul>
+<section id="types">
+<h3><span class="section-number">8.12.1. </span>Types<a class="headerlink" href="#types" title="Link to this heading">#</a></h3>
+<p>The routines and data structures described in this section are defined in
+<code class="docutils literal notranslate"><span class="pre">types.c</span></code> and <code class="docutils literal notranslate"><span class="pre">types.h</span></code>.  These are routines that manipulate intermediate
+language types in various ways.  They answer questions about them, and do
+various language transformations on them.</p>
+</section>
+</section>
+<section id="typerefs">
+<h2><span class="section-number">8.13. </span>Typerefs<a class="headerlink" href="#typerefs" title="Link to this heading">#</a></h2>
+<p>In type trees, typedefs, type qualifiers (e.g., const and volatile), type
+operators such as decltype, and various other types are represented by an entry
+called a typeref.  It indicates a reference to an existing type.  For qualified
+pointer types, the <code class="docutils literal notranslate"><span class="pre">typeref</span></code> indicating the qualifier is on top of the
+pointer type: for <code class="docutils literal notranslate"><span class="pre">int</span> <span class="pre">*const</span> <span class="pre">q</span></code> the type is a <code class="docutils literal notranslate"><span class="pre">const</span></code><code class="docutils literal notranslate"><span class="pre">typeref</span></code>
+pointing to a pointer type entry, which points to an entry for <code class="docutils literal notranslate"><span class="pre">int</span></code>.  Macros
+<code class="docutils literal notranslate"><span class="pre">get_type_qualifiers</span></code> and <code class="docutils literal notranslate"><span class="pre">get_top_level_type_qualifiers</span></code> (the former may
+check for qualifiers on the underlying array element type, the latter does not)
+call <code class="docutils literal notranslate"><span class="pre">f_get_type_qualifiers</span></code> when appropriate, returning a bit set (see
+<code class="docutils literal notranslate"><span class="pre">a_type_qualifier_set</span></code>).</p>
+<p>It is often necessary for code that deals with types to access the target of a
+typeref or chain of typerefs.  Various convenience functions are provided for
+this purpose, including skip_typerefs, skip_typerefs_not_typedefs,
+skip_lexical_typerefs, etc.</p>
+</section>
+<section id="asking-questions-about-types">
+<h2><span class="section-number">8.14. </span>Asking Questions About Types<a class="headerlink" href="#asking-questions-about-types" title="Link to this heading">#</a></h2>
+<p>There are many predicates that determine whether or not a given type is of a
+given kind.  Having predicate functions (instead of doing the testing by direct
+coding) is necessary because of the possibility of there being <code class="docutils literal notranslate"><span class="pre">typeref</span></code>
+entries on a type.  These predicates are implemented as functions, although
+they could be implemented as macros for any cases where it seems desirable.
+Within <code class="docutils literal notranslate"><span class="pre">types.c</span></code>, macros are used so as to avoid having one predicate routine
+call a half-dozen others to get an answer.  The predicate macros have the same
+names as the corresponding predicate functions, with the final <code class="docutils literal notranslate"><span class="pre">_type</span></code> of the
+name removed (i.e., <code class="docutils literal notranslate"><span class="pre">is_integral</span></code> corresponds to <code class="docutils literal notranslate"><span class="pre">is_integral_type</span></code>).  They
+do not call <code class="docutils literal notranslate"><span class="pre">skip_typerefs</span></code>.</p>
+<p>The predicate functions are</p>
+<ul>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">is_error_type</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">is_function_type</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">is_incomplete_type</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">is_object_type</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">is_void_type</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">is_integral_type</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">is_signed_integral_type</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">is_enum_typeis_integral_or_enum_type</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">is_character_type</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">is_fixed_point_type</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">is_floating_type</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">is_arithmetic_or_enum_type</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">is_pointer_type</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">is_reference_type</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">is_lvalue_reference_type</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">is_rvalue_reference_type</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">is_ptr_or_ref_type</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">is_scalar_type</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">is_array_type</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">is_char_array_type</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">is_class_struct_union_type</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">is_complete_class_struct_union_type</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">is_union_type</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">is_aggregate_or_union_type</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">is_polymorphic_class_type</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">is_ptr_to_member_type</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">is_template_class_type</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">is_template_param_type</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">is_nullptr_type</span></code></div>
+</div>
+</li>
+</ul>
+<p>Macros that may be called to get information about the type (when
+<code class="docutils literal notranslate"><span class="pre">skip_typerefs</span></code> is not to be called) include</p>
+<ul>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">is_immediate_error_type</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">is_immediate_class_type</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">is_qualified_type</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">is_const_qualified_type</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">is_volatile_qualified_type</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">is_top_level_qualified_type</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">is_top_level_const_qualified_type</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">is_top_level_volatile_qualified_type</span></code></div>
+</div>
+</li>
+</ul>
+<p>(Among those that check type qualifiers, the <code class="docutils literal notranslate"><span class="pre">is_top_level_</span></code><em>xxx</em> versions
+differ from the others in not checking for qualifiers on underlying array
+element types.) Other type qualifiers besides <code class="docutils literal notranslate"><span class="pre">const</span></code> and <code class="docutils literal notranslate"><span class="pre">volatile</span></code> may be
+recognized; for instance, when support for <code class="docutils literal notranslate"><span class="pre">restrict</span></code> is enabled,
+<code class="docutils literal notranslate"><span class="pre">is_restrict_qualified_type</span></code> and <code class="docutils literal notranslate"><span class="pre">is_top_level_restrict_qualified_type</span></code> are
+also defined.</p>
+<p><code class="docutils literal notranslate"><span class="pre">is_illegal_abstract_class_type</span></code> returns TRUE if the type is that of an
+abstract class, struct, or union, or if it is an array of abstract class
+objects, or if it is pointer or reference to an array of abstract class
+objects.</p>
+<p><code class="docutils literal notranslate"><span class="pre">int_kind_is_signed</span></code> determines whether a given integer kind is a signed
+type.</p>
+<p>There are in addition some predicate functions that examine an entire type
+tree, if necessary, to return information about a type:</p>
+<ul>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">is_or_contains_local_type</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">is_or_contains_unnamed_or_local_type</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">is_or_contains_template_param</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">is_or_contains_specific_template_param</span></code></div>
+</div>
+</li>
+</ul>
+<p>These routines call <code class="docutils literal notranslate"><span class="pre">traverse_type_tree</span></code>, a generic type-walking routine; it
+is passed the address of a service routine that examines a node in the type
+tree, and its detailed behavior is governed by setting some combination of
+flags (see <code class="docutils literal notranslate"><span class="pre">a_type_tree_traversal_flag_set</span></code>).</p>
+<p>Another set of predicates tests C++/CLI types and can be used only inside
+<code class="docutils literal notranslate"><span class="pre">#if</span></code> guards for <code class="docutils literal notranslate"><span class="pre">MICROSOFT_EXTENSIONS_ALLOWED:</span></code></p>
+<ul>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">is_handle_type</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">is_managed_nullptr_type</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">is_ref_class_type</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">is_value_class_type</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">is_managed_class_type</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">is_standard_class_type</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">is_cli_interface_type</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">is_tracking_reference_type</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">is_handle_or_tracking_ref_type</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">is_interior_ptr_type</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">is_pin_ptr_type</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">is_cli_array_type</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">is_handle_to_cli_array_type</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">is_cli_generic_param_type</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">is_cli_generic_constraint_type</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">is_boxable_type</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">is_delegate_type</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">is_cli_system_object_type</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">is_cli_system_string_type</span></code></div>
+</div>
+</li>
+</ul>
+<p>To ease pointer/reference/handle tests in code that might have to deal with
+C++/CLI types, the following test certain general categories of pointers and
+references:</p>
+<ul>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">is_any_reference_type</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">is_any_ptr_or_ref_type</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">is_pointer_or_handle_type</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">types_are_both_pointers_or_both_handles</span></code></div>
+</div>
+</li>
+</ul>
+</section>
+<section id="taking-apart-types">
+<h2><span class="section-number">8.15. </span>Taking Apart Types<a class="headerlink" href="#taking-apart-types" title="Link to this heading">#</a></h2>
+<p>Given an array type, <code class="docutils literal notranslate"><span class="pre">array_element_type</span></code> and
+<code class="docutils literal notranslate"><span class="pre">underlying_array_element_type</span></code> return the type of an element; the second
+deals with multidimensional arrays.  <code class="docutils literal notranslate"><span class="pre">type_pointed_to</span></code> is used to get the
+base type from a pointer or reference type.  <code class="docutils literal notranslate"><span class="pre">pm_member_type</span></code> and
+<code class="docutils literal notranslate"><span class="pre">pm_class_type</span></code> extract the base types from pointer-to-member types.
+<code class="docutils literal notranslate"><span class="pre">underlying_type_of_derived_type</span></code> extracts the underlying type for all
+derived types (pointer, pointer-to-member, array, etc.).</p>
+<p>Given a C++/CLI array type, <code class="docutils literal notranslate"><span class="pre">cli_array_element_type</span></code> returns the type of the
+element.  <code class="docutils literal notranslate"><span class="pre">cli_array_rank_constant</span></code> and <code class="docutils literal notranslate"><span class="pre">cli_array_rank</span></code> return the rank
+(number of dimensions) of the array in different forms.</p>
+</section>
+<section id="setting-sizes-and-alignments-of-types">
+<h2><span class="section-number">8.16. </span>Setting Sizes and Alignments of Types<a class="headerlink" href="#setting-sizes-and-alignments-of-types" title="Link to this heading">#</a></h2>
+<p>The size and alignment for a type are recorded in the type entry (except for
+<code class="docutils literal notranslate"><span class="pre">typeref</span></code>s, which have their sizes and alignments dictated by the type they
+refer to).  These values, however, are not set all over the front end, but only
+by isolated routines.  The main routine is <code class="docutils literal notranslate"><span class="pre">set_type_size</span></code>, which will set
+the size of an arbitrary type.  The type must be completely built by the time
+this routine is called.  <code class="docutils literal notranslate"><span class="pre">set_type_size</span></code> calls <code class="docutils literal notranslate"><span class="pre">set_array_type_size</span></code> for
+arrays.  Size and alignment for class types are set by code in <code class="docutils literal notranslate"><span class="pre">layout.c</span></code>.</p>
+</section>
+<section id="modifying-type-trees">
+<h2><span class="section-number">8.17. </span>Modifying Type Trees<a class="headerlink" href="#modifying-type-trees" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">set_used_in_exception_or_rtti_flag</span></code> is called for types that appear as the
+type of a throw object, in an exception specification list, as the type of a
+handler, or in a <code class="docutils literal notranslate"><span class="pre">typeid</span></code> operator.  It sets the type entry’s
+<code class="docutils literal notranslate"><span class="pre">used_in_exception_or_rtti</span></code> flag.  To assure that such types have external
+linkage, it also calls <code class="docutils literal notranslate"><span class="pre">set_force_external_linkage_flag</span></code>, which in turn calls
+<code class="docutils literal notranslate"><span class="pre">traverse_type_tree</span></code> to mark all the components of the type tree that have
+linkage.</p>
+<p><code class="docutils literal notranslate"><span class="pre">strip_local_typedefs</span></code> is called to remove all local <code class="docutils literal notranslate"><span class="pre">typedef</span></code> components
+of a type tree.  It calls <code class="docutils literal notranslate"><span class="pre">traverse_and_modify_type_tree</span></code> to help accomplish
+this task.  If a subtree of the type tree is modified, a new type tree is built
+to accommodate the change.</p>
+</section>
+<section id="getting-information-about-base-classes">
+<h2><span class="section-number">8.18. </span>Getting Information About Base Classes<a class="headerlink" href="#getting-information-about-base-classes" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">find_base_class_of</span></code> returns a pointer to a base class entry if a given class
+type is represented on the base classes list of another class type.  Similar
+functionality, but with the implied restrictions, is provided by
+<code class="docutils literal notranslate"><span class="pre">find_direct_base_class_of</span></code> and <code class="docutils literal notranslate"><span class="pre">find_direct_or_virtual_base_class_of</span></code>.
+<code class="docutils literal notranslate"><span class="pre">related_class_pointers</span></code> will do the same for pointers to classes.</p>
+<p><code class="docutils literal notranslate"><span class="pre">corresponding_base_class</span></code>, given a base class belonging to one class,
+searches the base classes of another class, finds the corresponding entry, and
+returns a pointer to it.</p>
+<p><code class="docutils literal notranslate"><span class="pre">is_on_any_derivation_of</span></code> returns TRUE if a given base class is on the
+derivation of another base class.</p>
+</section>
+<section id="routines-that-implement-language-concepts">
+<h2><span class="section-number">8.19. </span>Routines that Implement Language Concepts<a class="headerlink" href="#routines-that-implement-language-concepts" title="Link to this heading">#</a></h2>
+<p>The routines described in this section implement concepts of the C or C++
+languages.</p>
+<p>Two routines handle type promotions: <code class="docutils literal notranslate"><span class="pre">type_after_integral_promotion</span></code>
+determines the type that results from integral promotion done in an expression,
+and <code class="docutils literal notranslate"><span class="pre">default_argument_promotion</span></code> determines the type of an argument to a
+function with old-style parameter declarations after default promotion.  See
+also <code class="docutils literal notranslate"><span class="pre">type_after_bit_field_integral_promotion</span></code> in <code class="docutils literal notranslate"><span class="pre">exprutil.c</span></code> for a
+special case involving bit-fields.</p>
+<p>Several routines compare two types to see if they are compatible in some way.
+<code class="docutils literal notranslate"><span class="pre">identical_types</span></code> determines whether the two types are structurally identical
+(they don’t have to be the same pointer).  <code class="docutils literal notranslate"><span class="pre">il_identical_types</span></code> sees if the
+two types are identical from an IL perspective (e.g., <code class="docutils literal notranslate"><span class="pre">int</span></code> and <code class="docutils literal notranslate"><span class="pre">long</span></code>
+might be identical if the front end is configured that way).
+<code class="docutils literal notranslate"><span class="pre">types_are_compatible</span></code> sees if two types are compatible (C standard,
+3.1.2.6).  (Those three names are actually macros which call
+<code class="docutils literal notranslate"><span class="pre">f_identical_types</span></code> and <code class="docutils literal notranslate"><span class="pre">f_types_are_compatible</span></code> only if the type pointers
+are not exactly the same.) <code class="docutils literal notranslate"><span class="pre">interchangeable_types</span></code> sees if two types are
+interchangeable as arguments to functions (basically, this is true if they are
+compatible except for signedness issues).</p>
+<p><code class="docutils literal notranslate"><span class="pre">impl_pointer_conversion</span></code> determines whether or not an implicit conversion
+from a given type to a given pointer type is valid, with some special cases for
+pointers to <code class="docutils literal notranslate"><span class="pre">void</span></code> and for null pointer constants.</p>
+<p><code class="docutils literal notranslate"><span class="pre">impl_conversion_possible</span></code> determines whether or not an implicit conversion
+from a given type to another is valid.  <code class="docutils literal notranslate"><span class="pre">impl_ptr_to_member_conversion</span></code>
+handles the subcase of implicit conversion of one pointer-to-member type to
+another.</p>
+<p><code class="docutils literal notranslate"><span class="pre">expl_conversion_possible</span></code> determines whether or not an explicit conversion
+(cast) from a given type to another is valid.  It relies on two subroutines for
+the major subcases:</p>
+<ul>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">static_cast_conversion_possible</span></code> and</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">reinterpret_cast_conversion_possible</span></code>.</div>
+</div>
+</li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">composite_type</span></code> develops a composite type from two types (C standard,
+3.1.2.6).</p>
+<p><code class="docutils literal notranslate"><span class="pre">overload_distinguishable</span></code> determines whether or not two function types are
+sufficiently different that they can be distinguished by overload processing
+(and therefore routines with those types can be overloaded).</p>
+<p><code class="docutils literal notranslate"><span class="pre">impl_handle_conversion</span></code> determines whether or not an implicit conversion
+from a given type to a given C++/CLI handle type is valid.</p>
+<p><code class="docutils literal notranslate"><span class="pre">boxing_conversion_possible</span></code> determines whether a conversion from one given
+type to another is a C++/CLI boxing conversion.  The cases accepted convert a
+value type to a handle to that value type.</p>
+<p><code class="docutils literal notranslate"><span class="pre">unboxing_conversion_possible</span></code> determines whether a conversion from one given
+type to another is a C++/CLI unboxing conversion.  The cases accepted convert a
+handle type to a value type.</p>
+<p><code class="docutils literal notranslate"><span class="pre">system_type_from_fundamental_type</span></code> and <code class="docutils literal notranslate"><span class="pre">fundamental_type_from_system_type</span></code>
+are a pair of functions that convert back and forth between fundamental types
+and the corresponding C++/CLI value class types (e.g., between <code class="docutils literal notranslate"><span class="pre">int</span></code> and
+<code class="docutils literal notranslate"><span class="pre">System::Int32</span></code>).</p>
+</section>
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"><div class="navigation-prev">
+    <a href="../lex_pp/">
+      <i class="i-lucide chevron-left"></i>
+      <div class="page-info">
+        <span>Previous</span><div class="title"><span class="section-number">7. </span>Lexical Analysis and Preprocessing</div></div>
+    </a>
+  </div><div class="navigation-next">
+    <a href="../expr/">
+      <div class="page-info">
+        <span>Next</span>
+        <div class="title"><span class="section-number">9. </span>Expression Scanning</div>
+      </div>
+      <i class="i-lucide chevron-right"></i>
+    </a>
+  </div></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>EDG 7.0, 7/20/26 - ©2026, Edison Design Group, Inc.</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials"></div>
+    </div>
+  </div>
+</footer>
+      <script src="../_static/documentation_options.js?v=618d875b"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/shibuya.js?v=50760d75"></script></body>
+</html>
