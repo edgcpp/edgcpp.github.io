@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="violet" data-content_root="./">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>CPFE 7.0 documentation</title><link rel="index" title="Index" href="genindex/" /><link rel="search" title="Search" href="search/" /><link rel="next" title="1. Configuring and Building the C++ Front End" href="build/" />
+      <link rel="canonical" href="https://edgcpp.org/dev/doc/" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="_static/pygments.css?v=e1a1ceaf" />
+    <link rel="stylesheet" type="text/css" href="_static/shibuya.css?v=2ceb65ce" />
+    <link media="print" rel="stylesheet" type="text/css" href="_static/print.css?v=20ff2c19" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=8971ef7f" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://edgcpp.org/dev/doc/"/>
+  <meta property="og:title" content="C/C++ Front End Documentation"/>
+    <meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="#">
+      <img class="light-logo" src="_static/doc-logo-light.png" alt="CPFE" height="28" loading="lazy" />
+      <img class="dark-logo" src="_static/doc-logo-dark.png" alt="CPFE" height="28" loading="lazy" />
+      <strong>CPFE</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="search/" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials"></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2"></span>
+          <span class="hamburger_3"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><ul>
+<li class="toctree-l1"><a class="reference internal" href="build/">1. Configuring and Building the C++ Front End</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ext_intf/">2. External Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="int_overview/">3. Overview of Internal Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="il/">4. Intermediate Language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lower_il/">5. IL Lowering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="symbol_tbl/">6. Symbol Table</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lex_pp/">7. Lexical Analysis and Preprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tables/">8. Table Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="expr/">9. Expression Scanning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="decls/">10. Declarations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="class_decl/">11. Class Declarations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="statements/">12. Statement Scanning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="templates/">13. Templates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="exceptions/">14. Exception Handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pragma/">15. Pragmas and Attributes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/">16. Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="trans_unit/">17. Multiple Translation Units</a></li>
+<li class="toctree-l1"><a class="reference internal" href="admin/">18. Administrative Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="err_msgs/">19. Error Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="includes/">20. ANSI C and C++ Include Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="runtime/">21. Runtime Library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utilities/">22. Utility Programs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="c_gen_be/">23. C-Generating Back End</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cp_gen_be/">24. C++-Generating Back End</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code_style/">25. Coding Style Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing/">26. EDG Testing Framework</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#">C/C++ Front End Documentation</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="#"><span itemprop="name">CPFE</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">C/C++ Front End Documentation</strong>
+        <meta itemprop="position" content="2" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="relative min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+  <div class="copy-page-wrapper relative pb-4 lg:absolute lg:top-8 lg:right-6 xl:right-12">
+  <div id="copy-page-trigger">
+    <button
+      type="button"
+      class="js-copy px-3 py-1 inline-flex items-center gap-1"
+      data-url="https://edgcpp.org/dev/doc/_sources/index.rst.txt"
+    >
+      <i class="i-lucide" data-icon="copy"></i>
+      <span>Copy page</span>
+    </button>
+    <button class="js-menu px-2 py-1" type="button" aria-label="More actions"
+      aria-haspopup="menu" aria-expanded="false" aria-controls="copy-page-content">
+      <i class="i-lucide chevron-down"></i>
+    </button>
+  </div>
+  <div id="copy-page-content" role="menu" aria-orientation="vertical" aria-hidden="true">
+    <div role="presentation">
+      <div class="flex flex-col" role="group">
+        <button class="js-copy" type="button" role="menuitem"
+          data-url="https://edgcpp.org/dev/doc/_sources/index.rst.txt">
+          <span class="iconify-icon">
+            <i class="i-lucide" data-icon="copy"></i>
+          </span>
+          <span>Copy page</span>
+        </button>
+        <a role="menuitem" href="https://edgcpp.org/dev/doc/_sources/index.rst.txt" target="_blank" rel="nofollow"><iconify-icon icon="bi:code-slash"></iconify-icon>
+            <span>View Source</span></a><a role="menuitem" href="https://chatgpt.com/?hints=search&q=Read%20https%3A//edgcpp.org/dev/doc/_sources/index.rst.txt%20so%20I%20can%20ask%20questions%20about%20it." target="_blank" rel="nofollow">
+          <iconify-icon icon="bi:openai"></iconify-icon>
+          <span>Open in ChatGPT</span>
+        </a><a role="menuitem" href="https://claude.ai/new?q=Read%20https%3A//edgcpp.org/dev/doc/_sources/index.rst.txt%20so%20I%20can%20ask%20questions%20about%20it." target="_blank" rel="nofollow">
+          <iconify-icon icon="bi:claude"></iconify-icon>
+          <span>Open in Claude</span>
+        </a></div>
+    </div>
+  </div>
+</div><article class="yue" role="main">
+          <section id="c-c-front-end-documentation">
+<h1>C/C++ Front End Documentation<a class="headerlink" href="#c-c-front-end-documentation" title="Link to this heading">#</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h2>
+<p>This document describes the function and internal structure of the Edison
+Design Group C/C++ Front End.  More precisely, it gives the general overview
+necessary as an introduction to the study of the source code of the Front End.
+The source code comments provide more detailed information, and that
+information is not necessarily repeated here.</p>
+<p>The front end accepts the C++ language as defined by the ISO/IEC 14882:2020
+standard, as well as a number of the features of the ISO/IEC 14882:2024
+standard.  The front end can also be configured to accept earlier revisions of
+the C++ standard (e.g., ISO/IEC 14882:2003).  With the proper command-line
+options, it alternatively accepts the C language of the ISO/IEC 9899:1990,
+ISO/IEC 9899:1999, ISO/IEC 9899:2011, and ISO/IEC 9899:2018 standards, as well
+as a number of features from the ISO/IEC 9899:2024 standard.  Certain other
+dialects of C++ and C are also accepted, including Microsoft, GNU and Clang
+dialects.  C++/CLI, the Microsoft extension to C++ in support of Microsoft’s
+.NET environment (and formalized through the ECMA-372 standard), is also
+implemented.</p>
+<p>It is a single pass, including integrated preprocessing.  (Preprocessing
+alone – to a textual output file – can also be done, as in traditional
+compilers with a separate preprocessor.) The syntax-analysis technique is
+recursive descent, with a precedence modification to speed up the scanning
+of expressions.</p>
+<p>The front end does no optimization.  Its goal is to produce a complete and
+clean parsed form of the source program, and to diagnose errors.  It does
+complete error checking, produces clear error messages (including the position
+of the error within the source line), and avoids cascading of errors.  It also
+tries to avoid seeming overly finicky to a knowledgeable C or C++ programmer.</p>
+<p>The front end is written in a portable dialect of C++, using features from the
+ISO/IEC 14882:2011 standard (i.e., it’s written using C++11 features).  Host
+and target computer characteristics (e.g., command-line interface, character
+sets, integer sizes, floating-point representation) are carefully separated
+from the main body of code so that they can be easily changed for rehosting or
+retargeting.  There is extensive debugging and assertion-checking code, which
+can be included or excluded by conditional compilation options.</p>
+<p>The output from the front end is a high-level tree-structured in-memory
+intermediate language.  This intermediate language contains full information on
+declarations, statements, and expressions, all in tree form, and all with
+source-correspondence information that simplifies the generation of symbolic
+debugging information.</p>
+<p>The intermediate language can, if desired, be written to a file, read back from
+such a file, or displayed in human-readable form.</p>
+<p>When it translates C programs to intermediate language, the front end uses only
+the C subset of the intermediate language.  When it translates C++ programs to
+intermediate language, it uses the full intermediate language.  However, an
+optional IL lowering pass can be used translate the C++ intermediate language
+constructs into C intermediate language constructs to reduce the work required
+of back ends.</p>
+<p>It is expected that the front end will be combined with an appropriate back end
+that will generate object code from the intermediate language.  A simple back
+end is provided that generates C from the intermediate language, and another
+that generates C++ from the intermediate language (the latter is intended for
+source-to-source applications).</p>
+<p>Also included: minimal runtime, a template prelinker, an IL display utility, a
+name demangler, and prototype header files.</p>
+<p>This document covers:</p>
+<ul class="simple">
+<li><p>The external interface of the front end – the command-line options,
+language dialect, intermediate language, and host/target configuration
+issues.  (Error messages are listed in an appendix.)</p></li>
+<li><p>The design of the front end – its philosophy and an overview of the source
+code.</p></li>
+</ul>
+<p>Readers of this document should be familiar with the C++ language, with the C
+language, and with the basics of compiler theory.</p>
+</section>
+</section>
+<section id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Link to this heading">#</a></h1>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex/"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="search/"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"><div class="navigation-next">
+    <a href="build/">
+      <div class="page-info">
+        <span>Next</span>
+        <div class="title"><span class="section-number">1. </span>Configuring and Building the C++ Front End</div>
+      </div>
+      <i class="i-lucide chevron-right"></i>
+    </a>
+  </div></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>EDG 7.0, 7/20/26 - ©2026, Edison Design Group, Inc.</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials"></div>
+    </div>
+  </div>
+</footer>
+      <script src="_static/documentation_options.js?v=618d875b"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="_static/shibuya.js?v=50760d75"></script></body>
+</html>

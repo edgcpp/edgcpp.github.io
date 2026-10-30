@@ -1,0 +1,1394 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="violet" data-content_root="../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>10. Declarations - CPFE 7.0 documentation</title><link rel="index" title="Index" href="../genindex/" /><link rel="search" title="Search" href="../search/" /><link rel="next" title="11. Class Declarations" href="../class_decl/" /><link rel="prev" title="9. Expression Scanning" href="../expr/" />
+      <link rel="canonical" href="https://edgcpp.org/doc/decls/" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e1a1ceaf" />
+    <link rel="stylesheet" type="text/css" href="../_static/shibuya.css?v=2ceb65ce" />
+    <link media="print" rel="stylesheet" type="text/css" href="../_static/print.css?v=20ff2c19" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=8971ef7f" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://edgcpp.org/doc/decls/"/>
+  <meta property="og:title" content="10. Declarations"/>
+    <meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="../">
+      <img class="light-logo" src="../_static/doc-logo-light.png" alt="CPFE" height="28" loading="lazy" />
+      <img class="dark-logo" src="../_static/doc-logo-dark.png" alt="CPFE" height="28" loading="lazy" />
+      <strong>CPFE</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="../search/" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials"></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2"></span>
+          <span class="hamburger_3"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../build/">1. Configuring and Building the C++ Front End</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ext_intf/">2. External Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../int_overview/">3. Overview of Internal Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../il/">4. Intermediate Language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lower_il/">5. IL Lowering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../symbol_tbl/">6. Symbol Table</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lex_pp/">7. Lexical Analysis and Preprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tables/">8. Table Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../expr/">9. Expression Scanning</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">10. Declarations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../class_decl/">11. Class Declarations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../statements/">12. Statement Scanning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../templates/">13. Templates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../exceptions/">14. Exception Handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pragma/">15. Pragmas and Attributes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/">16. Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../trans_unit/">17. Multiple Translation Units</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../admin/">18. Administrative Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../err_msgs/">19. Error Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../includes/">20. ANSI C and C++ Include Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../runtime/">21. Runtime Library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../utilities/">22. Utility Programs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../c_gen_be/">23. C-Generating Back End</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cp_gen_be/">24. C++-Generating Back End</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../code_style/">25. Coding Style Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../testing/">26. EDG Testing Framework</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#overview">10.1. Overview</a><ul>
+<li><a class="reference internal" href="#declaration-parse-state">10.1.1. Declaration Parse State</a></li>
+<li><a class="reference internal" href="#declarations-from-c-cli-assembly-metadata">10.1.2. Declarations from C++/CLI Assembly Metadata</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#linkage-specifications">10.2. Linkage Specifications</a></li>
+<li><a class="reference internal" href="#declarations-vs-expressions">10.3. Declarations <em>vs.</em> Expressions</a></li>
+<li><a class="reference internal" href="#declaration-scanning">10.4. Declaration Scanning</a><ul>
+<li><a class="reference internal" href="#declaration-specifiers">10.4.1. Declaration Specifiers</a></li>
+<li><a class="reference internal" href="#declarators">10.4.2. Declarators</a></li>
+<li><a class="reference internal" href="#c-cli-type-constructs">10.4.3. C++/CLI Type Constructs</a></li>
+<li><a class="reference internal" href="#completing-the-declaration">10.4.4. Completing the Declaration</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#initialization">10.5. Initialization</a><ul>
+<li><a class="reference internal" href="#il-representation">10.5.1. IL Representation</a></li>
+<li><a class="reference internal" href="#init-components-and-init-states">10.5.2. Init Components and Init States</a></li>
+<li><a class="reference internal" href="#variable-initializers">10.5.3. Variable Initializers</a><ul>
+<li><a class="reference internal" href="#auto-type-deduction">10.5.3.1. Auto type deduction</a></li>
+<li><a class="reference internal" href="#default-initialization">10.5.3.2. Default Initialization</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#aggregate-initializers">10.5.4. Aggregate Initializers</a></li>
+<li><a class="reference internal" href="#constructor-initializers">10.5.5. Constructor Initializers</a></li>
+<li><a class="reference internal" href="#destructor-initializers">10.5.6. Destructor-initializers</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#type-names-in-expressions">10.6. Type Names in Expressions</a></li>
+<li><a class="reference internal" href="#asm-declarations">10.7. <code class="docutils literal notranslate"><span class="pre">asm</span></code> Declarations</a></li>
+<li><a class="reference internal" href="#namespaces">10.8. Namespaces</a><ul>
+<li><a class="reference internal" href="#namespace-declarations">10.8.1. Namespace Declarations</a></li>
+<li><a class="reference internal" href="#using-directives">10.8.2. Using-Directives</a></li>
+<li><a class="reference internal" href="#using-declarations">10.8.3. Using-Declarations</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#standard-attributes-gnu-attributes-and-declspec-attributes">10.9. Standard Attributes, GNU Attributes, and <code class="docutils literal notranslate"><span class="pre">__declspec</span></code> Attributes</a></li>
+<li><a class="reference internal" href="#microsoft-attributes">10.10. Microsoft Attributes</a></li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../"><span itemprop="name">CPFE</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name"><span class="section-number">10. </span>Declarations</strong>
+        <meta itemprop="position" content="2" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="relative min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+  <div class="copy-page-wrapper relative pb-4 lg:absolute lg:top-8 lg:right-6 xl:right-12">
+  <div id="copy-page-trigger">
+    <button
+      type="button"
+      class="js-copy px-3 py-1 inline-flex items-center gap-1"
+      data-url="https://edgcpp.org/doc/_sources/decls.rst.txt"
+    >
+      <i class="i-lucide" data-icon="copy"></i>
+      <span>Copy page</span>
+    </button>
+    <button class="js-menu px-2 py-1" type="button" aria-label="More actions"
+      aria-haspopup="menu" aria-expanded="false" aria-controls="copy-page-content">
+      <i class="i-lucide chevron-down"></i>
+    </button>
+  </div>
+  <div id="copy-page-content" role="menu" aria-orientation="vertical" aria-hidden="true">
+    <div role="presentation">
+      <div class="flex flex-col" role="group">
+        <button class="js-copy" type="button" role="menuitem"
+          data-url="https://edgcpp.org/doc/_sources/decls.rst.txt">
+          <span class="iconify-icon">
+            <i class="i-lucide" data-icon="copy"></i>
+          </span>
+          <span>Copy page</span>
+        </button>
+        <a role="menuitem" href="https://edgcpp.org/doc/_sources/decls.rst.txt" target="_blank" rel="nofollow"><iconify-icon icon="bi:code-slash"></iconify-icon>
+            <span>View Source</span></a><a role="menuitem" href="https://chatgpt.com/?hints=search&q=Read%20https%3A//edgcpp.org/doc/_sources/decls.rst.txt%20so%20I%20can%20ask%20questions%20about%20it." target="_blank" rel="nofollow">
+          <iconify-icon icon="bi:openai"></iconify-icon>
+          <span>Open in ChatGPT</span>
+        </a><a role="menuitem" href="https://claude.ai/new?q=Read%20https%3A//edgcpp.org/doc/_sources/decls.rst.txt%20so%20I%20can%20ask%20questions%20about%20it." target="_blank" rel="nofollow">
+          <iconify-icon icon="bi:claude"></iconify-icon>
+          <span>Open in Claude</span>
+        </a></div>
+    </div>
+  </div>
+</div><article class="yue" role="main">
+          <section id="declarations">
+<h1><span class="section-number">10. </span>Declarations<a class="headerlink" href="#declarations" title="Link to this heading">#</a></h1>
+<p>Declaration scanning is shared among a number of files.  What is specific to
+class member declarations is found in <code class="docutils literal notranslate"><span class="pre">class_decl.c</span></code> and is discussed in the
+next chapter.  The remainder of declaration processing is found in <code class="docutils literal notranslate"><span class="pre">decls.c</span></code>,
+which contains the top level routines and a number of utility functions;
+<code class="docutils literal notranslate"><span class="pre">decl_spec.c</span></code>, which handles declaration specifiers; <code class="docutils literal notranslate"><span class="pre">declarator.c</span></code>, which
+scans declarators; <code class="docutils literal notranslate"><span class="pre">func_def.c</span></code>, which contains the code to process function
+definitions; and <code class="docutils literal notranslate"><span class="pre">decl_inits.c</span></code>, which contains the code to scan
+initializers.  <code class="docutils literal notranslate"><span class="pre">decls.h</span></code>, <code class="docutils literal notranslate"><span class="pre">decl_spec.h</span></code>, <code class="docutils literal notranslate"><span class="pre">declarator.h</span></code>, <code class="docutils literal notranslate"><span class="pre">func_def.h</span></code>,
+and <code class="docutils literal notranslate"><span class="pre">decl_inits.h</span></code> contain associated declarations.  In addition, code for
+disambiguating C++ declarations and expressions is found in <code class="docutils literal notranslate"><span class="pre">disambig.c</span></code>,
+with associated declarations in <code class="docutils literal notranslate"><span class="pre">disambig.h</span></code>.</p>
+<section id="overview">
+<h2><span class="section-number">10.1. </span>Overview<a class="headerlink" href="#overview" title="Link to this heading">#</a></h2>
+<p>The top level routine in declaration scanning, and in fact in the overall
+compilation process, is <code class="docutils literal notranslate"><span class="pre">translation_unit</span></code>, which scans a series of
+declarations and stops at end of file.  The routine it calls is
+<code class="docutils literal notranslate"><span class="pre">scan_nonmember_declaration</span></code> (via the older <code class="docutils literal notranslate"><span class="pre">declaration</span></code> interface), which
+is also called for local declarations that appear within functions or blocks
+(including old-style parameter declarations).  (The only declarations that do
+not pass through <code class="docutils literal notranslate"><span class="pre">declaration</span></code> are class member declarations and new-style
+parameter declarations.)</p>
+<p>Since a typical declaration looks like this:</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line"><em>decl-specifiers</em> <em>declarator-list</em> <code class="docutils literal notranslate"><span class="pre">;</span></code></div>
+</div>
+</div></blockquote>
+<p>two principal elements in the structure of <code class="docutils literal notranslate"><span class="pre">scan_nonmember_declaration</span></code> are</p>
+<ul>
+<li><div class="line-block">
+<div class="line">a call to <code class="docutils literal notranslate"><span class="pre">decl_specifiers</span></code>, which scans the type specifier, storage
+class keyword, and so forth; and</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">a loop to handle a comma-separated list of declarators with successive
+calls to <code class="docutils literal notranslate"><span class="pre">declarator</span></code>.</div>
+</div>
+</li>
+</ul>
+<p>There are many details, including a lot of error checking and some special
+cases.  But in general, after the return from <code class="docutils literal notranslate"><span class="pre">declarator</span></code>, one of several
+routines is called (though not called directly from <code class="docutils literal notranslate"><span class="pre">declaration</span></code>) to do
+additional processing:</p>
+<ul>
+<li><div class="line-block">
+<div class="line">When a function body is present <code class="docutils literal notranslate"><span class="pre">function_definition</span></code> is called and the
+loop is exited.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">decl_variable</span></code> is called for declarations of variables.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">decl_routine</span></code> is called for declarations of non-member functions without
+bodies (it is also called via <code class="docutils literal notranslate"><span class="pre">function_definition</span></code> when a body is
+present).</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">decl_typedef</span></code> is called for <code class="docutils literal notranslate"><span class="pre">typedef</span></code> declarations.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">decl_parameter</span></code> is called for old-style parameter list declarations.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">define_static_data_member</span></code> is called for C++ static data member
+definitions.</div>
+</div>
+</li>
+</ul>
+<p>Finally, if an initializer is present in a variable or static data member
+declaration, it is scanned by a call to <code class="docutils literal notranslate"><span class="pre">initializer</span></code>; in cases where default
+initialization may be required, <code class="docutils literal notranslate"><span class="pre">def_initializer</span></code> is called.</p>
+<p>Other sorts of declarations are handled by the following (via
+<code class="docutils literal notranslate"><span class="pre">check_special_declaration_form</span></code>):</p>
+<ul>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">template_directive_or_declaration</span></code> is called for template declarations,
+template instantiation directives, and template specializations (in other
+words, declarations that begin with the keyword <code class="docutils literal notranslate"><span class="pre">template</span></code>).</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">namespace_declaration</span></code> is called for namespace and namespace alias
+declarations.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">nonmember_using_declaration</span></code> is called for all <code class="docutils literal notranslate"><span class="pre">using</span></code>-declarations
+except those appearing in a class definition.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">using_directive</span></code> is called for <code class="docutils literal notranslate"><span class="pre">using</span></code>-directives.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">asm_declaration</span></code> is called for declarations that begin with the keyword
+<code class="docutils literal notranslate"><span class="pre">asm</span></code>.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">alias_declaration</span></code> is called for C++11-style alias declarations.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">scan_and_record_cli_delegate_definition</span></code> is called for C++/CLI delegate
+definitions.</div>
+</div>
+</li>
+</ul>
+<section id="declaration-parse-state">
+<h3><span class="section-number">10.1.1. </span>Declaration Parse State<a class="headerlink" href="#declaration-parse-state" title="Link to this heading">#</a></h3>
+<p>The outline above just lists a few of the many functions involved in parsing
+declarations, and many of those functions need to share various bits of state.
+The principal structure tracking this state through this process have type
+<code class="docutils literal notranslate"><span class="pre">a_decl_parse_state</span></code>.  This keeps track of types (declared type, effective
+type, etc.), positions (start of declaration, declarator, certain specifier
+keywords, etc.), additional declarative attributes (GNU, Microsoft, etc.), and
+so forth.</p>
+<p>For declarations involving a declarator, the declared entity’s symbol, once
+available, is pointed to by <code class="docutils literal notranslate"><span class="pre">dps-&gt;sym</span></code> where <code class="docutils literal notranslate"><span class="pre">dps</span></code> is a pointer to the
+declaration parse state for that declaration.</p>
+<p>In most cases the declaration parse state is initialized using the
+<code class="docutils literal notranslate"><span class="pre">init_decl_parse_state</span></code> macro, but when multiple comma-separated declarators
+are handled, the state is recycled for each secondary declarator by calling
+<code class="docutils literal notranslate"><span class="pre">start_secondary_declarator</span></code> (which preserves and even restores state
+associated with the common declaration specifiers).</p>
+<p><code class="docutils literal notranslate"><span class="pre">a_decl_parse_state</span></code> includes a field of type <code class="docutils literal notranslate"><span class="pre">an_init_state</span></code> to describe
+the processing of any initializer associated with the declaration (although
+<code class="docutils literal notranslate"><span class="pre">an_init_state</span></code> variables can also exist independent of a specific
+declaration; see also <a class="reference internal" href="#init-components-and-state"><span class="std std-ref">Init Components and Init States</span></a>).</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">a_decl_parse_state</span></code> stucture also maintains a list of “actions”
+(pointers to functions accepting a pointer to that state) that should be run at
+the end of a declaration; this can be useful when a local declaration element
+is encountered that cannot be checked until the declaration has been more or
+less completely processed.  New actions can be registered by calls to
+<code class="docutils literal notranslate"><span class="pre">add_end_of_parse_action</span></code> (they are eventually run by a call to
+<code class="docutils literal notranslate"><span class="pre">run_end_of_parse_actions</span></code>).</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">a_decl_parse_state</span></code> structure is not only used by declarations handled
+by <code class="docutils literal notranslate"><span class="pre">scan_nonmember_declaration</span></code>, but also for class member declarations,
+parameter declarations, and even when parsing type names in contexts such as
+casts and template arguments (through function <code class="docutils literal notranslate"><span class="pre">type_name_full</span></code>), which isn’t
+really declaration parsing at all.</p>
+</section>
+<section id="declarations-from-c-cli-assembly-metadata">
+<span id="cppcli-assembly-decls"></span><h3><span class="section-number">10.1.2. </span>Declarations from C++/CLI Assembly Metadata<a class="headerlink" href="#declarations-from-c-cli-assembly-metadata" title="Link to this heading">#</a></h3>
+<p>In C++/CLI mode, the front end is able to import assembly metadata files.  This
+is achieved by first transforming the metadata into equivalent C++/CLI source
+code, and then parsing that code.  Whether metadata is imported implicitly
+(because it is the core library file), explicitly through a “preusing”
+command-line toption, or explicitly through a <code class="docutils literal notranslate"><span class="pre">#using</span></code> directive, the root
+function doing the importing is <code class="docutils literal notranslate"><span class="pre">import_metadata</span></code> (in <code class="docutils literal notranslate"><span class="pre">preproc.c</span></code>).  This
+function sequences the following operations:</p>
+<ul>
+<li><div class="line-block">
+<div class="line">It prepares a file for importing by calling <code class="docutils literal notranslate"><span class="pre">make_cli_metadata_file</span></code> and
+<code class="docutils literal notranslate"><span class="pre">import_metadata_file</span></code>.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">If all went well, it calls <code class="docutils literal notranslate"><span class="pre">generate_top_level_metadata_code</span></code>, which
+creates a string containing C++/CLI source representing the
+declarations – but not the definitions – of the top-level entities
+(which are managed class types) in the metadata file.  The actual work
+for this is done by the “metadata reader” implemented in
+<code class="docutils literal notranslate"><span class="pre">ms_metadata.cpp</span></code> (a C++ file meant to be compiled only in a
+Microsoft environment).</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">Finally, the generated string is passed to
+<code class="docutils literal notranslate"><span class="pre">scan_top_level_metadata_declarations</span></code>, which (much like
+<code class="docutils literal notranslate"><span class="pre">translation_unit</span></code>) repeatedly calls <code class="docutils literal notranslate"><span class="pre">declaration</span></code> to internalize the
+generated code.</div>
+</div>
+</li>
+</ul>
+<p>The definitions of the generated entities <a class="footnote-reference brackets" href="#f1" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> aren’t imported until (and
+unless) they are needed.  When that happens, a process somewhat similar to that
+of <code class="docutils literal notranslate"><span class="pre">import_metadata</span></code> is performed by <code class="docutils literal notranslate"><span class="pre">get_definition_of_class</span></code>, but this
+time routines to process definitions are called instead of <code class="docutils literal notranslate"><span class="pre">declaration</span></code>:
+<code class="docutils literal notranslate"><span class="pre">scan_cli_generic_class_definition_from_assembly_import</span></code> for generic entities
+(including generic delegates),
+<code class="docutils literal notranslate"><span class="pre">scan_cli_delegate_definition_from_assembly_import</span></code> for non-generic delegate
+definitions, and <code class="docutils literal notranslate"><span class="pre">scan_class_definition</span></code> for other non-generic class type
+definition.
+An imported assembly is assigned a number (the “assembly index”) and that
+number is recorded in the IL representation of class and enum types loaded from
+the assembly.
+While processing code generated from metadata (top-level or needed
+definitions), the global variable <code class="docutils literal notranslate"><span class="pre">scanning_generated_code_from_metadata</span></code> is
+TRUE.  This is used, for example, to suppress certain diagnostics that do not
+apply to code generated from metadata.</p>
+</section>
+</section>
+<section id="linkage-specifications">
+<h2><span class="section-number">10.2. </span>Linkage Specifications<a class="headerlink" href="#linkage-specifications" title="Link to this heading">#</a></h2>
+<p>In C++ the first thing <code class="docutils literal notranslate"><span class="pre">declaration</span></code> must check for is the token <code class="docutils literal notranslate"><span class="pre">extern</span></code>
+followed by a string literal (e.g., <code class="docutils literal notranslate"><span class="pre">extern</span> <span class="pre">&quot;C&quot;</span></code>).  This introduces a linkage
+specification, which may control a single declaration or a brace-enclosed block
+of declarations.  In either case <code class="docutils literal notranslate"><span class="pre">linkage_specification</span></code> is called.  It sets
+global variable <code class="docutils literal notranslate"><span class="pre">def_external_linkage</span></code> to describe the kind of linkage that
+is to be the default for subsequent declarations, and then it calls
+<code class="docutils literal notranslate"><span class="pre">declaration</span></code> again.</p>
+</section>
+<section id="declarations-vs-expressions">
+<h2><span class="section-number">10.3. </span>Declarations <em>vs.</em> Expressions<a class="headerlink" href="#declarations-vs-expressions" title="Link to this heading">#</a></h2>
+<p>Inside a function body it is sometimes difficult to determine whether something
+is a declaration or an executable statement.  In C the presence of a
+declaration specifier keyword or a type name is sufficient to disambiguate the
+cases, but in C++ it can be more complicated.  Similar disambiguation problems
+appear in other contexts as well.  Here are some examples.</p>
+<ul>
+<li><div class="line-block">
+<div class="line">a statement <em>vs.</em> a declaration:</div>
+</div>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">typedef</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">I</span><span class="p">;</span>
+</span><span data-line="2"><span class="n">I</span><span class="p">(</span><span class="n">i</span><span class="p">);</span><span class="w">              </span><span class="c1">// declaration (= I i);</span>
+</span><span data-line="3"><span class="n">I</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">++</span><span class="p">;</span><span class="w">            </span><span class="c1">// cast i to I, then increment</span>
+</span></pre></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">with <code class="docutils literal notranslate"><span class="pre">operator</span> <span class="pre">new</span></code>, a parenthesized type <em>vs.</em> a placement expression:</div>
+</div>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">new</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="p">(</span><span class="mf">1.5</span><span class="p">))</span><span class="w"> </span><span class="n">A</span><span class="w">   </span><span class="c1">// placement</span>
+</span><span data-line="2"><span class="k">new</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="p">(</span><span class="o">*</span><span class="w">  </span><span class="p">))</span><span class="w">     </span><span class="c1">// type</span>
+</span></pre></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">a parenthesized initializer <em>vs.</em> a parameter declaration</div>
+</div>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">struct</span><span class="w"> </span><span class="nc">A</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="cm">/* ... */</span><span class="w"> </span><span class="p">};</span>
+</span><span data-line="2"><span class="n">A</span><span class="w"> </span><span class="nf">a</span><span class="p">(</span><span class="kt">int</span><span class="p">(</span><span class="mi">1</span><span class="p">));</span><span class="w">   </span><span class="c1">// declare variable a (initialized by</span>
+</span><span data-line="3"><span class="w">               </span><span class="c1">//    calling A::A() with arg 1)</span>
+</span><span data-line="4"><span class="n">A</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="kt">int</span><span class="p">(</span><span class="n">i</span><span class="p">));</span><span class="w">   </span><span class="c1">// declare function f to take an integer</span>
+</span><span data-line="5"><span class="w">               </span><span class="c1">//    argument and return an A</span>
+</span></pre></div>
+</div>
+</li>
+</ul>
+<p>The function <code class="docutils literal notranslate"><span class="pre">is_decl_not_expr</span></code> is called in cases where disambiguation is
+required.  This may in turn use the routines <code class="docutils literal notranslate"><span class="pre">prescan_declaration</span></code>,
+<code class="docutils literal notranslate"><span class="pre">prescan_decl_specifiers</span></code>, <code class="docutils literal notranslate"><span class="pre">prescan_declarator</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">prescan_function_declarator</span></code>.  In general, if a sequence of tokens looks
+like a declaration, then it is a declaration, even if it could also be an
+expression.  The technique requires looking ahead as many tokens as necessary
+to confirm or disprove the assumption that the token sequence is a declaration;
+tokens are cached so that they can be rescanned by the caller.</p>
+<p>Thus, in statement processing, when <code class="docutils literal notranslate"><span class="pre">is_decl_not_expr</span></code> returns TRUE the
+tokens are scanned as a declaration (<code class="docutils literal notranslate"><span class="pre">declaration</span></code> is called); otherwise, the
+tokens are scanned assuming that they constitute a statement.</p>
+</section>
+<section id="declaration-scanning">
+<h2><span class="section-number">10.4. </span>Declaration Scanning<a class="headerlink" href="#declaration-scanning" title="Link to this heading">#</a></h2>
+<section id="declaration-specifiers">
+<h3><span class="section-number">10.4.1. </span>Declaration Specifiers<a class="headerlink" href="#declaration-specifiers" title="Link to this heading">#</a></h3>
+<p>The principal part of the code for processing declaration specifiers appears in
+<code class="docutils literal notranslate"><span class="pre">decl_spec.c</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">decl_specifiers</span></code> scans a list of type specifiers, type qualifiers, and/or
+storage class specifiers, and returns (through a <code class="docutils literal notranslate"><span class="pre">a_decl_parse_state</span></code> object)
+a pointer to a type tree.  It is passed a vector of input flags (telling it
+that a storage class specifier is allowed, that the declaration is of a class
+member, etc.) and it returns additional information about the results of the
+scan (reporting that <code class="docutils literal notranslate"><span class="pre">inline</span></code> was scanned, that an explicit type specifier
+was present, etc.) via the <code class="docutils literal notranslate"><span class="pre">a_decl_parse_state</span></code> object that was passed in.</p>
+<p>The specifiers are scanned in a loop.  The simple ones are handled directly.
+When <code class="docutils literal notranslate"><span class="pre">enum</span></code> is seen, <code class="docutils literal notranslate"><span class="pre">enum_specifier</span></code> is called.  When <code class="docutils literal notranslate"><span class="pre">class</span></code>,
+<code class="docutils literal notranslate"><span class="pre">struct</span></code>, or <code class="docutils literal notranslate"><span class="pre">union</span></code> is scanned, <code class="docutils literal notranslate"><span class="pre">class_specifier</span></code> is called; the
+processing entailed in scanning a class definition (see
+<code class="docutils literal notranslate"><span class="pre">scan_class_definition</span></code> in <code class="docutils literal notranslate"><span class="pre">class_decl.c</span></code>) is described in the chapter on
+Class Declarations.</p>
+<p>A <code class="docutils literal notranslate"><span class="pre">typedef</span></code> name may appear as a type specifier, as may a class name in C++.
+Therefore, to tell whether an identifier (including a qualified name) is a type
+name or a declarator, a call is made to <code class="docutils literal notranslate"><span class="pre">curr_type_symbol</span></code>; it returns a
+symbol pointer when the identifier is a type name and NULL otherwise.  Since
+class name can also be a constructor name under some conditions, that case is
+also checked for by <code class="docutils literal notranslate"><span class="pre">is_constructor_decl</span></code>.</p>
+<p>The loop continues until it reaches something it does not recognize as a
+declaration specifier.  Then the accumulated information is combined to create
+a type entry (see <code class="docutils literal notranslate"><span class="pre">combine_type_specifiers</span></code> and <code class="docutils literal notranslate"><span class="pre">add_type_qualifiers</span></code>, and
+the output flags are set.  When no type is explicitly specified, a default type
+is returned; ordinarily it is <code class="docutils literal notranslate"><span class="pre">int</span></code>, but when the declarator is recognized to
+be a constructor, the default is a reference to the class type, and for
+destructors it is <code class="docutils literal notranslate"><span class="pre">void</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">decl_specifiers</span></code> is also called to scan a set of type qualifiers only, e.g.,
+as part of scanning a pointer-declarator.  For such cases
+<code class="docutils literal notranslate"><span class="pre">a_type_qualifier_set</span></code> is always returned independently of the type (even
+though in the usual case it is also part of the returned type).  (See also
+<code class="docutils literal notranslate"><span class="pre">collect_type_qualifiers</span></code> in <code class="docutils literal notranslate"><span class="pre">declarator.c</span></code>.)</p>
+<p>The details of an <code class="docutils literal notranslate"><span class="pre">enum</span></code> declaration are handled by <code class="docutils literal notranslate"><span class="pre">enum_specifier</span></code>.
+First it calls <code class="docutils literal notranslate"><span class="pre">scan_tag_name</span></code> (which is also called from
+<code class="docutils literal notranslate"><span class="pre">class_specifier</span></code>) to look up the (optional) tag name and return a symbol.
+When a brace-enclosed declaration follows the tag name, <code class="docutils literal notranslate"><span class="pre">enum_specifier</span></code>
+scans the list of enumeration constant declarations, calling
+<code class="docutils literal notranslate"><span class="pre">scan_integral_constant_expression</span></code> when a value is specified.  Each
+declaration is turned into a constant entry with the proper value, and all of
+the constant entries are linked together under the type entry for the
+enumerated type.  The size of the enumerated type is also determined from the
+value.  <a class="footnote-reference brackets" href="#f2" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a> Note that in C++, unlike C, the types of the enumeration and its
+constants are always the same.</p>
+</section>
+<section id="declarators">
+<h3><span class="section-number">10.4.2. </span>Declarators<a class="headerlink" href="#declarators" title="Link to this heading">#</a></h3>
+<p>Most of the code for scanning declarators is found in <code class="docutils literal notranslate"><span class="pre">declarator.c</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">declarator</span></code> scans a declarator.  It can scan either a real declarator or an
+abstract declarator.  It receives as input (via the <code class="docutils literal notranslate"><span class="pre">a_decl_parse_state</span></code>
+object tracking that declaration) the type from an associated specifiers list,
+and combines that type with the type information in the declarator.  It also
+returns a symbol locator for the name declared in the middle of the declarator.
+For an abstract declarator, it returns an error locator.  It takes as input a
+vector of flags to direct its processing, and it returns a vector of output
+flags to report results to the caller (again via the <code class="docutils literal notranslate"><span class="pre">a_decl_parse_state</span></code>
+object).</p>
+<p><code class="docutils literal notranslate"><span class="pre">declarator</span></code> is the top-level interface and calls <code class="docutils literal notranslate"><span class="pre">r_declarator</span></code>, which is
+recursive.  Declarator processing has three parts:</p>
+<ul>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">pointer_declarator</span></code> is called to handle pointer modifiers (<code class="docutils literal notranslate"><span class="pre">*</span></code>) and in
+C++ references (<code class="docutils literal notranslate"><span class="pre">&amp;</span></code>) and pointer-to-member syntax.  There can be more
+than one such modifier, and each can be accompanied by one or more type
+qualifiers.  These are combined with the type returned by
+<code class="docutils literal notranslate"><span class="pre">decl_specifiers</span></code>; the routines invoked to construct the new types are
+<code class="docutils literal notranslate"><span class="pre">make_pointer_type</span></code>, <code class="docutils literal notranslate"><span class="pre">make_reference_type</span></code>,
+<code class="docutils literal notranslate"><span class="pre">make_rvalue_reference_type</span></code>, and <code class="docutils literal notranslate"><span class="pre">pointer_to_member_type</span></code>.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">The middle section is either an identifier (or the place where one would
+be, for an abstract declarator) or a nested declarator enclosed in
+parentheses.  The left parenthesis is ambiguous in an abstract declarator,
+so the routine looks one token past it to disambiguate the function
+declarator case from the nested declarator case.  The declarator
+identifier, scanned by <code class="docutils literal notranslate"><span class="pre">scan_real_declarator_id</span></code>, may be a simple
+identifier, a qualified name, <a class="footnote-reference brackets" href="#f3" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a> a destructor name, or a token sequence
+representing an overloaded operator or a user-defined conversion (such as
+<code class="docutils literal notranslate"><span class="pre">operator+</span></code> or <code class="docutils literal notranslate"><span class="pre">operator</span> <span class="pre">int</span></code>).</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">The third section consists of zero or more function or array declarators,
+for which calls are made to <code class="docutils literal notranslate"><span class="pre">function_declarator</span></code> or
+<code class="docutils literal notranslate"><span class="pre">array_declarator</span></code>.</div>
+</div>
+<ul>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">function_declarator</span></code> scans the parameter list (an old-style id list, a
+prototype parameter list, or <code class="docutils literal notranslate"><span class="pre">void</span></code>) and builds a function type.  For a
+top-level function type some additional information is returned in a
+block called <code class="docutils literal notranslate"><span class="pre">func_info</span></code>, which is returned to the caller to assist
+with later function processing; most notably, this includes a list of the
+identifier names in an old-style id list.  If the function declarator is
+a prototype, and if any tags are declared in the prototype, a prototype
+scope is created.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">array_declarator</span></code> scans constant and nonconstant array dimensions (the
+latter for variable length arrays in C mode and type names in <code class="docutils literal notranslate"><span class="pre">new</span></code>
+expressions in C++).</div>
+</div>
+</li>
+</ul>
+<div class="line-block">
+<div class="line">The processing for VLA declarations has several twists.  In the ordinary
+case in which a VLA declaration appears at function or block scope, a VLA
+dimension entry is created and an <code class="docutils literal notranslate"><span class="pre">stmk_set_vla_size</span></code> statment is put
+out.  If the VLA declaration appears in a function prototype, then the
+dimension expression may be unspecified (i.e., the<code class="docutils literal notranslate"><span class="pre">[*]</span></code> syntax is
+accepted); this is not permitted, however, when the function prototype
+belongs to a function definition, but this check is delayed till
+<code class="docutils literal notranslate"><span class="pre">scan_function_body</span></code>.  If the dimension expression <em>is</em> specified in a
+function prototype scope, a fixup entry is created and processing is
+completed in <code class="docutils literal notranslate"><span class="pre">scan_function_body</span></code>: once the routine’s IL scope has been
+created, the VLA dimension entry can be allocated and any references to
+parameter variables can be properly incorporated into the VLA dimension
+expression.</div>
+</div>
+</li>
+</ul>
+<p>The type information from the three sections is combined into a single type
+tree.  The routine that combines derived types is <code class="docutils literal notranslate"><span class="pre">add_to_derived_type_list</span></code>;
+aside from the purely mechanical task of joining types, it also does error
+checking, and calls <code class="docutils literal notranslate"><span class="pre">set_type_size</span></code> once all the parts of a derived type have
+come together.</p>
+<p>Information about the <em>declarator-id</em> is returned from <code class="docutils literal notranslate"><span class="pre">declarator</span></code> in a
+symbol locator.</p>
+</section>
+<section id="c-cli-type-constructs">
+<h3><span class="section-number">10.4.3. </span>C++/CLI Type Constructs<a class="headerlink" href="#c-cli-type-constructs" title="Link to this heading">#</a></h3>
+<p>C++/CLI adds several type composition mechanisms: handles, tracking references,
+interior pointers, pin pointers, CLI arrays, and delegates.  It also adds new
+class type and enum type variations.</p>
+<p>The C++/CLI core library (which is always imported, and is usually
+<code class="docutils literal notranslate"><span class="pre">mscorlib.dll</span></code>) defines a number of special “value class types” (e.g.,
+<code class="docutils literal notranslate"><span class="pre">System::Int32</span></code>) that map onto fundamental types (like <code class="docutils literal notranslate"><span class="pre">int</span></code>).  When the
+type scanned by <code class="docutils literal notranslate"><span class="pre">decl_specifiers</span></code> is such a special class type, it is
+immediately replaced by the corresponding fundamental type (by a call to
+<code class="docutils literal notranslate"><span class="pre">fundamental_type_from_system_type</span></code>).  However, if a handle to a fundamental
+type with a corresponding value class type is formed, the fundamental type is
+replaced by the class type (through a call to <code class="docutils literal notranslate"><span class="pre">boxed_type_for</span></code>, which in turn
+calls <code class="docutils literal notranslate"><span class="pre">system_type_from_fundamental_type</span></code>).  Handles to enumeration type are
+handled similarly: A C++/CLI value class type is created that “boxes” the
+enumeration (see <code class="docutils literal notranslate"><span class="pre">make_boxed_enum_type</span></code>), and the handle is to that class
+type.</p>
+<p>Syntactically, handles and tracking references are like pointers and references
+that use different declarator operators (”<code class="docutils literal notranslate"><span class="pre">^</span></code>” and “<code class="docutils literal notranslate"><span class="pre">%</span></code>” respectively).
+They have different semantics and constraints, however.  Many of the basic
+constraints on their underlying types are checked in
+<code class="docutils literal notranslate"><span class="pre">f_check_cli_type_pointed_to</span></code>.</p>
+<p>Like handles and tracking references, C++/CLI interior pointers and pin
+pointers are represented using <code class="docutils literal notranslate"><span class="pre">tk_pointer</span></code> entries.  However, the syntax to
+express interior pointers and pin pointers uses template-like angle brackets
+(e.g., <code class="docutils literal notranslate"><span class="pre">cli::pin_ptr&lt;X&gt;</span></code>) instead of declarator operators.  The front end
+implements support for that syntax by predefining special alias templates
+<code class="docutils literal notranslate"><span class="pre">cli::pin_ptr</span></code> and <code class="docutils literal notranslate"><span class="pre">cli::interior_ptr</span></code> (see
+<code class="docutils literal notranslate"><span class="pre">make_symbol_for_cli_interior_ptr</span></code> and <code class="docutils literal notranslate"><span class="pre">make_symbol_for_cli_pin_ptr</span></code>) that
+rely on internal <code class="docutils literal notranslate"><span class="pre">__declspec</span></code> attributes to form the aliased <code class="docutils literal notranslate"><span class="pre">tk_pointer</span></code>
+type.</p>
+<p>CLI arrays are instances of a ref class template <code class="docutils literal notranslate"><span class="pre">cli::array&lt;T,</span> <span class="pre">Rank</span> <span class="pre">=</span> <span class="pre">1&gt;</span></code>
+(see <code class="docutils literal notranslate"><span class="pre">make_symbol_for_cli_array</span></code>).  Instances of this template have the flag
+<code class="docutils literal notranslate"><span class="pre">is_cli_array</span></code> set (in their class type supplement); this simplifies, among
+other things, the implementation of the function <code class="docutils literal notranslate"><span class="pre">is_cli_array_type</span></code>).  CLI
+arrays can mostly only be used via handles-to-CLI-arrays (see
+<code class="docutils literal notranslate"><span class="pre">check_invalid_use_of_special_cli_class_type</span></code>).</p>
+<p>A delegate is a special kind of generated reference class type that
+encapsulates an “invocation list” (see <a class="reference internal" href="../class_decl/#cppcli-delegates"><span class="std std-ref">Delegates (C++/CLI mode)</span></a> for details).
+Like CLI arrays, they can mostly only be used via handles-to-delegates.</p>
+<p>C++/CLI function declarators can include a trailing “parameter array” (with
+syntax like “<code class="docutils literal notranslate"><span class="pre">void</span> <span class="pre">f(double,</span> <span class="pre">...cli::array&lt;double&gt;</span> <span class="pre">^p)</span></code>”, where the type must
+be a handle to a one-dimensional CLI array).  They are akin to traditional C
+variadic function arguments (“varargs”), but they are type-safe and limited to
+accepting a variadic list of arguments that are all of the same type.  A
+parameter array is represented with a single <code class="docutils literal notranslate"><span class="pre">a_param_type</span></code> entry whose
+<code class="docutils literal notranslate"><span class="pre">is_cli_param_array</span></code> flag is TRUE.</p>
+</section>
+<section id="completing-the-declaration">
+<h3><span class="section-number">10.4.4. </span>Completing the Declaration<a class="headerlink" href="#completing-the-declaration" title="Link to this heading">#</a></h3>
+<p>Once the declaration specifiers and the declarator have been scanned, it
+remains to put the type and other declarative information together and generate
+IL and symbol representations for the objects declared.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">typedef</span></code> was seen among the declaration specifiers, <code class="docutils literal notranslate"><span class="pre">decl_typedef</span></code> is
+called.  It enters a <code class="docutils literal notranslate"><span class="pre">tk_typeref</span></code> type entry into the IL and an <code class="docutils literal notranslate"><span class="pre">sk_type</span></code>
+symbol in the symbol table.  In C++ it has some extra processing when the type
+passed in to it is that of a tagless class or enum: the <code class="docutils literal notranslate"><span class="pre">typedef</span></code> name is
+transferred to the class or enum type entry, and in cfront-compatibility mode
+the symbol for the class is modified accordingly.</p>
+<p><code class="docutils literal notranslate"><span class="pre">define_static_data_member</span></code> is called to process the definition of a static
+data member.  The IL entry and symbol were created at the original point of
+declaration.</p>
+<p>Variables and routines are entered by calling <code class="docutils literal notranslate"><span class="pre">decl_variable</span></code> or
+<code class="docutils literal notranslate"><span class="pre">decl_routine</span></code>, which are similarly organized functions made fairly
+complicated by the need to check the declaration’s compatibility with previous
+declarations of the same entity.</p>
+<ul>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">id_linkage</span></code> is used to determine whether the declared name has linkage,
+and if so, to what (see <code class="docutils literal notranslate"><span class="pre">find_linked_symbol</span></code>, which returns a symbol if
+there is a previous use in scope).</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">qualified_name_redecl_sym</span></code> is called instead of <code class="docutils literal notranslate"><span class="pre">id_linkage</span></code> if the
+declarator is a namespace-qualified name (e.g., a friend declaration or a
+namespace member definition that appears outside the scope of the namespace
+to which it belongs); it also calls <code class="docutils literal notranslate"><span class="pre">find_linked_symbol</span></code>.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">find_linked_symbol</span></code> not only calls the appropriate lookup routine; it
+also deals with function overloading and function template specializations
+(see <code class="docutils literal notranslate"><span class="pre">matching_template_function</span></code> in <code class="docutils literal notranslate"><span class="pre">templates.c</span></code>).</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">create_external_symbol_for_linked_entity</span></code> is called to find any previous
+external variable or routine of the same name, even if the previous name
+has since gone out of scope; it also checks that the old and new types are
+compatible.  <code class="docutils literal notranslate"><span class="pre">decl_variable</span></code> and <code class="docutils literal notranslate"><span class="pre">decl_routine</span></code> use this information to
+decide whether to create a new variable or routine entry or instead to
+reuse or complete a previous declaration.</div>
+</div>
+</li>
+</ul>
+<p>“Block-extern” variables and routines have linkage and are always entered at
+the file scope or namespace scope in the intermediate language, but their
+symbols belong to the current scope in the symbol table (except in <code class="docutils literal notranslate"><span class="pre">pcc</span></code>
+mode, where they are entered at the file scope in the symbol table too).  When
+a <code class="docutils literal notranslate"><span class="pre">friend</span></code> declaration introduces a new routine, its symbol is entered in the
+innermost enclosing nonclass scope, and the associated routine entry is entered
+in the innermost enclosing namespace scope.</p>
+<p>In addition to deciding whether an existing symbol and IL entry can be reused
+or new ones need to be created, <code class="docutils literal notranslate"><span class="pre">decl_variable</span></code> and <code class="docutils literal notranslate"><span class="pre">decl_routine</span></code> are also
+responsible for checking type compatibility, storage class, and name-linkage,
+and they call the routines that record cross-reference and source-sequence
+information.</p>
+<p>Functions with bodies need additional processing.  <code class="docutils literal notranslate"><span class="pre">function_definition</span></code>
+finishes the scanning of a function definition started by <code class="docutils literal notranslate"><span class="pre">declaration</span></code>.  If
+there is an old-style parameter list, the declarations are scanned through a
+series of calls to <code class="docutils literal notranslate"><span class="pre">declaration</span></code>.  Next, it calls <code class="docutils literal notranslate"><span class="pre">decl_routine</span></code> (for
+normal functions) or <code class="docutils literal notranslate"><span class="pre">define_member_function</span></code> (for member functions) to
+retrieve or create the function’s symbol and routine entry.</p>
+<p>Then, <code class="docutils literal notranslate"><span class="pre">scan_function_body</span></code> is called.  First, the scope stack is fixed up –
+if the routine is a member function defined outside the class body, the scope
+of the class of which it is a member is reactivated, or, if it is a namespace
+member appearing outside the scope of the namespace, a namespace extension
+scope is pushed – after which the routine’s own function scope is pushed.</p>
+<p>Function parameter processing is completed within the function scope, so that
+parameter variables will be entered into the symbol table correctly.  A pass is
+made over the linked list of <code class="docutils literal notranslate"><span class="pre">a_param_type</span></code> entries recorded in the function
+type and the linked list of <code class="docutils literal notranslate"><span class="pre">a_param_id</span></code> entries created from scanning the
+parameter declarations (the two lists should be in sync; the latter knows the
+name of the parameter, the former only the type), and <code class="docutils literal notranslate"><span class="pre">decl_parameter</span></code> is
+called to create the parameter variable entries.</p>
+<p>When support for variable length arrays is enabled, a fixup is performed on any
+VLA declarations that appeared in the function prototype.  If the VLA dimension
+expression referred to a parameter, a dummy variable is replaced with the
+“real” parameter variable that has just been created.  Then, the dimension
+expression is copied from the file-scope memory region to the function-scope
+memory region, and an entry of type <code class="docutils literal notranslate"><span class="pre">a_vla_dimension</span></code> is created to record it
+in the IL.</p>
+<p>If it is a constructor that is being defined, <code class="docutils literal notranslate"><span class="pre">ctor_intializer</span></code> is called to
+scan the constructor initializer list and to enter implicit ctor-initializers;
+similar processing is done for a destructor with a call to
+<code class="docutils literal notranslate"><span class="pre">dtor_initializer</span></code>.  If this definition appears in the midst of statement
+processing (either because it is an inline member function of a local class or
+a template instantiation), it is necessary to save the structured statement
+stack and start a brand new one (see <code class="docutils literal notranslate"><span class="pre">new_struct_stmt_stack</span></code>).  Then
+<code class="docutils literal notranslate"><span class="pre">compound_statement</span></code> can finally be called to scan the body of the function;
+the resulting statement tree is recorded in the <code class="docutils literal notranslate"><span class="pre">assoc_block</span></code> field of the
+function’s scope entry.  Before returning, <code class="docutils literal notranslate"><span class="pre">scan_function_body</span></code> restores the
+structured statement stack and pops the various scopes off the scope stack.</p>
+</section>
+</section>
+<section id="initialization">
+<h2><span class="section-number">10.5. </span>Initialization<a class="headerlink" href="#initialization" title="Link to this heading">#</a></h2>
+<p>Initialization is a broad topic in C and C++. It includes:</p>
+<ul>
+<li><div class="line-block">
+<div class="line">Setting the initial value of a variable as part of its declaration (the
+traditional C notion of initialization)</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">Initializing members and bases of a class as part of the execution of a
+constructor</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">Initializing a temporary variable as part of a cast or C99-style compound
+literal</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">Passing arguments in a function call (parameter variables are initialized
+with argument values)</div>
+</div>
+</li>
+</ul>
+<p>Furthermore, “default” initialization actions may be required even in the
+absence of an explicit source construct, and the binding of references, while
+treated as a form of initialization, involves a number of rules of its own.
+Also, C++17 structured bindings are sometimes “aliases” for expressions and
+those are represented as variables with a special kind of “initializer”
+(although arguably those do not correspond to actual initialization).</p>
+<p>Source file <code class="docutils literal notranslate"><span class="pre">decl_inits.c</span></code> is primarily concerned with declaration contexts:
+Initializing variables and initializing members of classes as part of
+constructor definitions (i.e., the first two bullets).  It also includes the
+structural handling of aggregate initialization (the traditional brace-enclosed
+initializers), and that handling is also used in non-declaration contexts;
+particularly, in C99-style compound literals and in various C++11-style list
+initialization contexts.</p>
+<section id="il-representation">
+<h3><span class="section-number">10.5.1. </span>IL Representation<a class="headerlink" href="#il-representation" title="Link to this heading">#</a></h3>
+<p>The special case of a variable with static storage duration initialized with a
+true constant is represented by associating the <code class="docutils literal notranslate"><span class="pre">a_constant</span></code> entry directly
+with the <code class="docutils literal notranslate"><span class="pre">a_variable</span></code> entry (via the <code class="docutils literal notranslate"><span class="pre">an_initializer</span></code> entry embedded in the
+variable entry).  C++17 structured bindings for array elements and structure
+fields are represented as variables with a special kind of “binding”
+initializer pointing to the aliased expression (also via the <code class="docutils literal notranslate"><span class="pre">an_initializer</span></code>
+entry).  In all other cases, initialization involves a dynamic element and an
+entry of type <code class="docutils literal notranslate"><span class="pre">a_dynamic_init</span></code> is used to represent it (see
+<a class="reference internal" href="../il/#il-dynamic-init"><span class="std std-ref">Dynamic Initialization</span></a>).</p>
+<p>In addition, even for entities that are not initialized (or whose
+initialization is “trivial”), a dynamic init entry may nonetheless be generated
+to represent the eventual destruction of that entity (assuming that entity has
+a nontrivial destructor).</p>
+</section>
+<section id="init-components-and-init-states">
+<span id="init-components-and-state"></span><h3><span class="section-number">10.5.2. </span>Init Components and Init States<a class="headerlink" href="#init-components-and-init-states" title="Link to this heading">#</a></h3>
+<p>It is frequently convenient in the front end to separate the parsing of an
+initializer from its actual binding to a target entity.  When this is done, the
+parsing phase produces an “init component” (type <code class="docutils literal notranslate"><span class="pre">an_init_component</span></code>, defined
+in <code class="docutils literal notranslate"><span class="pre">expr.h</span></code>).  Such a component can represent either</p>
+<ul>
+<li><div class="line-block">
+<div class="line">an expression, or</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">a C99-style aggregate member designator, or</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">a brace-enclosed list of init components.</div>
+</div>
+</li>
+</ul>
+<p>(A fourth kind of “placeholder” init component exists.  It represents a
+point at which the parsing of a large aggregate initializer has been
+suspended for later continuation.  This is transparent to the routines
+processing initializers because they don’t access the <code class="docutils literal notranslate"><span class="pre">next</span></code> pointer of
+init components directly and instead use macros – like <code class="docutils literal notranslate"><span class="pre">next_elem</span></code> – that
+automatically resume parsing when reaching one of these placeholder
+entries.)</p>
+<p>An init component that represents an expression ultimately points to an object
+of type <code class="docutils literal notranslate"><span class="pre">an_operand</span></code> (see <a class="reference internal" href="../expr/#expr-operands"><span class="std std-ref">Operand Data Structure</span></a>), as well as other information
+needed for the second (“binding”) phase of initializer processing.</p>
+<p><code class="docutils literal notranslate"><span class="pre">decl_inits.c</span></code> relies on two functions from <code class="docutils literal notranslate"><span class="pre">expr.c</span></code> to scan init
+components: <code class="docutils literal notranslate"><span class="pre">scan_braced_init_list</span></code> for list initializers (which in
+general will return the top component of a tree representing the braced
+structure), and <code class="docutils literal notranslate"><span class="pre">scan_full_initializer_expr_as_component</span></code> (which will
+return a simple expression component).  Sometimes, initializers must be
+“prescanned” (to deduce the type of a C++11-style <code class="docutils literal notranslate"><span class="pre">auto</span></code> declaration):
+The two aforementioned functions will retrieve the prescanned init
+components from a cache if needed.  Eventually,
+<code class="docutils literal notranslate"><span class="pre">free_init_component_list</span></code> must be called on the top-level component
+produced for every initializer.</p>
+<p>The binding of an initializer as represented by an init component to its target
+entity is generally handled by a call to <code class="docutils literal notranslate"><span class="pre">convert_initializer</span></code>, except for
+aggregate initialization where the structure of the initializer is mapped to
+that of the target type using a variety of functions (see
+<a class="reference internal" href="#decl-aggregate-init"><span class="std std-ref">Aggregate Initializers</span></a>) which eventually call the <code class="docutils literal notranslate"><span class="pre">expr.c</span></code> function
+<code class="docutils literal notranslate"><span class="pre">convert_initializer</span></code> for the non-aggregate “leaf” elements of the aggregate
+initializer.</p>
+<p>Initializer processing shares a fair amount of information across calls to a
+large number of functions.  To facilitate this, the information is recorded in
+a structure of type <code class="docutils literal notranslate"><span class="pre">an_init_state</span></code>.  This is both an “input” and an “output”
+device: Some fields are used to pass information down the initializer
+processing functions, while others are used to return results.  In particular,
+some input fields inhibit the generation of IL entries
+(<code class="docutils literal notranslate"><span class="pre">check_validity_only</span></code>) and/or the emission of diagnostics
+(<code class="docutils literal notranslate"><span class="pre">no_diagnostics</span></code>): This is needed to handle overload resolution and template
+deduction (which requires “tentative” initialization in C++11).</p>
+<p>A declaration parse state block (<code class="docutils literal notranslate"><span class="pre">a_decl_parse_state</span></code>) embeds an init state
+for initialization directly associated with a declaration (variable
+initializers, particularly), and in that case, the embedded init state also
+contains a pointer back to the associated declaration parse state block.</p>
+</section>
+<section id="variable-initializers">
+<h3><span class="section-number">10.5.3. </span>Variable Initializers<a class="headerlink" href="#variable-initializers" title="Link to this heading">#</a></h3>
+<p>Variable initializers (including initializers for static data members) are
+scanned and processed by calling <code class="docutils literal notranslate"><span class="pre">initializer</span></code> in <code class="docutils literal notranslate"><span class="pre">decl_inits.c</span></code>.  After
+checking for errors independently of the initializer itself, and if necessary
+deducing the type of the variable from the type of the initializer
+(<code class="docutils literal notranslate"><span class="pre">prescan_initializer_for_auto_type_deduction</span></code>), the function distinguishes
+four syntactic cases:</p>
+<ol class="arabic">
+<li><div class="line-block">
+<div class="line">parenthesized initializers (a C++ feature; e.g., “<code class="docutils literal notranslate"><span class="pre">T</span> <span class="pre">x(3);</span></code>”),</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">direct list initializers (a C++11 feature; e.g., “<code class="docutils literal notranslate"><span class="pre">T</span> <span class="pre">x{3};</span></code>”),</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">traditional list initializers (e.g., “<code class="docutils literal notranslate"><span class="pre">T</span> <span class="pre">x</span> <span class="pre">=</span> <span class="pre">{3};</span></code>”), and</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">simple initializers (e.g., “<code class="docutils literal notranslate"><span class="pre">T</span> <span class="pre">x</span> <span class="pre">=</span> <span class="pre">3;</span></code>”).</div>
+</div>
+</li>
+</ol>
+<p>Parenthesized initializers for class types and for template-dependent types are
+the only variations that do not use init components as an intermediate
+representation of the initializer: Instead, these cases are handled by calls to
+<code class="docutils literal notranslate"><span class="pre">scan_class_parenthesized_initializer</span></code> and
+<code class="docutils literal notranslate"><span class="pre">scan_dependent_type_parenthesized_initializer</span></code>, respectively.  The remaining
+parenthesized cases (i.e., those that cannot involve a constructor and
+therefore must allow for only a single parenthesized expression) are handled by
+<code class="docutils literal notranslate"><span class="pre">expr_direct_init_object</span></code>.</p>
+<p>Both the C++11-style direct list initialization syntax and the more traditional
+list initialization syntax are handled by calls to <code class="docutils literal notranslate"><span class="pre">brace_init_variable</span></code>,
+except that the initialization of a C++/CLI array using traditional list
+initialization syntax uses a dedicated routine
+<code class="docutils literal notranslate"><span class="pre">aggr_init_cli_array_with_alloc</span></code>.  brace_init_variable calls
+braced_initializer</p>
+<p>Finally, initializations of the form “<code class="docutils literal notranslate"><span class="pre">T</span> <span class="pre">x</span> <span class="pre">=</span></code> <em>expr</em>” are handled by
+<code class="docutils literal notranslate"><span class="pre">expr_init_aggr_variable</span></code> (for variables of class or array types) and
+<code class="docutils literal notranslate"><span class="pre">expr_init_scalar_variable</span></code> (for scalar variables).</p>
+<p>Structured bindings to array elements and to fields are technically not
+variables (they are aliased to components of the unnamed “container” variable
+for the binding), but they are represented though <code class="docutils literal notranslate"><span class="pre">a_variable</span></code> entries in the
+front end.  These entries have an <code class="docutils literal notranslate"><span class="pre">initk_binding</span></code> initializer kind and point
+to the aliased expression.  The routines
+<code class="docutils literal notranslate"><span class="pre">record_struct_binding_expr_for_array_element</span></code> and
+<code class="docutils literal notranslate"><span class="pre">record_struct_binding_expr_for_field</span></code> (both in <code class="docutils literal notranslate"><span class="pre">expr.c</span></code>) handle this
+pseudo-initializers.</p>
+<section id="auto-type-deduction">
+<h4><span class="section-number">10.5.3.1. </span>Auto type deduction<a class="headerlink" href="#auto-type-deduction" title="Link to this heading">#</a></h4>
+<p>Some modes allow the keyword <code class="docutils literal notranslate"><span class="pre">auto</span></code> to be used as a type specifier.  In such
+cases, the actual type must be deduced from the initializer using rules similar
+to those for function template argument deduction.  This presents an ordering
+challenge: The expression handling routines called by <code class="docutils literal notranslate"><span class="pre">initializer</span></code> must know
+the type of the entity being initialized (e.g., to determine appropriate
+conversions), but that type is not known until the initializer has been
+determined.  To address this, the initializer for entities declared with the
+<code class="docutils literal notranslate"><span class="pre">auto</span></code> type specifier is prescanned (routine
+<code class="docutils literal notranslate"><span class="pre">prescan_initializer_for_auto_type_deduction</span></code> in <code class="docutils literal notranslate"><span class="pre">expr.c</span></code>): That process
+deduces the actual type of <code class="docutils literal notranslate"><span class="pre">auto</span></code> (using the same machinery as that used for
+calls of function templates) and records the prescanned init component in the
+<code class="docutils literal notranslate"><span class="pre">a_decl_parse_state</span></code> entity for the current declaration.  The routines called
+by <code class="docutils literal notranslate"><span class="pre">initializer</span></code> to scan init components are aware of this record and will
+use it instead of actually scanning tokens when appropriate.</p>
+<p>The same mechanism is also used to support the <code class="docutils literal notranslate"><span class="pre">auto</span></code> type specifier in
+<em>new-expression</em>s (<code class="docutils literal notranslate"><span class="pre">scan_new_operator</span></code> in <code class="docutils literal notranslate"><span class="pre">expr.c</span></code>) and in
+declarations of <code class="docutils literal notranslate"><span class="pre">static</span> <span class="pre">const</span></code> data members with in-class initializers
+(<code class="docutils literal notranslate"><span class="pre">decl_static_data_member</span></code> in <code class="docutils literal notranslate"><span class="pre">class_decl.c</span></code>).</p>
+</section>
+<section id="default-initialization">
+<h4><span class="section-number">10.5.3.2. </span>Default Initialization<a class="headerlink" href="#default-initialization" title="Link to this heading">#</a></h4>
+<p>C++ entities of class type that are declared without an explicit initializer
+are “default-initialized” – which means calling the class’s default
+constructor (or, for an array, calling the default constructor for each
+element):</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">struct</span><span class="w"> </span><span class="nc">A</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">A</span><span class="p">();</span><span class="w"> </span><span class="cm">/* ... */</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="n">a</span><span class="p">;</span><span class="w">    </span><span class="c1">// a is default-initialized by A::A()</span>
+</span></pre></div>
+</div>
+<p>The routine <code class="docutils literal notranslate"><span class="pre">def_initializer</span></code> is called for declarations without
+initializers, and it generates the default initialization if appropriate.
+Default initialization is done only for variables and static data members that
+are defined in the current translation unit, and not all classes are subject to
+default initialization in the same way:</p>
+<ol class="arabic">
+<li><div class="line-block">
+<div class="line">“POD” structs and unions (roughly, C-style structs: no non-public
+members, no user-defined constructor, destructor, or assignment operator,
+no base classes, no virtual functions, etc.) are <em>never</em>
+default-initialized:</div>
+</div>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">struct</span><span class="w"> </span><span class="nc">A</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="p">;</span><span class="w"> </span><span class="p">};</span><span class="w">     </span><span class="c1">// POD</span>
+</span><span data-line="2"><span class="n">A</span><span class="w"> </span><span class="n">a1</span><span class="p">;</span><span class="w">                    </span><span class="c1">// a1 goes uninitialized</span>
+</span><span data-line="3"><span class="k">const</span><span class="w"> </span><span class="n">A</span><span class="w"> </span><span class="n">a2</span><span class="p">;</span><span class="w">              </span><span class="c1">// error -- no explicit initializer</span>
+</span></pre></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">Non-POD classes with an implicitly-declared trivial default constructor
+(i.e., classes for which each base class or nonstatic data member of
+class type, if any, will in turn be initialized with its own trivial
+default constructor) are default-initialized only when the object is
+non-<code class="docutils literal notranslate"><span class="pre">const</span></code>:</div>
+</div>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">struct</span><span class="w"> </span><span class="nc">B</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">private</span><span class="o">:</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="p">;</span><span class="w"> </span><span class="p">};</span><span class="w">    </span><span class="c1">// implicit trivial B::B()</span>
+</span><span data-line="2"><span class="n">B</span><span class="w"> </span><span class="n">b1</span><span class="p">;</span><span class="w">                            </span><span class="c1">// b1 is default-initialized</span>
+</span><span data-line="3"><span class="k">const</span><span class="w"> </span><span class="n">B</span><span class="w"> </span><span class="n">b2</span><span class="p">;</span><span class="w">                      </span><span class="c1">// error -- no explicit initializer</span>
+</span></pre></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">Classes with an implicitly-declared nontrivial default constructor are
+likewise default-initialized only when the object is non-<code class="docutils literal notranslate"><span class="pre">const</span></code>:</div>
+</div>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">struct</span><span class="w"> </span><span class="nc">C</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="p">;</span><span class="w"> </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">f</span><span class="p">();</span><span class="w"> </span><span class="p">};</span><span class="w"> </span><span class="c1">// implicit nontrivial C::C()</span>
+</span><span data-line="2"><span class="n">C</span><span class="w"> </span><span class="n">c1</span><span class="p">;</span><span class="w">                                  </span><span class="c1">// c1 is default-initialized</span>
+</span><span data-line="3"><span class="k">const</span><span class="w"> </span><span class="n">C</span><span class="w"> </span><span class="n">c2</span><span class="p">;</span><span class="w">                            </span><span class="c1">// error -- no explicit initializer</span>
+</span></pre></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">Classes with at least one user-declared constructor are default
+initialized whether or not the object is <code class="docutils literal notranslate"><span class="pre">const</span></code>:</div>
+</div>
+</li>
+</ol>
+<blockquote>
+<div><div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">struct</span><span class="w"> </span><span class="nc">D</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="p">;</span><span class="w"> </span><span class="n">D</span><span class="p">();</span><span class="w"> </span><span class="p">};</span><span class="w">   </span><span class="c1">// user-declared D::D()</span>
+</span><span data-line="2"><span class="n">D</span><span class="w"> </span><span class="n">d1</span><span class="p">;</span><span class="w">                       </span><span class="c1">// d1 is default-initialized</span>
+</span><span data-line="3"><span class="k">const</span><span class="w"> </span><span class="n">D</span><span class="w"> </span><span class="n">d2</span><span class="p">;</span><span class="w">                 </span><span class="c1">// d2 is default-initialized</span>
+</span></pre></div>
+</div>
+</div></blockquote>
+<p>A further distinction is made between the second and third groups (classes with
+trivial vs.  nontrivial implicitly declared default constructor): <code class="docutils literal notranslate"><span class="pre">b1</span></code> and
+<code class="docutils literal notranslate"><span class="pre">c1</span></code> differ in how their default initialization is implemented.  A call to
+the nontrivial default constructor <code class="docutils literal notranslate"><span class="pre">C::C()</span></code> is actually added to the IL (it
+needs to deal with the virtual function info for class <code class="docutils literal notranslate"><span class="pre">C</span></code>), but the trivial
+default constructor <code class="docutils literal notranslate"><span class="pre">B::B()</span></code> need not actually be called, since calling it
+would have no effect.  Its definition is generated in case there might be
+compile-time side-effects (see <code class="docutils literal notranslate"><span class="pre">reference_to_trivial_default_constructor</span></code> in
+<code class="docutils literal notranslate"><span class="pre">symbol_ref.c</span></code>), but the IL for a trivial default constructor does not appear
+in the IL.</p>
+</section>
+</section>
+<section id="aggregate-initializers">
+<span id="decl-aggregate-init"></span><h3><span class="section-number">10.5.4. </span>Aggregate Initializers<a class="headerlink" href="#aggregate-initializers" title="Link to this heading">#</a></h3>
+<p>An aggregate type is an array type or a class type that has no user-provided
+constructors.  When an entity of such a type is initialized with a
+braced-enclosed construct, the front end traverses the initializer structure
+and the destination type’s structure mapping one onto the other.  The result is
+an aggregate constant (<code class="docutils literal notranslate"><span class="pre">ck_aggregate</span></code>), which may contain elements that are
+not actually constants (i.e., <code class="docutils literal notranslate"><span class="pre">ck_dynamic_init</span></code> “constants”).  Four cases are
+distinguished:</p>
+<ul>
+<li><div class="line-block">
+<div class="line">aggregate class types: handled by <code class="docutils literal notranslate"><span class="pre">aggr_init_class</span></code>, with help from
+<code class="docutils literal notranslate"><span class="pre">aggr_init_field_designator</span></code> to handle C99- and GNU-style designators,
+and from <code class="docutils literal notranslate"><span class="pre">aggr_init_class_remainder_if_needed</span></code> to represent nontrivial
+initializations (in C++) of fields that have no explicit initializer.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">array types: handled by <code class="docutils literal notranslate"><span class="pre">aggr_init_array</span></code>, with help from
+<code class="docutils literal notranslate"><span class="pre">aggr_init_array_designator</span></code> to handle designators, and from
+<code class="docutils literal notranslate"><span class="pre">aggr_init_array_remainder_if_needed</span></code> to represent nontrivial
+initializations (in C++) of array elements that have no explicit
+initializer.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">template-dependent types: handled by <code class="docutils literal notranslate"><span class="pre">aggr_init_generic_element</span></code>; since
+the structure of the destination type is not known in that case, the
+structure of the resulting constant is entirely determined by the
+brace-structure of the initializer.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">C++/CLI array types: handled by <code class="docutils literal notranslate"><span class="pre">aggr_init_cli_array</span></code> with help from
+<code class="docutils literal notranslate"><span class="pre">aggr_init_cli_array_level</span></code> (which deals with the special rules for
+deducing CLI array dimensions from the initializer when applicable).</div>
+</div>
+</li>
+</ul>
+<p>The cases can be composed (e.g., an aggregate struct can contain an array of
+aggregate structs), which is handled through recursion: <code class="docutils literal notranslate"><span class="pre">aggr_init_element</span></code>
+handles the dispatching of the recursion based on the subaggregate object’s
+type.  Leaf entities (i.e., entities whose initialization doesn’t fall into one
+of the cases above) are handled by <code class="docutils literal notranslate"><span class="pre">aggr_init_simple_element</span></code>.  Cleanup
+actions needed in case of an exception occurring during the initialization of a
+leaf entity – including default initialization – is handled by calls to
+<code class="docutils literal notranslate"><span class="pre">record_partial_aggregate_cleanup_destruction</span></code>.</p>
+<p>The complete handling of a top-level aggregate initialization is initiated
+either by a call to <code class="docutils literal notranslate"><span class="pre">braced_initializer</span></code> (for the initialization of variables
+and static data members, compound literals, and constructor-initializers), or
+by a call to <code class="docutils literal notranslate"><span class="pre">prep_aggr_initializer</span></code> (for all other expression contexts).</p>
+<p>While “aggregate initializer” mainly deals with the initialization of an entity
+of aggregate type with a brace-enclosed construct, it also includes the
+initialization of a character array with a string literal.  This can happen at
+the top-level (e.g., “<code class="docutils literal notranslate"><span class="pre">char</span> <span class="pre">str[]</span> <span class="pre">=</span> <span class="pre">&quot;text</span></code>”;”) or at a subaggregate level
+(e.g., “<code class="docutils literal notranslate"><span class="pre">X</span> <span class="pre">x</span> <span class="pre">=</span> <span class="pre">{</span> <span class="pre">1,</span> <span class="pre">2,</span> <span class="pre">&quot;three&quot;</span> <span class="pre">};</span></code>”).  A central routine for this aspect of
+initialization is <code class="docutils literal notranslate"><span class="pre">try_string_literal_init</span></code>.</p>
+</section>
+<section id="constructor-initializers">
+<h3><span class="section-number">10.5.5. </span>Constructor Initializers<a class="headerlink" href="#constructor-initializers" title="Link to this heading">#</a></h3>
+<p>Constructor initializers can be written explicitly in the source:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">struct</span><span class="w"> </span><span class="nc">A</span><span class="w"> </span><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">j</span><span class="p">;</span>
+</span><span data-line="3"><span class="w">  </span><span class="n">A</span><span class="p">()</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">i</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="w"> </span><span class="n">j</span><span class="p">{</span><span class="mi">2</span><span class="p">}</span><span class="w">  </span><span class="c1">// Constructor initializers with parenthesized</span>
+</span><span data-line="4"><span class="w">    </span><span class="p">{}</span><span class="w">              </span><span class="c1">// and braced syntax, respectively.</span>
+</span><span data-line="5"><span class="p">};</span>
+</span></pre></div>
+</div>
+<p>They can also be generated implicitly by the front end for class members and
+base classes that must be initialized and are not explicitly initialized in the
+source.  (This includes, as an extreme case, constructor routines that are
+front-end-generated; any needed constructor-initializers would have to be
+implicit).</p>
+<p><code class="docutils literal notranslate"><span class="pre">ctor_initializer</span></code> builds the proper list of constructor-initializer entries
+and attaches it to a constructor routine entry.  It is called with a flag that
+indicates whether or not it should attempt to scan the source construct (if
+not, it just generates a default list without looking at the source).</p>
+<p>The list generated is in the “right” order, that is, the order in which
+initialization should be done, which is not necessarily the order in which the
+explicit constructor-initializer clauses were written.  The list contains three
+parts, tracked by the <code class="docutils literal notranslate"><span class="pre">a_ctor_init_block</span></code> data structure: direct base
+entries, virtual base entries, and field entries.  Each initialization is
+represented in the IL with an entry of type <code class="docutils literal notranslate"><span class="pre">a_constructor_init</span></code> (which in
+turn points to a dynamic init entry).</p>
+<p>The explicit clauses are scanned by calling <code class="docutils literal notranslate"><span class="pre">scan_mem_initializer</span></code>, which
+ultimately calls</p>
+<ul>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">scan_parenthesized_mem_init_args</span></code> for parenthesized initializers (often
+in turn calling <code class="docutils literal notranslate"><span class="pre">scan_dependent_type_parenthesized_initializer</span></code> for
+template-dependent entities, <code class="docutils literal notranslate"><span class="pre">scan_class_parenthesized_initializer</span></code> for
+class type entities initialized through a constructor call, or
+<code class="docutils literal notranslate"><span class="pre">expr_direct_init_object</span></code> for other initializations not involving a
+constructor).</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">braced_initializer</span></code> for C++11-style braced initializers.</div>
+</div>
+</li>
+</ul>
+<p>Once any explicit clauses have been scanned, default initializers are generated
+for any base classes and members that require them.  In addition, in C++11
+mode, implicit constructor initializer entries may be generated for fields with
+“field initializers” (see also <a class="reference internal" href="../class_decl/#field-inits"><span class="std std-ref">Field Initializers</span></a>): Such entries do not decribe
+the initialization directly, but defer to the initializer recorded in the
+<code class="docutils literal notranslate"><span class="pre">a_field</span></code> entry by setting the <code class="docutils literal notranslate"><span class="pre">use_field_initializer</span></code> flag to TRUE.</p>
+</section>
+<section id="destructor-initializers">
+<h3><span class="section-number">10.5.6. </span>Destructor-initializers<a class="headerlink" href="#destructor-initializers" title="Link to this heading">#</a></h3>
+<p>The destructor-initializers list attached to a destructor indicates any
+destructions required for base classes and members of the destructor’s class.
+The list is in the order in which the destructions should be done, i.e., the
+reverse of the order of the list on the corresponding constructor.</p>
+<p>Unlike in the constructor case, there is no source form for the
+destructor-initializers, and therefore all the entries on the list are
+front-end generated.</p>
+</section>
+</section>
+<section id="type-names-in-expressions">
+<h2><span class="section-number">10.6. </span>Type Names in Expressions<a class="headerlink" href="#type-names-in-expressions" title="Link to this heading">#</a></h2>
+<p>When a type name appears in an expression, routines that are used in
+declaration processing are invoked to scan the type name.</p>
+<p><code class="docutils literal notranslate"><span class="pre">type_name</span></code> is called to scan a type that appears in a cast expression or as
+an argument to <code class="docutils literal notranslate"><span class="pre">sizeof</span></code>.  It calls <a class="footnote-reference brackets" href="#f4" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></a> <code class="docutils literal notranslate"><span class="pre">decl_specifiers</span></code> and, for
+abstractor declarators only, <code class="docutils literal notranslate"><span class="pre">declarator</span></code>.  It returns a pointer to a type.</p>
+<p><code class="docutils literal notranslate"><span class="pre">new_type_name</span></code> is called to scan a C++ <em>new-type-name</em> or a parenthesized
+<em>type-name</em> that may appear in a <code class="docutils literal notranslate"><span class="pre">new</span></code> expression.  Only abstract declarators
+are allowed, but a nonconstant bound expression is permitted for the first
+array dimension.</p>
+</section>
+<section id="asm-declarations">
+<h2><span class="section-number">10.7. </span><code class="docutils literal notranslate"><span class="pre">asm</span></code> Declarations<a class="headerlink" href="#asm-declarations" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">asm_declaration</span></code> is called when an <code class="docutils literal notranslate"><span class="pre">asm</span></code> keyword is encountered.  A
+parenthesized string literal is scanned and recorded in an entity of kind
+<code class="docutils literal notranslate"><span class="pre">an_asm_entry</span></code>.  The <code class="docutils literal notranslate"><span class="pre">asm</span></code>-string is not parsed or validated by the front
+end – it is simply passed as-is to the back end.</p>
+<p>In Microsoft and GNU modes, some syntax variations are accepted, and in GNU
+modes, this can involve some limited validation checks.</p>
+</section>
+<section id="namespaces">
+<h2><span class="section-number">10.8. </span>Namespaces<a class="headerlink" href="#namespaces" title="Link to this heading">#</a></h2>
+<section id="namespace-declarations">
+<h3><span class="section-number">10.8.1. </span>Namespace Declarations<a class="headerlink" href="#namespace-declarations" title="Link to this heading">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">namespace_declaration</span></code> is called to process original namespace definitions,
+namespace extensions, and declarations of namespace aliases.</p>
+<p>When a namespace is originally declared, an entry of type <code class="docutils literal notranslate"><span class="pre">a_namespace</span></code> is
+created and an <code class="docutils literal notranslate"><span class="pre">sk_namespace</span></code> symbol is entered in the symbol table.  Then,
+an <code class="docutils literal notranslate"><span class="pre">sck_namespace</span></code> scope is pushed, and declarations inside the namespace are
+represented by symbols that are entered on the active symbol list of a given
+symbol header; when the scope is popped the symbols are moved from the active
+list to the inactive list.  However, that namespace can be reopened again, in
+which case it is an <code class="docutils literal notranslate"><span class="pre">sck_namespace_extension</span></code> scope that is pushed onto the
+scope stack.  It points to the same IL scope as the original <code class="docutils literal notranslate"><span class="pre">sck_namespace</span></code>
+scope, but symbols that are entered within this scope are added directly to the
+inactive list.  This affects how name lookup is done inside a namespace
+extension definition – see the <a class="reference internal" href="../symbol_tbl/#symbol-table"><span class="std std-ref">Symbol Table</span></a> chapter.</p>
+<p>For both original and extending namespace definitions, once the appropriate
+scope has been pushed, a loop is executed to make a series of calls to
+<code class="docutils literal notranslate"><span class="pre">declaration</span></code> until the closing <code class="docutils literal notranslate"><span class="pre">}</span></code> of the namespace definition is
+encountered.  Then the <code class="docutils literal notranslate"><span class="pre">sck_namespace</span></code> or <code class="docutils literal notranslate"><span class="pre">sck_namespace_extension</span></code> scope
+is popped off the scope stack.</p>
+<p>Unnamed namespace definitions are a special case.  For an original unnamed
+namespace definition, an <code class="docutils literal notranslate"><span class="pre">sck_namespace</span></code> scope is immediately pushed and then
+popped, a <code class="docutils literal notranslate"><span class="pre">using</span></code>-directive is simulated, and then an
+<code class="docutils literal notranslate"><span class="pre">sck_namespace_extension</span></code> scope is opened.  <a class="footnote-reference brackets" href="#f5" id="id5" role="doc-noteref"><span class="fn-bracket">[</span>5<span class="fn-bracket">]</span></a> In other words, an
+original unnamed namespace definition that is written like this</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">namespace</span><span class="w"> </span><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="p">;</span>
+</span><span data-line="3"><span class="p">}</span>
+</span></pre></div>
+</div>
+<p>is represented internally as if it were</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">namespace</span></code> <em>&lt;unnamed&gt;</em> <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">}</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">using</span> <span class="pre">namespace</span></code> <em>&lt;unnamed&gt;</em><code class="docutils literal notranslate"><span class="pre">;</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">namespace</span></code> <em>&lt;unnamed&gt;</em> <code class="docutils literal notranslate"><span class="pre">{</span></code></div>
+<div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">int</span> <span class="pre">i;</span></code></div>
+</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">}</span></code></div>
+</div>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">namespace_declaration</span></code> also handles declarations of namespace aliases, for
+which a namespace IL entry and a namespace symbol are also created.  However,
+in this case the namespace IL entry has its <code class="docutils literal notranslate"><span class="pre">is_namespace_alias</span></code> flag set to
+TRUE and points not to an associated IL scope but to the namespace entry it
+stands for.</p>
+</section>
+<section id="using-directives">
+<h3><span class="section-number">10.8.2. </span>Using-Directives<a class="headerlink" href="#using-directives" title="Link to this heading">#</a></h3>
+<p>A <em>using-directive</em> is processed by <code class="docutils literal notranslate"><span class="pre">using_directive</span></code>, which looks up the
+namespace name and calls <code class="docutils literal notranslate"><span class="pre">make_using_directive</span></code> to create and enter an entry
+of type <code class="docutils literal notranslate"><span class="pre">a_using_decl</span></code> and to “activate” the using directive in the current
+scope (see <code class="docutils literal notranslate"><span class="pre">add_active_using_directive</span></code> in <code class="docutils literal notranslate"><span class="pre">scope_stk.c</span></code>).  The effect of a
+<em>using-directive</em> on the lookup algorithm is discussed in the Symbol Table
+chapter.</p>
+</section>
+<section id="using-declarations">
+<h3><span class="section-number">10.8.3. </span>Using-Declarations<a class="headerlink" href="#using-declarations" title="Link to this heading">#</a></h3>
+<p>A <em>using-declaration</em> that appears in a scope other than that of a class
+definition is processed by <code class="docutils literal notranslate"><span class="pre">nonmember_using_declaration</span></code>.  <a class="footnote-reference brackets" href="#f6" id="id6" role="doc-noteref"><span class="fn-bracket">[</span>6<span class="fn-bracket">]</span></a> First it
+looks up and validates the namespace-qualified or globally qualified name.
+Then it enters an <code class="docutils literal notranslate"><span class="pre">sk_namespace_projection</span></code> symbol to represent the name
+pulled into the current scope by the using-declaration.</p>
+<p>When a <em>using-declaration</em> specifies the name of an overloaded function, each
+member of the overload set will have its own projection symbol.  An overload
+set in the current scope may end up with a mix of <code class="docutils literal notranslate"><span class="pre">sk_routine</span></code> symbols
+(declarations from the current scope) and <code class="docutils literal notranslate"><span class="pre">sk_namespace_projection</span></code> symbols
+(referring to declarations from another scope).
+<code class="docutils literal notranslate"><span class="pre">conflicts_with_previous_function_decl</span></code> is called to determine if a function
+specified by a <em>using-declaration</em> is not distinguishable, for purposes of
+overloading, from functions actually declared in the current scope.</p>
+<p>An IL entry is created to represent the <em>using-declaration</em> (see
+<code class="docutils literal notranslate"><span class="pre">make_using_decl</span></code>); it is available to back ends from the <code class="docutils literal notranslate"><span class="pre">using_decls</span></code>
+list pointed to from the current scope.</p>
+</section>
+</section>
+<section id="standard-attributes-gnu-attributes-and-declspec-attributes">
+<h2><span class="section-number">10.9. </span>Standard Attributes, GNU Attributes, and <code class="docutils literal notranslate"><span class="pre">__declspec</span></code> Attributes<a class="headerlink" href="#standard-attributes-gnu-attributes-and-declspec-attributes" title="Link to this heading">#</a></h2>
+<p>In declarative contexts, the processing for standard attributes (delimited by
+double square brackets) is very similar to that for GNU attributes
+(”<code class="docutils literal notranslate"><span class="pre">__attribute((...))</span></code>”) and Microsoft <code class="docutils literal notranslate"><span class="pre">__declspec(...)</span></code> attributes.  The
+main difference (other than the delimiting tokens) is that standard attributes
+have strict “appertaining rules” whereas nonstandard (GNU and Microsoft
+<code class="docutils literal notranslate"><span class="pre">__declspec</span></code>) attributes can be placed more loosely.  The standard rules are
+basically that an attribute applies to the construct immediately preceding it,
+except for “prefix attributes” which apply to all the entities denoted by the
+declarators of the prefixed declaration.  With nonstandard attributes, the
+entity modified by an attribute depends on the attribute.  For example:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">[[</span><span class="na">noreturn</span><span class="p">]]</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="p">[[</span><span class="na">X</span><span class="p">]]</span><span class="w"> </span><span class="n">f</span><span class="w"> </span><span class="p">[[</span><span class="w"> </span><span class="na">nothrow</span><span class="w"> </span><span class="p">]]</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">[[</span><span class="na">Y</span><span class="p">]],</span><span class="w"> </span><span class="n">g</span><span class="p">();</span><span class="w">    </span><span class="c1">// (1)</span>
+</span><span data-line="2"><span class="cp">#define A __attribute</span>
+</span><span data-line="3"><span class="n">A</span><span class="p">((</span><span class="n">noreturn</span><span class="p">))</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">A</span><span class="p">((</span><span class="n">nothrow</span><span class="p">))</span><span class="w"> </span><span class="n">f</span><span class="p">()</span><span class="w"> </span><span class="n">A</span><span class="p">((</span><span class="n">pure</span><span class="p">)),</span><span class="w"> </span><span class="n">g</span><span class="p">();</span><span class="w">       </span><span class="c1">// (2)</span>
+</span></pre></div>
+</div>
+<p>In (1), the <code class="docutils literal notranslate"><span class="pre">noreturn</span></code> attribute applies to the functions <code class="docutils literal notranslate"><span class="pre">f</span></code> and <code class="docutils literal notranslate"><span class="pre">g</span></code>,
+and any attribute in that location would apply to those entities.  The unknown
+attribute <code class="docutils literal notranslate"><span class="pre">X</span></code> (in (1)) applies to <code class="docutils literal notranslate"><span class="pre">int</span></code>, <code class="docutils literal notranslate"><span class="pre">nothrow</span></code> applies to <code class="docutils literal notranslate"><span class="pre">f</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">Y</span></code> applies to the function type associated with the function declarator that
+precedes it.  (There are currently no standard attributes that could appear in
+the locations indicated by X and Y, but the language specification does
+anticipate their appertainance.)</p>
+<p>While in (2) the <code class="docutils literal notranslate"><span class="pre">noreturn</span></code> attribute applies as in (1), the <code class="docutils literal notranslate"><span class="pre">nothrow</span></code>
+attribute applies to the type of <code class="docutils literal notranslate"><span class="pre">f</span></code> (a function type) and the <code class="docutils literal notranslate"><span class="pre">pure</span></code>
+attribute applies to <code class="docutils literal notranslate"><span class="pre">f</span></code> itself.  Furthermore, the locations of the
+<code class="docutils literal notranslate"><span class="pre">nothrow</span></code> and <code class="docutils literal notranslate"><span class="pre">pure</span></code> attributes can be interchanged with no change of
+meaning.</p>
+<p>The principal routines for parsing and applying attributes are described in
+detail <a class="reference internal" href="../pragma/#pragmas-and-attributes"><span class="std std-ref">Pragmas and Attributes</span></a>.  For attributes that apply to
+declarations, the attribute application “callback” functions can rely on the
+<code class="docutils literal notranslate"><span class="pre">assoc_info</span></code> field of the attribute entry pointing to the
+<code class="docutils literal notranslate"><span class="pre">a_decl_parse_state</span></code> structure for that declaration.</p>
+</section>
+<section id="microsoft-attributes">
+<span id="ms-attributes"></span><h2><span class="section-number">10.10. </span>Microsoft Attributes<a class="headerlink" href="#microsoft-attributes" title="Link to this heading">#</a></h2>
+<p>In Microsoft mode, Microsoft attributes delimited by single brackets are
+accepted.  Attributes may, in general, be specified where a declaration is
+accepted.  In particular, they are accepted in namespace scopes, class scopes,
+and in function parameter lists.  Attributes have the form:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">[</span><span class="n">attribute_name</span><span class="p">]</span>
+</span><span data-line="2"><span class="p">[</span><span class="n">attribute_name</span><span class="p">(</span><span class="n">args</span><span class="p">)]</span>
+</span></pre></div>
+</div>
+<p>When the bracket that begins an attribute is encountered,
+<code class="docutils literal notranslate"><span class="pre">scan_microsoft_attributes</span></code> is used to scan the attributes and create the IL
+entries used to represent them.  A list of attributes is returned.  This list
+is later passed to one of the following routines that either add the attributes
+to the IL or issue the appropriate diagnostics if the attributes appear in
+invalid locations:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">apply_microsoft_attributes</span>
+</span><span data-line="2"><span class="n">verify_standalone_attributes</span>
+</span><span data-line="3"><span class="n">dispose_of_unapplied_attributes</span>
+</span></pre></div>
+</div>
+<p>The attribute scanning routines use an attribute description data structure to
+describe the attributes that should be recognized and to describe the argument
+lists expected by those attributes.  When the
+<code class="docutils literal notranslate"><span class="pre">RECOGNIZE_MICROSOFT_ATTRIBUTES</span></code> macro is TRUE, the front end supplies
+attribute descriptions for the documented Microsoft attributes.  When
+<code class="docutils literal notranslate"><span class="pre">SUPPRESS_MICROSOFT_ATTRIBUTE_PROCESSING</span></code> is TRUE, the Microsoft attributes
+are recognized in the sense that no “unrecognized attribute” warning is issued,
+but they are otherwise treated as unrecognized attributes (see below).</p>
+<p>Each attribute is represented by an entry of type <code class="docutils literal notranslate"><span class="pre">an_ms_attribute</span></code>.  The
+entry contains a string representation of the attribute.  In addition, a
+structured representation is also created for recognized attributes.  In the
+structured representation, each attribute has a list of associated argument
+values.  The argument values are checked to verify that they match the kind of
+value expected for a given argument (e.g., for a boolean parameter the value
+must be true or false).  When processing an unrecognized attribute, no semantic
+checking of argument values is performed and no checking is done to verify that
+a given attribute is used in an acceptable location.</p>
+<p>Attribute processing results in a list of attribute IL entries, and a flag
+in the source correspondence that indicates that attributes apply to a
+given entity (see the <a class="reference internal" href="../il/#intermediate-language"><span class="std std-ref">Intermediate Language</span></a> chapter for more
+information).  The source correspondence flag is only available when the
+structured attribute representation is being used.  Beyond the error
+checking described above, no additional semantic processing of attributes
+is performed.  For example, no code insertion is performed for the COM
+attributes.</p>
+<p>C++/CLI makes use of the same attribute syntax.  Currently, however, no
+C++/CLI-specific attributes are recognized (and as a consequence no associated
+semantics are implemented).</p>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="f1" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<p>The top-level entities imported from assemblies are generic and
+nongeneric managed classes, including some expressed using delegate
+definition syntax.  A delegate whose definition has not yet been
+loaded is treated like a ref class without a definition.</p>
+</aside>
+<aside class="footnote brackets" id="f2" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">2</a><span class="fn-bracket">]</span></span>
+<p>See <code class="docutils literal notranslate"><span class="pre">enum_types_can_be_smaller_than_int</span></code> in the configuration
+section of this document.</p>
+</aside>
+<aside class="footnote brackets" id="f3" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id3">3</a><span class="fn-bracket">]</span></span>
+<p>As an extension it is permitted to use a qualified name as the
+declarator in a class member declaration (see
+<code class="docutils literal notranslate"><span class="pre">simplify_curr_class_qualified_name</span></code>).  For instance,</p>
+</aside>
+<aside class="footnote brackets" id="f4" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id4">4</a><span class="fn-bracket">]</span></span>
+<p>The indirect call is via the more general function <code class="docutils literal notranslate"><span class="pre">type_name_full</span></code>.</p>
+</aside>
+<aside class="footnote brackets" id="f5" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id5">5</a><span class="fn-bracket">]</span></span>
+<p>The reason for this is to correctly handle globally qualified
+references to unnamed namespace members within the original namespace
+definition the same way as within a subsequent namespace extension.
+For example:</p>
+</aside>
+<aside class="footnote brackets" id="f6" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id6">6</a><span class="fn-bracket">]</span></span>
+<p>Using-declarations that appear inside a class definition are handled
+by <code class="docutils literal notranslate"><span class="pre">member_using_declaration</span></code> in <code class="docutils literal notranslate"><span class="pre">class_decl.c</span></code>, which is
+described in the Class Declarations chapter.</p>
+</aside>
+</aside>
+</section>
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"><div class="navigation-prev">
+    <a href="../expr/">
+      <i class="i-lucide chevron-left"></i>
+      <div class="page-info">
+        <span>Previous</span><div class="title"><span class="section-number">9. </span>Expression Scanning</div></div>
+    </a>
+  </div><div class="navigation-next">
+    <a href="../class_decl/">
+      <div class="page-info">
+        <span>Next</span>
+        <div class="title"><span class="section-number">11. </span>Class Declarations</div>
+      </div>
+      <i class="i-lucide chevron-right"></i>
+    </a>
+  </div></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>EDG 7.0, 7/20/26 - ©2026, Edison Design Group, Inc.</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials"></div>
+    </div>
+  </div>
+</footer>
+      <script src="../_static/documentation_options.js?v=618d875b"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/shibuya.js?v=50760d75"></script></body>
+</html>

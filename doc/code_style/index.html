@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="violet" data-content_root="../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>25. Coding Style Guide - CPFE 7.0 documentation</title><link rel="index" title="Index" href="../genindex/" /><link rel="search" title="Search" href="../search/" /><link rel="next" title="26. EDG Testing Framework" href="../testing/" /><link rel="prev" title="24. C++-Generating Back End" href="../cp_gen_be/" />
+      <link rel="canonical" href="https://edgcpp.org/doc/code_style/" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e1a1ceaf" />
+    <link rel="stylesheet" type="text/css" href="../_static/shibuya.css?v=2ceb65ce" />
+    <link media="print" rel="stylesheet" type="text/css" href="../_static/print.css?v=20ff2c19" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=8971ef7f" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://edgcpp.org/doc/code_style/"/>
+  <meta property="og:title" content="25. Coding Style Guide"/>
+    <meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="../">
+      <img class="light-logo" src="../_static/doc-logo-light.png" alt="CPFE" height="28" loading="lazy" />
+      <img class="dark-logo" src="../_static/doc-logo-dark.png" alt="CPFE" height="28" loading="lazy" />
+      <strong>CPFE</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="../search/" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials"></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2"></span>
+          <span class="hamburger_3"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../build/">1. Configuring and Building the C++ Front End</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ext_intf/">2. External Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../int_overview/">3. Overview of Internal Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../il/">4. Intermediate Language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lower_il/">5. IL Lowering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../symbol_tbl/">6. Symbol Table</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lex_pp/">7. Lexical Analysis and Preprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tables/">8. Table Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../expr/">9. Expression Scanning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../decls/">10. Declarations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../class_decl/">11. Class Declarations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../statements/">12. Statement Scanning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../templates/">13. Templates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../exceptions/">14. Exception Handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pragma/">15. Pragmas and Attributes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/">16. Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../trans_unit/">17. Multiple Translation Units</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../admin/">18. Administrative Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../err_msgs/">19. Error Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../includes/">20. ANSI C and C++ Include Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../runtime/">21. Runtime Library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../utilities/">22. Utility Programs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../c_gen_be/">23. C-Generating Back End</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cp_gen_be/">24. C++-Generating Back End</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">25. Coding Style Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../testing/">26. EDG Testing Framework</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#general-whitespace-rules">25.1. General Whitespace Rules</a></li>
+<li><a class="reference internal" href="#general-line-wrapping">25.2. General Line Wrapping</a><ul>
+<li><a class="reference internal" href="#general-condition-rules">25.2.1. General Condition Rules</a></li>
+<li><a class="reference internal" href="#general-statement-rules">25.2.2. General Statement Rules</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#general-line-breaks">25.3. General Line Breaks</a></li>
+<li><a class="reference internal" href="#naming-convention">25.4. Naming Convention</a></li>
+<li><a class="reference internal" href="#writing-a-variable">25.5. Writing a Variable</a></li>
+<li><a class="reference internal" href="#writing-a-function">25.6. Writing a Function</a><ul>
+<li><a class="reference internal" href="#parameter-alignment">25.6.1. Parameter Alignment</a></li>
+<li><a class="reference internal" href="#wrapping-function-declarations">25.6.2. Wrapping Function Declarations</a></li>
+<li><a class="reference internal" href="#documentation">25.6.3. Documentation</a></li>
+<li><a class="reference internal" href="#return-value">25.6.4. Return Value</a></li>
+<li><a class="reference internal" href="#variable-grouping">25.6.5. Variable Grouping</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#writing-a-lambda">25.7. Writing a Lambda</a></li>
+<li><a class="reference internal" href="#writing-a-class">25.8. Writing a Class</a><ul>
+<li><a class="reference internal" href="#data-members">25.8.1. Data Members</a></li>
+<li><a class="reference internal" href="#member-functions">25.8.2. Member Functions</a></li>
+<li><a class="reference internal" href="#member-initializer">25.8.3. Member Initializer</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#statements">25.9. Statements</a><ul>
+<li><a class="reference internal" href="#for-statements">25.9.1. <code class="docutils literal notranslate"><span class="pre">for</span></code> Statements</a><ul>
+<li><a class="reference internal" href="#c-style">25.9.1.1. C-style</a></li>
+<li><a class="reference internal" href="#range-based">25.9.1.2. Range-based</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#if-statements">25.9.2. <code class="docutils literal notranslate"><span class="pre">if</span></code> Statements</a></li>
+<li><a class="reference internal" href="#switch-statements">25.9.3. <code class="docutils literal notranslate"><span class="pre">switch</span></code> Statements</a></li>
+<li><a class="reference internal" href="#while-statements">25.9.4. <code class="docutils literal notranslate"><span class="pre">while</span></code> Statements</a><ul>
+<li><a class="reference internal" href="#pre-condition">25.9.4.1. Pre-condition</a></li>
+<li><a class="reference internal" href="#post-condition">25.9.4.2. Post-condition</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#preprocessor-directives">25.10. Preprocessor Directives</a><ul>
+<li><a class="reference internal" href="#if-and-endif">25.10.1. <code class="docutils literal notranslate"><span class="pre">#if</span></code> and <code class="docutils literal notranslate"><span class="pre">#endif</span></code></a></li>
+<li><a class="reference internal" href="#else">25.10.2. <code class="docutils literal notranslate"><span class="pre">#else</span></code></a></li>
+<li><a class="reference internal" href="#elif">25.10.3. <code class="docutils literal notranslate"><span class="pre">#elif</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#templates">25.11. Templates</a><ul>
+<li><a class="reference internal" href="#template-parameters">25.11.1. Template Parameters</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#special-cases">25.12. Special Cases</a><ul>
+<li><a class="reference internal" href="#pointer-reference-types">25.12.1. Pointer &amp; Reference Types</a></li>
+<li><a class="reference internal" href="#empty-loop-bodies">25.12.2. Empty Loop Bodies</a></li>
+<li><a class="reference internal" href="#annotating-function-arguments">25.12.3. Annotating Function Arguments</a></li>
+<li><a class="reference internal" href="#wrapping-function-calls">25.12.4. Wrapping Function Calls</a></li>
+</ul>
+</li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../"><span itemprop="name">CPFE</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name"><span class="section-number">25. </span>Coding Style Guide</strong>
+        <meta itemprop="position" content="2" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="relative min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+  <div class="copy-page-wrapper relative pb-4 lg:absolute lg:top-8 lg:right-6 xl:right-12">
+  <div id="copy-page-trigger">
+    <button
+      type="button"
+      class="js-copy px-3 py-1 inline-flex items-center gap-1"
+      data-url="https://edgcpp.org/doc/_sources/code_style.rst.txt"
+    >
+      <i class="i-lucide" data-icon="copy"></i>
+      <span>Copy page</span>
+    </button>
+    <button class="js-menu px-2 py-1" type="button" aria-label="More actions"
+      aria-haspopup="menu" aria-expanded="false" aria-controls="copy-page-content">
+      <i class="i-lucide chevron-down"></i>
+    </button>
+  </div>
+  <div id="copy-page-content" role="menu" aria-orientation="vertical" aria-hidden="true">
+    <div role="presentation">
+      <div class="flex flex-col" role="group">
+        <button class="js-copy" type="button" role="menuitem"
+          data-url="https://edgcpp.org/doc/_sources/code_style.rst.txt">
+          <span class="iconify-icon">
+            <i class="i-lucide" data-icon="copy"></i>
+          </span>
+          <span>Copy page</span>
+        </button>
+        <a role="menuitem" href="https://edgcpp.org/doc/_sources/code_style.rst.txt" target="_blank" rel="nofollow"><iconify-icon icon="bi:code-slash"></iconify-icon>
+            <span>View Source</span></a><a role="menuitem" href="https://chatgpt.com/?hints=search&q=Read%20https%3A//edgcpp.org/doc/_sources/code_style.rst.txt%20so%20I%20can%20ask%20questions%20about%20it." target="_blank" rel="nofollow">
+          <iconify-icon icon="bi:openai"></iconify-icon>
+          <span>Open in ChatGPT</span>
+        </a><a role="menuitem" href="https://claude.ai/new?q=Read%20https%3A//edgcpp.org/doc/_sources/code_style.rst.txt%20so%20I%20can%20ask%20questions%20about%20it." target="_blank" rel="nofollow">
+          <iconify-icon icon="bi:claude"></iconify-icon>
+          <span>Open in Claude</span>
+        </a></div>
+    </div>
+  </div>
+</div><article class="yue" role="main">
+          <section id="coding-style-guide">
+<h1><span class="section-number">25. </span>Coding Style Guide<a class="headerlink" href="#coding-style-guide" title="Link to this heading">#</a></h1>
+<section id="general-whitespace-rules">
+<h2><span class="section-number">25.1. </span>General Whitespace Rules<a class="headerlink" href="#general-whitespace-rules" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Maximum line length is 79 characters.</p></li>
+<li><p>Indentation is by 2 spaces.</p></li>
+<li><p>Editors should be set to use an 8 space tab width.</p></li>
+</ul>
+</section>
+<section id="general-line-wrapping">
+<h2><span class="section-number">25.2. </span>General Line Wrapping<a class="headerlink" href="#general-line-wrapping" title="Link to this heading">#</a></h2>
+<section id="general-condition-rules">
+<h3><span class="section-number">25.2.1. </span>General Condition Rules<a class="headerlink" href="#general-condition-rules" title="Link to this heading">#</a></h3>
+<p>Conditions that cause the line length to exceed 79 characters are wrapped via a
+line break following an operator.  The continuation is left aligned with the
+opening paren:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="cm">/* something very long */</span><span class="w"> </span><span class="o">&amp;&amp;</span>
+</span><span data-line="2"><span class="w">    </span><span class="cm">/* something else */</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span data-line="3"><span class="w">  </span><span class="cm">/* etc... */</span>
+</span><span data-line="4"><span class="p">}</span><span class="w">  </span><span class="cm">/* if */</span>
+</span><span data-line="5">
+</span><span data-line="6"><span class="k">if</span><span class="w"> </span><span class="p">((</span><span class="n">a</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;&amp;</span>
+</span><span data-line="7"><span class="w">    </span><span class="p">(</span><span class="cm">/* something very long */</span><span class="w"> </span><span class="o">||</span>
+</span><span data-line="8"><span class="w">     </span><span class="cm">/* something else */</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+</span><span data-line="9"><span class="w">  </span><span class="cm">/* etc... */</span>
+</span><span data-line="10"><span class="p">}</span><span class="w">  </span><span class="cm">/* if */</span>
+</span><span data-line="11">
+</span><span data-line="12"><span class="k">if</span><span class="w"> </span><span class="p">((</span><span class="n">a</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="p">(</span><span class="cm">/* something very long */</span><span class="w"> </span><span class="o">||</span>
+</span><span data-line="13"><span class="w">                 </span><span class="cm">/* something else */</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+</span><span data-line="14"><span class="w">  </span><span class="cm">/* etc... */</span>
+</span><span data-line="15"><span class="p">}</span><span class="w">  </span><span class="cm">/* if */</span>
+</span></pre></div>
+</div>
+</section>
+<section id="general-statement-rules">
+<h3><span class="section-number">25.2.2. </span>General Statement Rules<a class="headerlink" href="#general-statement-rules" title="Link to this heading">#</a></h3>
+<p>Expressions that cause the line length to exceed 79 characters are wrapped via
+a line break following an operator.  The continuation is right-aligned:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="cm">/* something very long */</span><span class="w"> </span><span class="o">&amp;&amp;</span>
+</span><span data-line="2"><span class="w">                        </span><span class="cm">/* something else (right-aligned to column 79) */</span><span class="p">;</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="general-line-breaks">
+<h2><span class="section-number">25.3. </span>General Line Breaks<a class="headerlink" href="#general-line-breaks" title="Link to this heading">#</a></h2>
+<p>Line breaks are prioritized as follows:</p>
+<ul class="simple">
+<li><p>1 line for a conditional preprocessor directives (e.g., #if, #ifdef, etc.)
+unless adding whitespace would break a visual “grouping” (e.g., conditional
+inclusion of a header in a list of headers, conditionally enabling a single
+statement in a function, etc.).</p></li>
+<li><p>1 line for a namespace declaration and its associated closing comments.</p></li>
+<li><p>2 lines for a function definition.</p></li>
+<li><p>1 line for a function, variable, or type declaration.</p></li>
+</ul>
+</section>
+<section id="naming-convention">
+<h2><span class="section-number">25.4. </span>Naming Convention<a class="headerlink" href="#naming-convention" title="Link to this heading">#</a></h2>
+<p>The EDG naming convention can be broadly described as “snake case” (with an
+exception for templates).  In snake case, names are composed of lower case
+letters and underscores.</p>
+<p>For types, the naming convention additionally adds a “<code class="docutils literal notranslate"><span class="pre">a_</span></code>/<code class="docutils literal notranslate"><span class="pre">an_</span></code>”
+prefixed to the typename.  For instance, what (in many projects) would be
+spelled <code class="docutils literal notranslate"><span class="pre">struct</span> <span class="pre">thing</span></code> is called <code class="docutils literal notranslate"><span class="pre">struct</span> <span class="pre">a_thing</span></code>.</p>
+</section>
+<section id="writing-a-variable">
+<h2><span class="section-number">25.5. </span>Writing a Variable<a class="headerlink" href="#writing-a-variable" title="Link to this heading">#</a></h2>
+<p>Variables appearing in “global” (these technically shouldn’t exist as
+there’s a conditional “<code class="docutils literal notranslate"><span class="pre">edg</span></code>” namespace around all file contents) or
+namespace scope are indented using tabs in older files which make use of
+tabs and the equivalent
+(8) spaces in newer files.  The type is not indented, the name is indented by
+2 tabs, and a comment should be added at 3 tabs:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">a_variable_type_name</span>
+</span><span data-line="2"><span class="w">        </span><span class="n">my_variable</span><span class="p">;</span>
+</span><span data-line="3"><span class="w">                </span><span class="cm">/* A descriptive comment. */</span>
+</span></pre></div>
+</div>
+<p>If a variable type or name ends before the next tab stop, the lines should be
+collapsed:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">a_variable_type_name</span>
+</span><span data-line="2"><span class="w">        </span><span class="n">x</span><span class="p">;</span><span class="w">      </span><span class="cm">/* A descriptive comment. */</span>
+</span><span data-line="3"><span class="kt">int</span><span class="w">     </span><span class="n">my_variable</span><span class="p">;</span>
+</span><span data-line="4"><span class="w">                </span><span class="cm">/* A descriptive comment. */</span>
+</span><span data-line="5"><span class="kt">int</span><span class="w">     </span><span class="n">x</span><span class="p">;</span><span class="w">      </span><span class="cm">/* A descriptive comment. */</span>
+</span></pre></div>
+</div>
+</section>
+<section id="writing-a-function">
+<span id="id1"></span><h2><span class="section-number">25.6. </span>Writing a Function<a class="headerlink" href="#writing-a-function" title="Link to this heading">#</a></h2>
+<section id="parameter-alignment">
+<h3><span class="section-number">25.6.1. </span>Parameter Alignment<a class="headerlink" href="#parameter-alignment" title="Link to this heading">#</a></h3>
+<p>Functions declarations that fit within a single line should do so:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kt">void</span><span class="w"> </span><span class="nf">foo</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">c</span><span class="p">);</span>
+</span></pre></div>
+</div>
+<p>If a function declaration does not fit on a single line, it should be broken up
+with the parameters broken up into two left-aligned columns, one column of
+parameter types, and one column of parameter names:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kt">void</span><span class="w"> </span><span class="nf">foo</span><span class="p">(</span><span class="n">a_variable_type</span><span class="w">        </span><span class="n">thing</span><span class="p">,</span>
+</span><span data-line="2"><span class="w">         </span><span class="n">an_other_variable_type</span><span class="w"> </span><span class="n">other_thing</span><span class="p">,</span>
+</span><span data-line="3"><span class="w">         </span><span class="n">a_thingy</span><span class="w">               </span><span class="n">thingy</span><span class="p">);</span>
+</span></pre></div>
+</div>
+</section>
+<section id="wrapping-function-declarations">
+<h3><span class="section-number">25.6.2. </span>Wrapping Function Declarations<a class="headerlink" href="#wrapping-function-declarations" title="Link to this heading">#</a></h3>
+<p>Particularly for function definitions with lots of qualifiers and long names
+(member functions are particularly guilty), simply wrapping the parameters can
+be insufficient.  In these cases, there are two accepted techniques for keeping
+the function within the required line length.</p>
+<p>If the function has qualifiers like <code class="docutils literal notranslate"><span class="pre">static</span></code> and <code class="docutils literal notranslate"><span class="pre">inline</span></code> these can be
+moved to the preceding line along with the return type:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">static</span><span class="w"> </span><span class="kr">inline</span><span class="w"> </span><span class="kt">void</span>
+</span><span data-line="2"><span class="nf">very_long_long_long_long_foo</span><span class="p">(</span><span class="n">a_variable_type</span><span class="w">        </span><span class="n">thing</span><span class="p">,</span>
+</span><span data-line="3"><span class="w">                             </span><span class="n">a_nother_variable_type</span><span class="w"> </span><span class="n">other_thing</span><span class="p">,</span>
+</span><span data-line="4"><span class="w">                             </span><span class="n">a_thingy</span><span class="w">               </span><span class="n">thingy</span><span class="p">);</span>
+</span></pre></div>
+</div>
+<p>If this is still insufficient, the parameters can be moved to a new line and
+right-aligned:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kt">void</span><span class="w"> </span><span class="nf">very_long_long_long_long_long_foo</span><span class="p">(</span>
+</span><span data-line="2"><span class="w">                                    </span><span class="n">a_variable_type</span><span class="w">        </span><span class="n">thing</span><span class="p">,</span>
+</span><span data-line="3"><span class="w">                                    </span><span class="n">a_nother_variable_type</span><span class="w"> </span><span class="n">other_thing</span><span class="p">,</span>
+</span><span data-line="4"><span class="w">                                    </span><span class="n">a_thingy</span><span class="w">               </span><span class="n">thingy</span><span class="p">);</span>
+</span></pre></div>
+</div>
+</section>
+<section id="documentation">
+<h3><span class="section-number">25.6.3. </span>Documentation<a class="headerlink" href="#documentation" title="Link to this heading">#</a></h3>
+<p>In a function definition, a comment should be added after the closing paren but
+before the opening curly brace.  This comment should describe all of the
+parameters, the return value, and any actions it takes, and the closing
+<code class="docutils literal notranslate"><span class="pre">}</span></code> of the function should be followed by a comment giving the name
+of the function, separated from the <code class="docutils literal notranslate"><span class="pre">}</span></code> by two spaces:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">a_boolean</span><span class="w"> </span><span class="nf">foo</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">num_l_parens</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">num_r_parens</span><span class="p">)</span>
+</span><span data-line="2"><span class="cm">/*</span>
+</span><span data-line="3"><span class="cm">Given the number of left parens (num_l_parens) and the number of right</span>
+</span><span data-line="4"><span class="cm">parens (num_r_parens), display the values and return TRUE if the</span>
+</span><span data-line="5"><span class="cm">numbers are equivalent; otherwise, return FALSE.</span>
+</span><span data-line="6"><span class="cm">*/</span>
+</span><span data-line="7"><span class="p">{</span>
+</span><span data-line="8"><span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">"lparens=%d, rparens= %d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">num_l_parens</span><span class="p">,</span><span class="w"> </span><span class="n">num_r_parens</span><span class="p">);</span>
+</span><span data-line="9"><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">num_l_parens</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">num_r_parens</span><span class="p">;</span>
+</span><span data-line="10"><span class="p">}</span><span class="w">  </span><span class="cm">/* foo */</span>
+</span></pre></div>
+</div>
+<p>This also applies to void functions that use output parameters:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kt">void</span><span class="w"> </span><span class="nf">foo</span><span class="p">(</span><span class="n">a_boolean</span><span class="w"> </span><span class="o">*</span><span class="n">result</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">num_l_parens</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">num_r_parens</span><span class="p">)</span>
+</span><span data-line="2"><span class="cm">/*</span>
+</span><span data-line="3"><span class="cm">Given the number of left parens (num_l_parens) and the number of right</span>
+</span><span data-line="4"><span class="cm">parens (num_r_parens), assign *result to TRUE if the numbers are equivalent;</span>
+</span><span data-line="5"><span class="cm">otherwise, assign *result to FALSE.</span>
+</span><span data-line="6"><span class="cm">*/</span>
+</span><span data-line="7"><span class="p">{</span>
+</span><span data-line="8"><span class="w">  </span><span class="o">*</span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">num_l_parens</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">num_r_parens</span><span class="p">);</span>
+</span><span data-line="9"><span class="p">}</span><span class="w">  </span><span class="cm">/* foo */</span>
+</span></pre></div>
+</div>
+</section>
+<section id="return-value">
+<h3><span class="section-number">25.6.4. </span>Return Value<a class="headerlink" href="#return-value" title="Link to this heading">#</a></h3>
+<p>If a function requires a variable to hold the result, it should be the first
+variable in the function, and it should be named “<code class="docutils literal notranslate"><span class="pre">result</span></code>”:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kt">int</span><span class="w"> </span><span class="nf">foo</span><span class="p">()</span>
+</span><span data-line="2"><span class="cm">/*</span>
+</span><span data-line="3"><span class="cm">A descriptive comment.</span>
+</span><span data-line="4"><span class="cm">*/</span>
+</span><span data-line="5"><span class="p">{</span>
+</span><span data-line="6"><span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">result</span><span class="p">;</span>
+</span><span data-line="7">
+</span><span data-line="8"><span class="w">  </span><span class="cm">/* etc... */</span>
+</span><span data-line="9"><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">result</span><span class="p">;</span>
+</span><span data-line="10"><span class="p">}</span><span class="w">  </span><span class="cm">/* foo */</span>
+</span></pre></div>
+</div>
+</section>
+<section id="variable-grouping">
+<h3><span class="section-number">25.6.5. </span>Variable Grouping<a class="headerlink" href="#variable-grouping" title="Link to this heading">#</a></h3>
+<p>Variables should be grouped into blocks with their types and names aligned.
+The first block of variables should have a trailing newline, and any following
+blocks should use a preceding newline:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kt">int</span><span class="w"> </span><span class="nf">foo</span><span class="p">()</span>
+</span><span data-line="2"><span class="cm">/*</span>
+</span><span data-line="3"><span class="cm">A descriptive comment.</span>
+</span><span data-line="4"><span class="cm">*/</span>
+</span><span data-line="5"><span class="p">{</span>
+</span><span data-line="6"><span class="w">  </span><span class="kt">int</span><span class="w">       </span><span class="n">result</span><span class="p">;</span>
+</span><span data-line="7"><span class="w">  </span><span class="n">a_boolean</span><span class="w"> </span><span class="n">temp_state</span><span class="p">;</span>
+</span><span data-line="8">
+</span><span data-line="9"><span class="w">  </span><span class="cm">/* etc... */</span>
+</span><span data-line="10">
+</span><span data-line="11"><span class="w">  </span><span class="n">a_state_catcher</span><span class="w"> </span><span class="n">secondary_state</span><span class="p">;</span>
+</span><span data-line="12"><span class="w">  </span><span class="n">a_boolean</span><span class="w">       </span><span class="n">state_catcher_used</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">FALSE</span><span class="p">;</span>
+</span><span data-line="13"><span class="w">  </span><span class="cm">/* etc... */</span>
+</span><span data-line="14"><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">result</span><span class="p">;</span>
+</span><span data-line="15"><span class="p">}</span><span class="w">  </span><span class="cm">/* foo */</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="writing-a-lambda">
+<h2><span class="section-number">25.7. </span>Writing a Lambda<a class="headerlink" href="#writing-a-lambda" title="Link to this heading">#</a></h2>
+<p>Lambdas are a case that’s a mix of variable and function rules.  Lambda
+parameters – similar to function parameters – should be broken up into two
+left-aligned columns, one column of parameter types, and one column of
+parameter names:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">auto</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[](</span><span class="kt">int</span><span class="w"> </span><span class="n">num_l_parens</span><span class="p">,</span>
+</span><span data-line="2"><span class="w">            </span><span class="kt">int</span><span class="w"> </span><span class="n">num_r_parens</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">a_boolean</span><span class="w"> </span><span class="p">{</span>
+</span><span data-line="3"><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">num_l_parens</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">num_r_parens</span><span class="p">;</span>
+</span><span data-line="4"><span class="p">};</span>
+</span></pre></div>
+</div>
+<p>Unlike functions, lambdas do not require a documentation comment, or a closing
+comment.  For this reason, lambdas should be reserved for fairly trivial
+operations.</p>
+<p>If a lambda appears in a block of other variables, the lambda should follow the
+name alignment of the variables in the same block, e.g.,</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">a_long_type_name</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="cm">/* etc... */</span><span class="p">;</span>
+</span><span data-line="2"><span class="k">auto</span><span class="w">             </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[](</span><span class="kt">int</span><span class="w"> </span><span class="n">num_l_parens</span><span class="p">,</span>
+</span><span data-line="3"><span class="w">                        </span><span class="kt">int</span><span class="w"> </span><span class="n">num_r_parens</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">a_boolean</span><span class="w"> </span><span class="p">{</span>
+</span><span data-line="4"><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">num_l_parens</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">num_r_parens</span><span class="p">;</span>
+</span><span data-line="5"><span class="p">};</span>
+</span></pre></div>
+</div>
+</section>
+<section id="writing-a-class">
+<h2><span class="section-number">25.8. </span>Writing a Class<a class="headerlink" href="#writing-a-class" title="Link to this heading">#</a></h2>
+<p>Classes should be preceded by a descriptive comment, and terminated by a
+closing comment giving the class name and separated from the <code class="docutils literal notranslate"><span class="pre">;</span></code> by two
+spaces:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="cm">/*</span>
+</span><span data-line="2"><span class="cm">A descriptive comment about class foo.</span>
+</span><span data-line="3"><span class="cm">*/</span>
+</span><span data-line="4"><span class="k">struct</span><span class="w"> </span><span class="nc">foo</span><span class="w"> </span><span class="p">{</span>
+</span><span data-line="5"><span class="w">  </span><span class="cm">/* etc... */</span>
+</span><span data-line="6"><span class="p">};</span><span class="w">  </span><span class="cm">/* foo */</span>
+</span></pre></div>
+</div>
+<section id="data-members">
+<h3><span class="section-number">25.8.1. </span>Data Members<a class="headerlink" href="#data-members" title="Link to this heading">#</a></h3>
+<p>Data members should be written at the end of the class.  In terms of
+indentation, data members are indented similarly to variables in global &amp;
+namespace scope, with the exception that the type is always indented by two
+spaces:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="cm">/*</span>
+</span><span data-line="2"><span class="cm">A descriptive comment about class foo.</span>
+</span><span data-line="3"><span class="cm">*/</span>
+</span><span data-line="4"><span class="k">struct</span><span class="w"> </span><span class="nc">foo</span><span class="w"> </span><span class="p">{</span>
+</span><span data-line="5"><span class="w">  </span><span class="cm">/* etc... */</span>
+</span><span data-line="6"><span class="k">private</span><span class="o">:</span>
+</span><span data-line="7"><span class="w">  </span><span class="n">a_variable_type_name</span>
+</span><span data-line="8"><span class="w">                </span><span class="n">my_var_a</span><span class="p">;</span>
+</span><span data-line="9"><span class="w">                        </span><span class="cm">/* A descriptive comment. */</span>
+</span><span data-line="10"><span class="w">  </span><span class="n">a_variable_type_name</span>
+</span><span data-line="11"><span class="w">                </span><span class="n">b</span><span class="p">;</span><span class="w">      </span><span class="cm">/* A descriptive comment. */</span>
+</span><span data-line="12"><span class="w">  </span><span class="kt">int</span><span class="w">           </span><span class="n">my_var_c</span><span class="p">;</span>
+</span><span data-line="13"><span class="w">                        </span><span class="cm">/* A descriptive comment. */</span>
+</span><span data-line="14"><span class="w">  </span><span class="kt">int</span><span class="w">           </span><span class="n">d</span><span class="p">;</span><span class="w">      </span><span class="cm">/* A descriptive comment. */</span>
+</span><span data-line="15"><span class="p">};</span><span class="w">  </span><span class="cm">/* foo */</span>
+</span></pre></div>
+</div>
+</section>
+<section id="member-functions">
+<h3><span class="section-number">25.8.2. </span>Member Functions<a class="headerlink" href="#member-functions" title="Link to this heading">#</a></h3>
+<p>Member functions (including special member functions like constructors and
+destructors) that do not exceed 1 line can be written inline:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="cm">/*</span>
+</span><span data-line="2"><span class="cm">A descriptive comment about class foo.</span>
+</span><span data-line="3"><span class="cm">*/</span>
+</span><span data-line="4"><span class="k">struct</span><span class="w"> </span><span class="nc">foo</span><span class="w"> </span><span class="p">{</span>
+</span><span data-line="5"><span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">bar</span><span class="p">()</span>
+</span><span data-line="6"><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">x</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+</span><span data-line="7"><span class="k">private</span><span class="o">:</span>
+</span><span data-line="8"><span class="w">  </span><span class="kt">int</span><span class="w">           </span><span class="n">x</span><span class="p">;</span><span class="w">      </span><span class="cm">/* A descriptive comment. */</span>
+</span><span data-line="9"><span class="p">};</span><span class="w">  </span><span class="cm">/* foo */</span>
+</span></pre></div>
+</div>
+<p>If the member function is empty it should be spelled “<code class="docutils literal notranslate"><span class="pre">{}</span></code>” (no space):</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="cm">/*</span>
+</span><span data-line="2"><span class="cm">A descriptive comment about class foo.</span>
+</span><span data-line="3"><span class="cm">*/</span>
+</span><span data-line="4"><span class="k">struct</span><span class="w"> </span><span class="nc">foo</span><span class="w"> </span><span class="p">{</span>
+</span><span data-line="5"><span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">foo</span><span class="p">()</span>
+</span><span data-line="6"><span class="w">    </span><span class="p">{}</span>
+</span><span data-line="7"><span class="p">};</span><span class="w">  </span><span class="cm">/* foo */</span>
+</span></pre></div>
+</div>
+<p>Member functions that exceed 1 line should be written out-of-line:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="cm">/*</span>
+</span><span data-line="2"><span class="cm">A descriptive comment about class foo.</span>
+</span><span data-line="3"><span class="cm">*/</span>
+</span><span data-line="4"><span class="k">struct</span><span class="w"> </span><span class="nc">foo</span><span class="w"> </span><span class="p">{</span>
+</span><span data-line="5"><span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">complex_bar</span><span class="p">();</span>
+</span><span data-line="6"><span class="k">private</span><span class="o">:</span>
+</span><span data-line="7"><span class="w">  </span><span class="kt">int</span><span class="w">           </span><span class="n">x</span><span class="p">;</span><span class="w">      </span><span class="cm">/* A descriptive comment. */</span>
+</span><span data-line="8"><span class="p">};</span><span class="w">  </span><span class="cm">/* foo */</span>
+</span><span data-line="9">
+</span><span data-line="10">
+</span><span data-line="11"><span class="kt">void</span><span class="w"> </span><span class="nf">foo::complex_bar</span><span class="p">()</span>
+</span><span data-line="12"><span class="cm">/*</span>
+</span><span data-line="13"><span class="cm">A descriptive comment about complex_bar.</span>
+</span><span data-line="14"><span class="cm">*/</span>
+</span><span data-line="15"><span class="p">{</span>
+</span><span data-line="16"><span class="w">  </span><span class="cm">/* etc... */</span>
+</span><span data-line="17"><span class="p">};</span><span class="w">  </span><span class="cm">/* foo::complex_bar */</span>
+</span></pre></div>
+</div>
+<p>Additionally see <a class="reference internal" href="#writing-a-function"><span class="std std-ref">Writing a Function</span></a> as those rules also apply to member
+functions.</p>
+</section>
+<section id="member-initializer">
+<h3><span class="section-number">25.8.3. </span>Member Initializer<a class="headerlink" href="#member-initializer" title="Link to this heading">#</a></h3>
+<p>If initializing using a passed value, the data members and parameters
+should have names that differ (e.g., for a data member <code class="docutils literal notranslate"><span class="pre">x</span></code>, <code class="docutils literal notranslate"><span class="pre">x_val</span></code> can
+be an appropriate parameter name).</p>
+<p>Additionally, the introducing colon and all member initializers should be
+indented two spaces, e.g.,</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="cm">/*</span>
+</span><span data-line="2"><span class="cm">A descriptive comment about class foo.</span>
+</span><span data-line="3"><span class="cm">*/</span>
+</span><span data-line="4"><span class="k">struct</span><span class="w"> </span><span class="nc">foo</span><span class="w"> </span><span class="p">{</span>
+</span><span data-line="5"><span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">foo</span><span class="p">()</span>
+</span><span data-line="6"><span class="w">    </span><span class="o">:</span><span class="w"> </span><span class="n">x</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="w"> </span><span class="n">y</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span><span class="w"> </span><span class="n">z</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+</span><span data-line="7"><span class="w">    </span><span class="p">{}</span>
+</span><span data-line="8"><span class="w">  </span><span class="kr">inline</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">foo</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">x_val</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">y_val</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">z_val</span><span class="p">);</span>
+</span><span data-line="9"><span class="w">  </span><span class="kt">int</span><span class="w">           </span><span class="n">x</span><span class="p">;</span><span class="w">      </span><span class="cm">/* A descriptive comment. */</span>
+</span><span data-line="10"><span class="w">  </span><span class="kt">int</span><span class="w">           </span><span class="n">y</span><span class="p">;</span><span class="w">      </span><span class="cm">/* A descriptive comment. */</span>
+</span><span data-line="11"><span class="w">  </span><span class="kt">int</span><span class="w">           </span><span class="n">z</span><span class="p">;</span><span class="w">      </span><span class="cm">/* A descriptive comment. */</span>
+</span><span data-line="12"><span class="p">};</span><span class="w">  </span><span class="cm">/* foo */</span>
+</span><span data-line="13">
+</span><span data-line="14">
+</span><span data-line="15"><span class="kt">void</span><span class="w"> </span><span class="nf">foo::foo</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">x_val</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">y_val</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">z_val</span><span class="p">)</span>
+</span><span data-line="16"><span class="cm">/*</span>
+</span><span data-line="17"><span class="cm">A descriptive comment about foo::foo.</span>
+</span><span data-line="18"><span class="cm">*/</span>
+</span><span data-line="19"><span class="w">  </span><span class="o">:</span><span class="w"> </span><span class="n">x</span><span class="p">(</span><span class="n">x_val</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">100</span><span class="p">),</span><span class="w"> </span><span class="n">y</span><span class="p">(</span><span class="n">y_val</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1000</span><span class="p">),</span>
+</span><span data-line="20"><span class="w">    </span><span class="n">z</span><span class="p">(</span><span class="n">z_val</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">10000</span><span class="p">)</span>
+</span><span data-line="21"><span class="p">{</span>
+</span><span data-line="22"><span class="w">  </span><span class="cm">/* etc... */</span>
+</span><span data-line="23"><span class="p">};</span><span class="w">  </span><span class="cm">/* foo::foo */</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="statements">
+<h2><span class="section-number">25.9. </span>Statements<a class="headerlink" href="#statements" title="Link to this heading">#</a></h2>
+<section id="for-statements">
+<h3><span class="section-number">25.9.1. </span><code class="docutils literal notranslate"><span class="pre">for</span></code> Statements<a class="headerlink" href="#for-statements" title="Link to this heading">#</a></h3>
+<section id="c-style">
+<h4><span class="section-number">25.9.1.1. </span>C-style<a class="headerlink" href="#c-style" title="Link to this heading">#</a></h4>
+<p>“C-style” <code class="docutils literal notranslate"><span class="pre">for</span></code> loops should be formatted with their contents indented by 2
+spaces, and a closing comment (with two preceding spaces):</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="cm">/* etc... */</span>
+</span><span data-line="3"><span class="p">}</span><span class="w">  </span><span class="cm">/* for */</span>
+</span></pre></div>
+</div>
+<p>If the condition of the <code class="docutils literal notranslate"><span class="pre">for</span></code> loop causes the line length to exceed 79
+characters, it should be broken up at the semicolons:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">long_variable</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+</span><span data-line="2"><span class="w">     </span><span class="n">long_variable</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">another_long_variable</span><span class="p">;</span>
+</span><span data-line="3"><span class="w">     </span><span class="o">++</span><span class="n">long_variable</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span data-line="4"><span class="w">  </span><span class="cm">/* etc... */</span>
+</span><span data-line="5"><span class="p">}</span><span class="w">  </span><span class="cm">/* for */</span>
+</span></pre></div>
+</div>
+</section>
+<section id="range-based">
+<h4><span class="section-number">25.9.1.2. </span>Range-based<a class="headerlink" href="#range-based" title="Link to this heading">#</a></h4>
+<p>Range-based <code class="docutils literal notranslate"><span class="pre">for</span></code> loops should be formatted as “C-style” <code class="docutils literal notranslate"><span class="pre">for</span></code> loops
+are, with the exception that, if the condition cause the line length to
+exceed 79 characters, it should be broken at the colon and right aligned:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">a_long_type</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="n">x</span><span class="w"> </span><span class="o">:</span>
+</span><span data-line="2"><span class="w">         </span><span class="n">some_container</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span data-line="3"><span class="w">  </span><span class="cm">/* etc... */</span>
+</span><span data-line="4"><span class="p">}</span><span class="w">  </span><span class="cm">/* for */</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="if-statements">
+<h3><span class="section-number">25.9.2. </span><code class="docutils literal notranslate"><span class="pre">if</span></code> Statements<a class="headerlink" href="#if-statements" title="Link to this heading">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">if</span></code> statements should be formatted with their contents indented by 2
+spaces. <code class="docutils literal notranslate"><span class="pre">else</span></code> and <code class="docutils literal notranslate"><span class="pre">else</span> <span class="pre">if</span></code> clauses should be preceded and followed by
+braces, aligned with the <code class="docutils literal notranslate"><span class="pre">if</span></code>, and the closing brace aligned with the
+<code class="docutils literal notranslate"><span class="pre">if</span></code> and followed by an <code class="docutils literal notranslate"><span class="pre">if</span></code> comment (with two preceding spaces):</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">argument</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="cm">/* something */</span>
+</span><span data-line="3"><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">other_argument</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span data-line="4"><span class="w">  </span><span class="cm">/* something else */</span>
+</span><span data-line="5"><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+</span><span data-line="6"><span class="w">  </span><span class="cm">/* default action */</span>
+</span><span data-line="7"><span class="p">}</span><span class="w">  </span><span class="cm">/* if */</span>
+</span></pre></div>
+</div>
+</section>
+<section id="switch-statements">
+<h3><span class="section-number">25.9.3. </span><code class="docutils literal notranslate"><span class="pre">switch</span></code> Statements<a class="headerlink" href="#switch-statements" title="Link to this heading">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">switch</span></code> statements should be formatted with their case labels indented
+by 2 spaces, the contents further indented by two spaces, and a closing
+comment (with two preceding spaces). The opening brace of a scoping block
+can be immediately followed on the same line by the first statement of the
+block, and its closing brace should have no comment:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">argument</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="k">case</span><span class="w"> </span><span class="no">a</span><span class="p">:</span>
+</span><span data-line="3"><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span>
+</span><span data-line="4">
+</span><span data-line="5"><span class="w">      </span><span class="n">x</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">y</span><span class="p">;</span>
+</span><span data-line="6"><span class="w">    </span><span class="p">}</span>
+</span><span data-line="7"><span class="w">    </span><span class="k">break</span><span class="p">;</span>
+</span><span data-line="8"><span class="w">  </span><span class="k">case</span><span class="w"> </span><span class="no">b</span><span class="p">:</span>
+</span><span data-line="9"><span class="w">    </span><span class="n">x</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+</span><span data-line="10"><span class="w">    </span><span class="k">break</span><span class="p">;</span>
+</span><span data-line="11"><span class="w">  </span><span class="k">case</span><span class="w"> </span><span class="no">c</span><span class="p">:</span>
+</span><span data-line="12"><span class="w">    </span><span class="cm">/* no-op */</span>
+</span><span data-line="13"><span class="w">    </span><span class="k">break</span><span class="p">;</span>
+</span><span data-line="14"><span class="w">  </span><span class="n">default_is_unexpected</span><span class="p">();</span>
+</span><span data-line="15"><span class="p">}</span><span class="w">  </span><span class="cm">/* switch */</span>
+</span></pre></div>
+</div>
+</section>
+<section id="while-statements">
+<h3><span class="section-number">25.9.4. </span><code class="docutils literal notranslate"><span class="pre">while</span></code> Statements<a class="headerlink" href="#while-statements" title="Link to this heading">#</a></h3>
+<section id="pre-condition">
+<h4><span class="section-number">25.9.4.1. </span>Pre-condition<a class="headerlink" href="#pre-condition" title="Link to this heading">#</a></h4>
+<p>“Pre-condition” <code class="docutils literal notranslate"><span class="pre">while</span></code> statements should be formatted with their contents
+indented by 2 spaces, and a closing comment (with two preceding spaces):</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">argument</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="cm">/* etc... */</span>
+</span><span data-line="3"><span class="p">}</span><span class="w">  </span><span class="cm">/* while */</span>
+</span></pre></div>
+</div>
+</section>
+<section id="post-condition">
+<h4><span class="section-number">25.9.4.2. </span>Post-condition<a class="headerlink" href="#post-condition" title="Link to this heading">#</a></h4>
+<p>“Post-condition” (i.e., <code class="docutils literal notranslate"><span class="pre">do</span></code>) while statements should similarly be
+formatted with their contents indented by 2 spaces.  However, unlike
+“pre-condition” <code class="docutils literal notranslate"><span class="pre">while</span></code> statements, no closing comment is required:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">do</span><span class="w"> </span><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="cm">/* etc... */</span>
+</span><span data-line="3"><span class="p">}</span><span class="w"> </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">argument</span><span class="p">);</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+</section>
+<section id="preprocessor-directives">
+<h2><span class="section-number">25.10. </span>Preprocessor Directives<a class="headerlink" href="#preprocessor-directives" title="Link to this heading">#</a></h2>
+<section id="if-and-endif">
+<h3><span class="section-number">25.10.1. </span><code class="docutils literal notranslate"><span class="pre">#if</span></code> and <code class="docutils literal notranslate"><span class="pre">#endif</span></code><a class="headerlink" href="#if-and-endif" title="Link to this heading">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">#if</span></code> should have its closing #endif commented with the condition used
+(preceded by a single space):</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="cp">#if MACRO_IS_ENABLED</span>
+</span><span data-line="2"><span class="cm">/* etc... */</span>
+</span><span data-line="3"><span class="cp">#endif </span><span class="cm">/* MACRO_IS_ENABLED */</span>
+</span></pre></div>
+</div>
+<p>If the condition is complicated, the closing comment can be abbreviated:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="cp">#if MACRO_IS_ENABLED &amp;&amp; (OTHER_MACRO_IS_ENABLED || \</span>
+</span><span data-line="2"><span class="cp">                         OTHER_OTHER_MACRO_IS_ENABLED)</span>
+</span><span data-line="3"><span class="cm">/* etc... */</span>
+</span><span data-line="4"><span class="cp">#endif </span><span class="cm">/* MACRO_IS_ENABLED &amp;&amp; (OTHER_MACRO...) */</span>
+</span></pre></div>
+</div>
+</section>
+<section id="else">
+<h3><span class="section-number">25.10.2. </span><code class="docutils literal notranslate"><span class="pre">#else</span></code><a class="headerlink" href="#else" title="Link to this heading">#</a></h3>
+<p>If an <code class="docutils literal notranslate"><span class="pre">#if</span></code> makes use of an <code class="docutils literal notranslate"><span class="pre">#else</span></code> a comment should express the negated
+condition (preceded by a single space):</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="cp">#if MACRO_IS_ENABLED</span>
+</span><span data-line="2"><span class="cm">/* etc... */</span>
+</span><span data-line="3"><span class="cp">#else </span><span class="cm">/* !MACRO_IS_ENABLED */</span>
+</span><span data-line="4"><span class="cm">/* etc... */</span>
+</span><span data-line="5"><span class="cp">#endif </span><span class="cm">/* MACRO_IS_ENABLED */</span>
+</span></pre></div>
+</div>
+</section>
+<section id="elif">
+<h3><span class="section-number">25.10.3. </span><code class="docutils literal notranslate"><span class="pre">#elif</span></code><a class="headerlink" href="#elif" title="Link to this heading">#</a></h3>
+<p>If an <code class="docutils literal notranslate"><span class="pre">#if</span></code> makes use of an <code class="docutils literal notranslate"><span class="pre">#elif</span></code>, no change to comments is performed:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="cp">#if MACRO_IS_ENABLED</span>
+</span><span data-line="2"><span class="cm">/* etc... */</span>
+</span><span data-line="3"><span class="cp">#elif OTHER_MACRO_IS_ENABLED</span>
+</span><span data-line="4"><span class="cm">/* etc... */</span>
+</span><span data-line="5"><span class="cp">#endif </span><span class="cm">/* MACRO_IS_ENABLED */</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="templates">
+<h2><span class="section-number">25.11. </span>Templates<a class="headerlink" href="#templates" title="Link to this heading">#</a></h2>
+<p>Templates follow the rules of the respective thing being templated, with
+the exception that the name for templates declaring a type should not
+follow the normal naming convention.  For class and alias templates, no
+<code class="docutils literal notranslate"><span class="pre">a_</span></code> or <code class="docutils literal notranslate"><span class="pre">an_</span></code> qualifier is used, instead an uppercase letter starts the
+name (e.g., <code class="docutils literal notranslate"><span class="pre">Dyn_array</span></code>).</p>
+<section id="template-parameters">
+<h3><span class="section-number">25.11.1. </span>Template Parameters<a class="headerlink" href="#template-parameters" title="Link to this heading">#</a></h3>
+<p>Template parameters, like template declarations, have their own naming
+convention.  They should be named <code class="docutils literal notranslate"><span class="pre">a_</span></code>/<code class="docutils literal notranslate"><span class="pre">an_</span></code> followed by a capital
+letter, and then a descriptive name, e.g.,</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">an_Elem</span><span class="o">&gt;</span>
+</span><span data-line="2"><span class="k">struct</span><span class="w"> </span><span class="nc">My_template</span><span class="p">;</span>
+</span></pre></div>
+</div>
+<p>If multiple template parameters need to be denoted as the “1st, 2nd, 3rd,
+etc.”  version of a parameter, capital letters can be used to denote this,
+e.g.,</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">a_Type_A</span><span class="p">,</span><span class="w"> </span><span class="k">typename</span><span class="w"> </span><span class="nc">a_Type_B</span><span class="o">&gt;</span>
+</span><span data-line="2"><span class="k">struct</span><span class="w"> </span><span class="nc">Thingy_helper</span><span class="p">;</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="special-cases">
+<h2><span class="section-number">25.12. </span>Special Cases<a class="headerlink" href="#special-cases" title="Link to this heading">#</a></h2>
+<section id="pointer-reference-types">
+<h3><span class="section-number">25.12.1. </span>Pointer &amp; Reference Types<a class="headerlink" href="#pointer-reference-types" title="Link to this heading">#</a></h3>
+<p>The rule for pointer and reference types is that the pointer or ref qualifier
+accompanies the name being typed (for purposes of a function, consider the
+return type the “type” of the function) e.g.,</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kt">void</span><span class="w"> </span><span class="nf">foo</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">result</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">thingy</span><span class="w"> </span><span class="o">&amp;</span><span class="n">a</span><span class="p">)</span>
+</span><span data-line="2"><span class="cm">/*</span>
+</span><span data-line="3"><span class="cm">A descriptive comment.</span>
+</span><span data-line="4"><span class="cm">*/</span>
+</span><span data-line="5"><span class="p">{</span>
+</span><span data-line="6"><span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="o">&amp;</span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">value</span><span class="p">;</span>
+</span><span data-line="7">
+</span><span data-line="8"><span class="w">  </span><span class="o">*</span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">c</span><span class="p">;</span>
+</span><span data-line="9"><span class="p">}</span><span class="w">  </span><span class="cm">/* foo */</span>
+</span><span data-line="10">
+</span><span data-line="11">
+</span><span data-line="12"><span class="n">a_thingy</span><span class="w"> </span><span class="o">*</span><span class="nf">alloc_thingy</span><span class="p">();</span>
+</span></pre></div>
+</div>
+</section>
+<section id="empty-loop-bodies">
+<h3><span class="section-number">25.12.2. </span>Empty Loop Bodies<a class="headerlink" href="#empty-loop-bodies" title="Link to this heading">#</a></h3>
+<p>Empty compound statements (e.g.,  function bodies and loop bodies) should be
+spelled “<code class="docutils literal notranslate"><span class="pre">{}</span></code>” (no space) and follow the looping statement on the same line,
+e.g.,</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">y</span><span class="p">;</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">*=</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">try_op</span><span class="p">(</span><span class="n">x</span><span class="p">))</span><span class="w"> </span><span class="p">{}</span>
+</span></pre></div>
+</div>
+</section>
+<section id="annotating-function-arguments">
+<h3><span class="section-number">25.12.3. </span>Annotating Function Arguments<a class="headerlink" href="#annotating-function-arguments" title="Link to this heading">#</a></h3>
+<p>When a function is called with an argument of a fixed value (e.g., a
+<code class="docutils literal notranslate"><span class="pre">TRUE</span></code> or <code class="docutils literal notranslate"><span class="pre">FALSE</span></code> value for a “flag” argument) the argument should be
+annotated with a comment naming the associated parameter, e.g.,</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kt">int</span><span class="w"> </span><span class="n">chars</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">count_characters</span><span class="p">(</span><span class="n">str</span><span class="p">,</span><span class="w"> </span><span class="cm">/*include_whitespace=*/</span><span class="n">FALSE</span><span class="p">);</span>
+</span></pre></div>
+</div>
+<p>When <code class="docutils literal notranslate"><span class="pre">NULL</span></code> is passed, it should either follow the same convention or
+be cast to the parameter’s type, e.g.,</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">some_func</span><span class="p">(</span><span class="n">one_thing</span><span class="p">,</span><span class="w"> </span><span class="cm">/*associated_thing=*/</span><span class="nb">NULL</span><span class="p">);</span>
+</span><span data-line="2"><span class="n">other_func</span><span class="p">(</span><span class="n">something_else</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="n">a_foo</span><span class="o">*</span><span class="p">)</span><span class="nb">NULL</span><span class="p">);</span>
+</span></pre></div>
+</div>
+</section>
+<section id="wrapping-function-calls">
+<h3><span class="section-number">25.12.4. </span>Wrapping Function Calls<a class="headerlink" href="#wrapping-function-calls" title="Link to this heading">#</a></h3>
+<p>Function calls that cause the line length to exceed 79 characters can be
+handled one of two ways.</p>
+<p>If the function call is initializing a variable, and would otherwise fit on the
+line, it can be moved down a line and right aligned:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span>
+</span><span data-line="2"><span class="w">     </span><span class="n">my_very_long_function</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">c</span><span class="p">,</span><span class="w"> </span><span class="n">d</span><span class="p">,</span><span class="w"> </span><span class="n">e</span><span class="p">,</span><span class="w"> </span><span class="n">f</span><span class="p">,</span><span class="w"> </span><span class="n">g</span><span class="p">,</span><span class="w"> </span><span class="n">h</span><span class="p">);</span>
+</span></pre></div>
+</div>
+<p>Otherwise, the function call should be wrapped on the arguments, aligning
+continuation lines with the “<code class="docutils literal notranslate"><span class="pre">(</span></code>” of the function call; if there is a
+single argument that cannot fit between the “<code class="docutils literal notranslate"><span class="pre">(</span></code>” column and the right
+margin, the call should be broken after the “<code class="docutils literal notranslate"><span class="pre">(</span></code>” and all continuation lines
+aligned with the position resulting from right-justifying the longest
+argument.  The exact style for wrapping the arguments is not specified, but
+in general developers should, in the interest of compact code, flow as many
+arguments together as will fit on each line:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">my_very_long_function</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">c</span><span class="p">,</span><span class="w"> </span><span class="n">d</span><span class="p">,</span><span class="w"> </span><span class="n">e</span><span class="p">,</span><span class="w"> </span><span class="n">f</span><span class="p">,</span>
+</span><span data-line="2"><span class="w">                              </span><span class="n">g</span><span class="p">,</span><span class="w"> </span><span class="n">h</span><span class="p">);</span>
+</span></pre></div>
+</div>
+<p>If arguments have some logical relation, e.g., for an area function, these
+arguments can be grouped to emphasize the relation instead of flowing for
+maximal compactness:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">compute_area_of_points</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span><span class="w"> </span><span class="n">y1</span><span class="p">,</span><span class="w"> </span><span class="n">z1</span><span class="p">,</span>
+</span><span data-line="2"><span class="w">                       </span><span class="n">x2</span><span class="p">,</span><span class="w"> </span><span class="n">y2</span><span class="p">,</span><span class="w"> </span><span class="n">z2</span><span class="p">);</span>
+</span></pre></div>
+</div>
+<p>In cases where the arguments are annotated with embedded comments, it may be
+desirable to distribute them across multiple lines for clarity and neatness,
+e.g.,</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">f</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">c</span><span class="p">,</span><span class="w"> </span><span class="n">d</span><span class="p">,</span><span class="w"> </span><span class="cm">/*is_foo_bar=*/</span><span class="n">FALSE</span><span class="p">,</span>
+</span><span data-line="2"><span class="w">  </span><span class="cm">/*needs_more_squirrels=*/</span><span class="n">VERY_FALSE</span><span class="p">);</span>
+</span></pre></div>
+</div>
+<p>instead of:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">f</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">c</span><span class="p">,</span><span class="w"> </span><span class="n">d</span><span class="p">,</span><span class="w"> </span><span class="cm">/*is_foo_bar=*/</span><span class="n">FALSE</span><span class="p">,</span><span class="w"> </span><span class="cm">/*needs_more_squirrels=*/</span><span class="n">VERY_FALSE</span><span class="p">);</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"><div class="navigation-prev">
+    <a href="../cp_gen_be/">
+      <i class="i-lucide chevron-left"></i>
+      <div class="page-info">
+        <span>Previous</span><div class="title"><span class="section-number">24. </span>C++-Generating Back End</div></div>
+    </a>
+  </div><div class="navigation-next">
+    <a href="../testing/">
+      <div class="page-info">
+        <span>Next</span>
+        <div class="title"><span class="section-number">26. </span>EDG Testing Framework</div>
+      </div>
+      <i class="i-lucide chevron-right"></i>
+    </a>
+  </div></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>EDG 7.0, 7/20/26 - ©2026, Edison Design Group, Inc.</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials"></div>
+    </div>
+  </div>
+</footer>
+      <script src="../_static/documentation_options.js?v=618d875b"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/shibuya.js?v=50760d75"></script></body>
+</html>
