@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="violet" data-content_root="../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>23. C-Generating Back End - CPFE 7.0 documentation</title><link rel="index" title="Index" href="../genindex/" /><link rel="search" title="Search" href="../search/" /><link rel="next" title="24. C++-Generating Back End" href="../cp_gen_be/" /><link rel="prev" title="22. Utility Programs" href="../utilities/" />
+      <link rel="canonical" href="https://edgcpp.org/dev/doc/c_gen_be/" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e1a1ceaf" />
+    <link rel="stylesheet" type="text/css" href="../_static/shibuya.css?v=2ceb65ce" />
+    <link media="print" rel="stylesheet" type="text/css" href="../_static/print.css?v=20ff2c19" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=8971ef7f" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://edgcpp.org/dev/doc/c_gen_be/"/>
+  <meta property="og:title" content="23. C-Generating Back End"/>
+    <meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="../">
+      <img class="light-logo" src="../_static/doc-logo-light.png" alt="CPFE" height="28" loading="lazy" />
+      <img class="dark-logo" src="../_static/doc-logo-dark.png" alt="CPFE" height="28" loading="lazy" />
+      <strong>CPFE</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="../search/" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials"></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2"></span>
+          <span class="hamburger_3"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../build/">1. Configuring and Building the C++ Front End</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ext_intf/">2. External Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../int_overview/">3. Overview of Internal Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../il/">4. Intermediate Language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lower_il/">5. IL Lowering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../symbol_tbl/">6. Symbol Table</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lex_pp/">7. Lexical Analysis and Preprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tables/">8. Table Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../expr/">9. Expression Scanning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../decls/">10. Declarations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../class_decl/">11. Class Declarations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../statements/">12. Statement Scanning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../templates/">13. Templates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../exceptions/">14. Exception Handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pragma/">15. Pragmas and Attributes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/">16. Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../trans_unit/">17. Multiple Translation Units</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../admin/">18. Administrative Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../err_msgs/">19. Error Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../includes/">20. ANSI C and C++ Include Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../runtime/">21. Runtime Library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../utilities/">22. Utility Programs</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">23. C-Generating Back End</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cp_gen_be/">24. C++-Generating Back End</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../code_style/">25. Coding Style Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../testing/">26. EDG Testing Framework</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#function">23.1. Function</a><ul>
+<li><a class="reference internal" href="#generated-c-code">23.1.1. Generated C Code</a></li>
+<li><a class="reference internal" href="#transformations">23.1.2. Transformations</a></li>
+<li><a class="reference internal" href="#configuration">23.1.3. Configuration</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#operation">23.2. Operation</a></li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../"><span itemprop="name">CPFE</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name"><span class="section-number">23. </span>C-Generating Back End</strong>
+        <meta itemprop="position" content="2" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="relative min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+  <div class="copy-page-wrapper relative pb-4 lg:absolute lg:top-8 lg:right-6 xl:right-12">
+  <div id="copy-page-trigger">
+    <button
+      type="button"
+      class="js-copy px-3 py-1 inline-flex items-center gap-1"
+      data-url="https://edgcpp.org/dev/doc/_sources/c_gen_be.rst.txt"
+    >
+      <i class="i-lucide" data-icon="copy"></i>
+      <span>Copy page</span>
+    </button>
+    <button class="js-menu px-2 py-1" type="button" aria-label="More actions"
+      aria-haspopup="menu" aria-expanded="false" aria-controls="copy-page-content">
+      <i class="i-lucide chevron-down"></i>
+    </button>
+  </div>
+  <div id="copy-page-content" role="menu" aria-orientation="vertical" aria-hidden="true">
+    <div role="presentation">
+      <div class="flex flex-col" role="group">
+        <button class="js-copy" type="button" role="menuitem"
+          data-url="https://edgcpp.org/dev/doc/_sources/c_gen_be.rst.txt">
+          <span class="iconify-icon">
+            <i class="i-lucide" data-icon="copy"></i>
+          </span>
+          <span>Copy page</span>
+        </button>
+        <a role="menuitem" href="https://edgcpp.org/dev/doc/_sources/c_gen_be.rst.txt" target="_blank" rel="nofollow"><iconify-icon icon="bi:code-slash"></iconify-icon>
+            <span>View Source</span></a><a role="menuitem" href="https://chatgpt.com/?hints=search&q=Read%20https%3A//edgcpp.org/dev/doc/_sources/c_gen_be.rst.txt%20so%20I%20can%20ask%20questions%20about%20it." target="_blank" rel="nofollow">
+          <iconify-icon icon="bi:openai"></iconify-icon>
+          <span>Open in ChatGPT</span>
+        </a><a role="menuitem" href="https://claude.ai/new?q=Read%20https%3A//edgcpp.org/dev/doc/_sources/c_gen_be.rst.txt%20so%20I%20can%20ask%20questions%20about%20it." target="_blank" rel="nofollow">
+          <iconify-icon icon="bi:claude"></iconify-icon>
+          <span>Open in Claude</span>
+        </a></div>
+    </div>
+  </div>
+</div><article class="yue" role="main">
+          <section id="c-generating-back-end">
+<h1><span class="section-number">23. </span>C-Generating Back End<a class="headerlink" href="#c-generating-back-end" title="Link to this heading">#</a></h1>
+<p><code class="docutils literal notranslate"><span class="pre">c_gen_be.c</span></code> contains code to translate the intermediate language to C;
+<code class="docutils literal notranslate"><span class="pre">c_gen_be.h</span></code> contains the associated declarations.  This is a fake “back end”
+that is useful as a way of testing the front end in the absence of a real back
+end, as a portability aid, and as an example of how to traverse the
+intermediate code (which may be helpful to those writing back ends).</p>
+<section id="function">
+<h2><span class="section-number">23.1. </span>Function<a class="headerlink" href="#function" title="Link to this heading">#</a></h2>
+<section id="generated-c-code">
+<h3><span class="section-number">23.1.1. </span>Generated C Code<a class="headerlink" href="#generated-c-code" title="Link to this heading">#</a></h3>
+<p>The C code generated can be either ANSI C or old-style K&amp;R C, depending on the
+setting of the configuration flag <code class="docutils literal notranslate"><span class="pre">C_GEN_BE_GENERATES_ANSI_C</span></code>.</p>
+<p>The output contains <code class="docutils literal notranslate"><span class="pre">#line</span></code> directives that relate the generated code back to
+the original source lines that generated it.  The <code class="docutils literal notranslate"><span class="pre">#line</span></code> directives do not
+ascend monotonically through the line numbers of the source file; they jump
+around as the code generation jumps around.  However, since the C-generating
+back end tends to process all declarations of entities of one kind in a sweep
+through those entities in source order, the output tends to have all the types
+in source order, then all the variables in source order, etc.</p>
+<p>Long output lines are broken (between tokens) to avoid unduly stressing C
+compilers that must process the generated code.</p>
+<p>Since the generated code is intended to be fed into a C compiler, rather than
+read by a human, it is not very readable.  The readability can be improved
+(slightly) by turning on debugging (e.g., <code class="docutils literal notranslate"><span class="pre">-d0</span></code> on the command line); that
+will cause the C-generating back end to generate annotation comments and
+indentation.  Unreferenced entities, which ordinarily are not put out at all,
+are generated inside <code class="docutils literal notranslate"><span class="pre">#if</span> <span class="pre">0</span></code>/<code class="docutils literal notranslate"><span class="pre">#endif</span></code> delimiters in this mode.</p>
+</section>
+<section id="transformations">
+<h3><span class="section-number">23.1.2. </span>Transformations<a class="headerlink" href="#transformations" title="Link to this heading">#</a></h3>
+<p>For the most part, what the C-generating back end does is just writing out the
+C code that corresponds directly to the IL.  Since the IL has the same concepts
+and constructs as the C language, the processing is pretty straightforward.
+However, there are a few complicating transformations.</p>
+<p>The following transformations on names are done:</p>
+<ul>
+<li><div class="line-block">
+<div class="line">Names that match C reserved words, or words that are likely to mean
+something to the underlying C compiler (e.g., <code class="docutils literal notranslate"><span class="pre">unix</span></code>), are given a prefix
+of “<code class="docutils literal notranslate"><span class="pre">__x</span></code>”.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">Names with no linkage (e.g., local variables) are given a prefix that is
+the source sequence (line) number and column number of the name’s
+declaration, to make sure they do not conflict with similar names from
+elsewhere in the program (e.g., “<code class="docutils literal notranslate"><span class="pre">i</span></code>” is output as “<code class="docutils literal notranslate"><span class="pre">__28_7_i</span></code>”).</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">Unnamed entities are given generated names of the form “<code class="docutils literal notranslate"><span class="pre">__T</span></code><em>nnnnnn</em>”,
+with <em>nnnnnn</em> generated from the IL entry address.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">The “<code class="docutils literal notranslate"><span class="pre">this</span></code>” parameter, passed through from C++, is given the name
+“<code class="docutils literal notranslate"><span class="pre">this</span></code>”.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">Function-local and prototype-scope types are given names formed by
+concatenating the original name, “<code class="docutils literal notranslate"><span class="pre">__</span></code>”, the (mangled) function name,
+“<code class="docutils literal notranslate"><span class="pre">__</span></code>”, and “<code class="docutils literal notranslate"><span class="pre">L</span></code><em>nn</em>”, where <em>nn</em> is a number identifying the
+function, prototype, or block scope scope of which the type is a
+member.  (Renaming is needed because such types are promoted out of
+functions; more on this below.)</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">When generating K&amp;R C, file-scope static variables are given a suffix
+formed from the name of the module and the date and time of compilation.
+This suffix is needed because initialized file-scope static variables must
+be made external to avoid some pcc limitations on declaring static
+variables more than once.  The suffix helps to ensure that the now-external
+name does not conflict with like-named static and external variables from
+other compilation units.</div>
+</div>
+</li>
+</ul>
+<p>Another set of transformations is necessitated by the fact that IL lowering
+generates “C” IL that actually contains some minor extensions.  These
+“extensions” are things that a real back end would probably take in its stride
+(i.e., it wouldn’t see these cases as being different than normal cases), but
+which must be rewritten if standard C code must be generated:</p>
+<ul>
+<li><div class="line-block">
+<div class="line">Dynamic initializations for declarations can appear in mid-block, after
+executable statements have appeared.  (These are generated as executable
+code.  Because of this, “<code class="docutils literal notranslate"><span class="pre">const</span></code>” type qualifiers are suppressed on
+variables initialized dynamically and on all struct members.)</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">Structs and unions can have no members at all, and aggregate constants used
+in initializers can contain empty lists of constants (”<code class="docutils literal notranslate"><span class="pre">{}</span></code>”).  (The
+struct/union definition will include a dummy field, and the initialization
+puts a zero into that field.)</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">Enumerations having no enumerator constants are put out as the
+corresponding integral type.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">The <code class="docutils literal notranslate"><span class="pre">eok_bassign</span></code> operator is used to do assignment of arrays (e.g., in
+generated copy constructors).  (A <code class="docutils literal notranslate"><span class="pre">memcpy</span></code> is generated.)</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">Prototyped parameter variables may be unnamed.  (A name is generated.)</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">Variables can be indicated to be initialized to zero (the <code class="docutils literal notranslate"><span class="pre">initk_zero</span></code>
+initialization kind).  This is used to differentiate real definitions of
+external variables from tentative definitions (a distinction that is hazy
+in C), and for local aggregate variables that are partially initialized.
+(For static variables, the initialization to zero is preserved in the
+generated C; for automatic variables, a <code class="docutils literal notranslate"><span class="pre">memset</span></code> is generated.)</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">String literals in C++ are <code class="docutils literal notranslate"><span class="pre">const</span></code>.  IL lowering leaves them <code class="docutils literal notranslate"><span class="pre">const</span></code>,
+even though string literals in C are not <code class="docutils literal notranslate"><span class="pre">const</span></code>.  (This does not require
+a transformation in the generated C code: the string literals are put out
+as such, and the C compiler sees them as non-<code class="docutils literal notranslate"><span class="pre">const</span></code>, which works out
+okay.)</div>
+</div>
+</li>
+</ul>
+<p>When generating K&amp;R C, some transformations are needed to erase ANSI C features
+that do not exist in K&amp;R C:</p>
+<ul>
+<li><div class="line-block">
+<div class="line">Prototyped functions are put out as old-style unprototyped functions.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">Type qualifiers (”<code class="docutils literal notranslate"><span class="pre">const</span></code>” and “<code class="docutils literal notranslate"><span class="pre">volatile</span></code>”) are not put out.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">Enumerations are put out as integral types, and enumeration constants are
+put out as integral constants.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">“<code class="docutils literal notranslate"><span class="pre">signed</span></code>” is never put out.  “<code class="docutils literal notranslate"><span class="pre">signed</span> <span class="pre">char</span></code>” is put out as “<code class="docutils literal notranslate"><span class="pre">char</span></code>”,
+and “<code class="docutils literal notranslate"><span class="pre">signed</span> <span class="pre">int</span></code>” is not used for the base type of a bit field.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">“<code class="docutils literal notranslate"><span class="pre">long</span> <span class="pre">double</span></code>” is put out as “<code class="docutils literal notranslate"><span class="pre">double</span></code>”.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">The suffixes “<code class="docutils literal notranslate"><span class="pre">U</span></code>” on integral constants and “<code class="docutils literal notranslate"><span class="pre">F</span></code>” and “<code class="docutils literal notranslate"><span class="pre">L</span></code>” on
+floating constants are not put out; a cast is used instead.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">Union initializations are rendered as executable code.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">Initializations of automatic aggregates are rendered as executable code.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">Bit fields in unions are put out as normal fields.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">Signed bit fields are simulated by adding code to sign-extend and truncate
+the bit fields on each access.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">Second and third operands of “<code class="docutils literal notranslate"><span class="pre">?</span></code>” of type <code class="docutils literal notranslate"><span class="pre">void</span></code> are rewritten.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">extern</span> <span class="pre">void</span></code> variables are put out with type <code class="docutils literal notranslate"><span class="pre">char</span></code>.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">Labels are given a prefix of “<code class="docutils literal notranslate"><span class="pre">__L_</span></code>” to accommodate the fact that pcc
+does not maintain a separate name space for labels.</div>
+</div>
+</li>
+</ul>
+<p>The following transformations also deal with features missing in K&amp;R C, but
+these transformations are done even when generating ANSI C to avoid some
+features that might not be implemented (well) in C compilers:</p>
+<ul>
+<li><div class="line-block">
+<div class="line">Rvalue field selections (e.g., “<code class="docutils literal notranslate"><span class="pre">f(x).i</span></code>”) are rewritten as lvalue field
+selections by using a temporary.</div>
+</div>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">struct</span><span class="w"> </span><span class="nc">A</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="p">;</span><span class="w"> </span><span class="p">};</span>
+</span><span data-line="2"><span class="k">extern</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">A</span><span class="w"> </span><span class="n">f</span><span class="p">();</span>
+</span><span data-line="3"><span class="kt">void</span><span class="w"> </span><span class="nf">m</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span data-line="4"><span class="w">  </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f</span><span class="p">().</span><span class="n">i</span><span class="p">;</span><span class="w">  </span><span class="cm">/* Rewritten as "j = (Tnnnn = f(), Tnnnn.i)" */</span>
+</span><span data-line="5"><span class="p">}</span>
+</span></pre></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">Wide string constants are stored in generated static variables and the
+variables are used in place of the constants at each reference.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">Character arrays initialized with string constants not containing a
+trailing null character are rendered in “exploded” form, e.g., something
+like</div>
+</div>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"abcd"</span><span class="p">;</span>
+</span></pre></div>
+</div>
+<div class="line-block">
+<div class="line">is rendered as</div>
+</div>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="sc">'a'</span><span class="p">,</span><span class="w"> </span><span class="sc">'b'</span><span class="p">,</span><span class="w"> </span><span class="sc">'c'</span><span class="p">,</span><span class="w"> </span><span class="sc">'d'</span><span class="p">};</span>
+</span></pre></div>
+</div>
+</li>
+</ul>
+<p>The following transformations are necessary to deal with ordering problems
+(i.e., they’re necessary because of the order in which the C-generating back
+end outputs entities):</p>
+<ul>
+<li><div class="line-block">
+<div class="line">Local types of functions are generated at file scope.  This avoids problems
+with extern declarations written inside functions (the extern entity is on
+the file-scope list, but it may refer to local types of the function).</div>
+</div>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kt">void</span><span class="w"> </span><span class="nf">f</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="k">struct</span><span class="w"> </span><span class="nc">A</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="p">;</span><span class="w"> </span><span class="p">};</span>
+</span><span data-line="3"><span class="w">  </span><span class="k">extern</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">g</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">A</span><span class="p">);</span>
+</span><span data-line="4"><span class="p">}</span>
+</span></pre></div>
+</div>
+<div class="line-block">
+<div class="line">is rewritten as</div>
+</div>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">struct</span><span class="w"> </span><span class="nc">A</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="p">;</span><span class="w"> </span><span class="p">};</span>
+</span><span data-line="2"><span class="k">extern</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">g</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">A</span><span class="p">);</span>
+</span><span data-line="3"><span class="kt">void</span><span class="w"> </span><span class="nf">f</span><span class="p">()</span><span class="w"> </span><span class="p">{}</span>
+</span></pre></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">Types in the prototype scope of a function are promoted out of the
+prototype scope.  This is because each function and variable is put out
+twice, once as a declaration and once as a definition.  Without this
+promotion, the declaration and definition would be incompatible because the
+two copies of the prototype scope types would be considered to be distinct
+types.</div>
+</div>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kt">void</span><span class="w"> </span><span class="n">f</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">A</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="n">p</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+</span></pre></div>
+</div>
+<div class="line-block">
+<div class="line">is rewritten as</div>
+</div>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">struct</span><span class="w"> </span><span class="nc">A</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="p">;</span><span class="w"> </span><span class="p">};</span>
+</span><span data-line="2"><span class="kt">void</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">A</span><span class="p">);</span>
+</span><span data-line="3"><span class="kt">void</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">A</span><span class="w"> </span><span class="n">p</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+</span></pre></div>
+</div>
+<div class="line-block">
+<div class="line">Prototype scopes that are not part of a function or variable definition are
+not processed in this way.  When generating K&amp;R C, such unprocessed
+function types are put out unprototyped, which eliminates the types defined
+in the prototype scope.  When generating ANSI C, such unprocessed function
+types are put out prototyped, and if any structs, unions, or enums are
+defined in the prototype scope they are put out inline.</div>
+<div class="line"><br /></div>
+<div class="line">When a pointer type containing a prototype scope needs to be put out (i.e.,
+as the type of a constant or in a cast), the type (and cast) is suppressed,
+because the conversion must have been implicit in the source program –
+it’s not possible to name the types defined in a prototype scope outside of
+that scope.</div>
+</div>
+</li>
+</ul>
+<p>When virtual functions with covariant return types appear in the source
+program, IL lowering rewrites them in a way that uses wrapper functions.  That
+is, when an overriding virtual function returns a pointer to a derived class,
+and the overridden virtual function returns a pointer to a base, a wrapper
+function is generated that calls the overriding function but returns a pointer
+appropriate for the overridden function.  Such functions have a body that is
+simply a return of an <code class="docutils literal notranslate"><span class="pre">enk_result_of_overriding_function</span></code> node cast to the
+proper pointer-to-base-class type.  The C-generating back end expands these
+wrapper functions by generating the body of the overriding function again, with
+the added cast inserted over the expression at each return statement.  Note
+that the “obvious” implementation technique of replacing the
+<code class="docutils literal notranslate"><span class="pre">enk_result_of_overriding_function</span></code> node by a call of the overriding function
+(i.e., implementing these as actual wrapper functions) will not work if the
+functions have variable-length argument lists.  The same technique is used for
+alternate entry points for constructors in the IA64-ABI, but only if the
+routine has a variable-length argument list.</p>
+</section>
+<section id="configuration">
+<h3><span class="section-number">23.1.3. </span>Configuration<a class="headerlink" href="#configuration" title="Link to this heading">#</a></h3>
+<p>Although the generated C code is generally portable, there are some
+configuration issues that must be attended to.</p>
+<p>The most obvious is to make sure that the sizes and alignments of basic types
+defined in <code class="docutils literal notranslate"><span class="pre">targ_def.h</span></code> match those assumed by the target C compiler.</p>
+<p>Block operations (e.g., <code class="docutils literal notranslate"><span class="pre">memcpy</span></code>) are generated in either the BSD form or the
+System V/ANSI form under control of the <code class="docutils literal notranslate"><span class="pre">__BSD__</span></code> configuration option, so
+make sure its setting matches the library of the target C compiler.</p>
+<p>If the target C compiler has some way of indicating that a function is inline,
+the code in <code class="docutils literal notranslate"><span class="pre">dump_routine_decl</span></code> should probably be changed to output that
+construct.</p>
+<p>Long output lines are wrapped to avoid overly long lines.  You can alter the
+maximum size by adjusting <code class="docutils literal notranslate"><span class="pre">MAX_OUTPUT_LINE_SIZE</span></code>.  The default is fairly
+modest (a few hundred characters).</p>
+<p>If the target C compiler has particular bugs or shortcomings, you may want to
+add code to work around them.  There is existing code for the Sun, Microsoft,
+and gcc C compilers.</p>
+<p>The C-generating back end can emit <code class="docutils literal notranslate"><span class="pre">#pragma</span></code> directives for IL pragma
+entries, but only in a somewhat limited way.  For pragmas bound to an entity,
+the pragma is emitted right before the declaration of the entity.  However,
+pragmas not bound to an entity are emitted at the beginning of the scope
+containing them, and therefore they may not be where expected.  That makes that
+kind of pragma suitable only in cases where the exact position of the pragma is
+not very significant, e.g., for global-effect pragmas and those that associate
+attributes with entities by naming the entities.</p>
+</section>
+</section>
+<section id="operation">
+<h2><span class="section-number">23.2. </span>Operation<a class="headerlink" href="#operation" title="Link to this heading">#</a></h2>
+<p>The code can be compiled either as a subroutine <code class="docutils literal notranslate"><span class="pre">back_end</span></code> that is called in
+the same program as the front end, or as a main program.  In either case,
+<code class="docutils literal notranslate"><span class="pre">c_gen_be</span></code> is called to do the C generation.  It begins at <code class="docutils literal notranslate"><span class="pre">il_header</span></code> and
+walks through the intermediate language tree, generating C and writing it to a
+file with a <code class="docutils literal notranslate"><span class="pre">.int.c</span></code> suffix.  First, it dumps the source correspondence
+information (<code class="docutils literal notranslate"><span class="pre">dump_source_file_correspondence_info</span></code>) and some other header
+code (<code class="docutils literal notranslate"><span class="pre">dump_header_code</span></code>).  Then, for the file scope level, it</p>
+<ul>
+<li><div class="line-block">
+<div class="line">calls <code class="docutils literal notranslate"><span class="pre">dump_scope_constants</span></code> to dump code for constants on the file-scope
+list.  This has marginal utility, but dumps class member constants (an
+extension) promoted to the file scope by IL lowering.  They are put out as
+<code class="docutils literal notranslate"><span class="pre">enum</span></code> declarations.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">calls <code class="docutils literal notranslate"><span class="pre">dump_scope_types</span></code> to dump declarations for all named types –
+i.e., <code class="docutils literal notranslate"><span class="pre">typedef</span></code>s and tags.  The tags are output twice: as incomplete
+declarations on a first pass, and as complete declarations on the second,
+to avoid forward-reference problems.  Local and prototype-scope types are
+also output here (at the file scope) to avoid some ordering problems.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">calls <code class="docutils literal notranslate"><span class="pre">dump_scope_routines</span></code> to dump routine headers (no bodies).</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">calls <code class="docutils literal notranslate"><span class="pre">dump_scope_variables</span></code> twice.  The first time dumps variables
+without initializers, and tentative declarations for those with
+initializers.  The second time dumps only the initialized variables, this
+time with initializers.  This is to avoid forward-reference problems.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">calls <code class="docutils literal notranslate"><span class="pre">dump_scope_routines</span></code> to dump routines with bodies.</div>
+</div>
+</li>
+</ul>
+<p>When <code class="docutils literal notranslate"><span class="pre">ONE_INSTANTIATION_PER_OBJECT</span></code> is enabled, each instantiation is put
+out as a separate object file.  There is still only one IL tree, but it is
+marked so that the C-generating back end can sweep through it several times
+and put out a different C file (a “slice”) each time, each C file
+containing one instantiated entity (function or static data member) plus
+exactly the set of other entities needed by that entity.  The information
+on which entities to include on each sweep is provided by the
+per-instantiation “needed” flags, which are a bit vector attached to the
+source correspondence entry (see <a class="reference internal" href="../admin/#needed-flags"><span class="std std-ref">Needed Flags</span></a>).  Each slice is
+assigned one bit in that bit vector, and if the bit is 1 the associated
+entity is needed in the slice.  On beginning the generation of the C file
+for a slice, the C-generating back end sets the global variable
+<code class="docutils literal notranslate"><span class="pre">needed_flag_bit_number</span></code> to the bit number for the slice, and then goes
+through the normal processing to generate C for everything in the IL tree.
+The normal test of the “needed” flag, used to exclude things that aren’t
+needed, in this mode tests the proper bit in the bit vector, and therefore
+excludes all entities that are not in the slice.  In addition, when a
+variable or function with a definition is encountered, if the variable or
+function is not assigned to the current slice (as indicated by the
+<code class="docutils literal notranslate"><span class="pre">instantiation_needed_bit_number</span></code> field in the variable or routine
+entry), the variable or function is put out as a declaration instead of a
+definition.</p>
+<p>The lower-level routines are as follows:</p>
+<p><code class="docutils literal notranslate"><span class="pre">dump_type_decl</span></code> generates a type declaration. It calls</p>
+<ul>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">dump_enum_definition</span></code>,</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">dump_struct_union_definition</span></code>, or</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">dump_typedef_decl</span></code>.</div>
+</div>
+</li>
+</ul>
+<p>Types are written out by <code class="docutils literal notranslate"><span class="pre">dump_type</span></code> and
+<code class="docutils literal notranslate"><span class="pre">dump_general_declaration_using_type</span></code>.  They use routines from
+<code class="docutils literal notranslate"><span class="pre">il_to_str.c</span></code> to produce the output for the type.  <code class="docutils literal notranslate"><span class="pre">dump_enum_definition</span></code>
+puts out enum definitions, and <code class="docutils literal notranslate"><span class="pre">dump_struct_union_definition</span></code> puts out
+struct/union definitions.</p>
+<p><code class="docutils literal notranslate"><span class="pre">dump_variable_decl</span></code> generates a variable declaration.  For a variable with
+an initializer, it calls <code class="docutils literal notranslate"><span class="pre">dump_initializer</span></code>.  There’s some fairly complicated
+processing under that routine to turn constant aggregate initialization into
+executable code.  Among other things, it involves writing initialization
+assignments to an auxiliary file while processing declarations, then copying
+the initialization code to the right place after all the declarations have been
+processed.  Because initialized static variables are put out twice (on two
+calls of <code class="docutils literal notranslate"><span class="pre">dump_variable_decl</span></code>), they are made external when generating K&amp;R C,
+so their names are modified (by <code class="docutils literal notranslate"><span class="pre">dump_variable_name</span></code>) to avoid name conflicts
+with like-named static and external variables in other compilation units.</p>
+<p>Code generated for file-scope initializations (of unions when generating K&amp;R C)
+is placed in a separate routine (with a name beginning with “<code class="docutils literal notranslate"><span class="pre">__cgi__</span></code>”) that
+needs to be called at program start-up time.  If the compilation contains a
+main program, or an initialization routine generated by IL lowering (with a
+prefix of “<code class="docutils literal notranslate"><span class="pre">__sti__</span></code>”), a call to the C-generating back end initialization
+routine is inserted there.  Otherwise, if the compilation is of C++ source, the
+C-generating back end generates an initialization routine of the same form as
+that generated by IL lowering (”<code class="docutils literal notranslate"><span class="pre">__sti__</span></code>” prefix), along with the variables
+needed to alert the link phase to the presence of the initialization routine.
+If the compilation is of C source, a message is issued to ask the user to
+include an appropriate “<code class="docutils literal notranslate"><span class="pre">-i</span></code>” option elsewhere to request invocation of the
+initialization code.</p>
+<p><code class="docutils literal notranslate"><span class="pre">dump_routine_decl</span></code> generates a routine declaration.  For a routine with a
+definition, it calls <code class="docutils literal notranslate"><span class="pre">dump_routine_definition</span></code>.  That in turn calls
+<code class="docutils literal notranslate"><span class="pre">dump_func_definition_type</span></code> to dump the parameters (prototyped or old-style).</p>
+<p><code class="docutils literal notranslate"><span class="pre">dump_statement</span></code> is called to generate code for statements.</p>
+<p>The statements and expressions of functions are pre-scanned before code for the
+routine is generated, to generate declarations for any temporaries that will be
+needed in the generated code.  Specifically, temporaries are generated for
+rvalue field selections and wide string constants.</p>
+<p>Expressions are dumped by calling <code class="docutils literal notranslate"><span class="pre">dump_expr</span></code>.  It outputs the expression by
+walking the tree.  It puts in explicit parentheses where necessary to guarantee
+the grouping of operators.  Taking the address of a function or array must also
+be handled carefully, and is done by <code class="docutils literal notranslate"><span class="pre">dump_ampersand</span></code>.</p>
+<p>Since <code class="docutils literal notranslate"><span class="pre">pcc</span></code> doesn’t allow signed bit fields, operations on such fields are
+surrounded by references to macros to sign-extend them or truncate them for
+storing.</p>
+<p><code class="docutils literal notranslate"><span class="pre">dump_constant</span></code> dumps out a literal constant or address constant using the
+IL-to-string routines in <code class="docutils literal notranslate"><span class="pre">il_to_str.c</span></code>.</p>
+<p>Actual output of generated code is handled by the following routines:</p>
+<ul>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">m_write_ch</span></code>,</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">write_ch</span></code>,</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">m_write_str</span></code>,</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">write_str</span></code>,</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">m_write_tok_ch</span></code>,</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">write_tok_ch</span></code>,</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">m_write_tok_str</span></code>,</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">write_tok_str</span></code>,</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">write_unsigned_num</span></code>, and</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">write_num</span></code>.</div>
+</div>
+</li>
+</ul>
+<p>The “<code class="docutils literal notranslate"><span class="pre">m_</span></code>” versions are macros; the others are not.  One can choose between
+them based on the need for speed and/or a single evaluation of the argument.
+The “<code class="docutils literal notranslate"><span class="pre">tok_</span></code>” routines always write a full token (or several); that allows the
+output line to be broken before or after the output if the line is too long.</p>
+<p><code class="docutils literal notranslate"><span class="pre">set_output_position</span></code> is called to establish the source position of an entity
+about to be generated.  If necessary, it generates a <code class="docutils literal notranslate"><span class="pre">#line</span></code> directive or the
+right number of empty lines to adjust the output position (see
+<code class="docutils literal notranslate"><span class="pre">write_line_directive</span></code>).</p>
+</section>
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"><div class="navigation-prev">
+    <a href="../utilities/">
+      <i class="i-lucide chevron-left"></i>
+      <div class="page-info">
+        <span>Previous</span><div class="title"><span class="section-number">22. </span>Utility Programs</div></div>
+    </a>
+  </div><div class="navigation-next">
+    <a href="../cp_gen_be/">
+      <div class="page-info">
+        <span>Next</span>
+        <div class="title"><span class="section-number">24. </span>C++-Generating Back End</div>
+      </div>
+      <i class="i-lucide chevron-right"></i>
+    </a>
+  </div></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>EDG 7.0, 7/20/26 - ©2026, Edison Design Group, Inc.</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials"></div>
+    </div>
+  </div>
+</footer>
+      <script src="../_static/documentation_options.js?v=618d875b"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/shibuya.js?v=50760d75"></script></body>
+</html>

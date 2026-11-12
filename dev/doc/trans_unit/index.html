@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="violet" data-content_root="../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>17. Multiple Translation Units - CPFE 7.0 documentation</title><link rel="index" title="Index" href="../genindex/" /><link rel="search" title="Search" href="../search/" /><link rel="next" title="18. Administrative Functions" href="../admin/" /><link rel="prev" title="16. Modules" href="../modules/" />
+      <link rel="canonical" href="https://edgcpp.org/dev/doc/trans_unit/" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e1a1ceaf" />
+    <link rel="stylesheet" type="text/css" href="../_static/shibuya.css?v=2ceb65ce" />
+    <link media="print" rel="stylesheet" type="text/css" href="../_static/print.css?v=20ff2c19" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=8971ef7f" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://edgcpp.org/dev/doc/trans_unit/"/>
+  <meta property="og:title" content="17. Multiple Translation Units"/>
+    <meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="../">
+      <img class="light-logo" src="../_static/doc-logo-light.png" alt="CPFE" height="28" loading="lazy" />
+      <img class="dark-logo" src="../_static/doc-logo-dark.png" alt="CPFE" height="28" loading="lazy" />
+      <strong>CPFE</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="../search/" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials"></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2"></span>
+          <span class="hamburger_3"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../build/">1. Configuring and Building the C++ Front End</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ext_intf/">2. External Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../int_overview/">3. Overview of Internal Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../il/">4. Intermediate Language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lower_il/">5. IL Lowering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../symbol_tbl/">6. Symbol Table</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lex_pp/">7. Lexical Analysis and Preprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tables/">8. Table Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../expr/">9. Expression Scanning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../decls/">10. Declarations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../class_decl/">11. Class Declarations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../statements/">12. Statement Scanning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../templates/">13. Templates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../exceptions/">14. Exception Handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pragma/">15. Pragmas and Attributes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/">16. Modules</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">17. Multiple Translation Units</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../admin/">18. Administrative Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../err_msgs/">19. Error Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../includes/">20. ANSI C and C++ Include Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../runtime/">21. Runtime Library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../utilities/">22. Utility Programs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../c_gen_be/">23. C-Generating Back End</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cp_gen_be/">24. C++-Generating Back End</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../code_style/">25. Coding Style Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../testing/">26. EDG Testing Framework</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#initialization-termination-and-keeping-translation-units-separate">17.1. Initialization, Termination, and Keeping Translation Units Separate</a></li>
+<li><a class="reference internal" href="#memory-regions-and-intermediate-language">17.2. Memory Regions and Intermediate Language</a></li>
+<li><a class="reference internal" href="#translation-unit-correspondences">17.3. Translation Unit Correspondences</a></li>
+<li><a class="reference internal" href="#canonical-entries">17.4. Canonical Entries</a></li>
+<li><a class="reference internal" href="#the-copy-address-pointer">17.5. The Copy Address Pointer</a></li>
+<li><a class="reference internal" href="#correspondence-checking">17.6. Correspondence Checking</a><ul>
+<li><a class="reference internal" href="#finding-corresponding-pairs">17.6.1. Finding Corresponding Pairs</a></li>
+<li><a class="reference internal" href="#ordering-dependencies">17.6.2. Ordering Dependencies</a></li>
+<li><a class="reference internal" href="#debugging-facilities">17.6.3. Debugging Facilities</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#copying-from-secondary-translation-units">17.7. Copying from Secondary Translation Units</a></li>
+<li><a class="reference internal" href="#externalization-of-statics">17.8. Externalization of statics</a></li>
+<li><a class="reference internal" href="#one-instantiation-per-object-mode">17.9. One-instantiation-per-object mode</a></li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../"><span itemprop="name">CPFE</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name"><span class="section-number">17. </span>Multiple Translation Units</strong>
+        <meta itemprop="position" content="2" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="relative min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+  <div class="copy-page-wrapper relative pb-4 lg:absolute lg:top-8 lg:right-6 xl:right-12">
+  <div id="copy-page-trigger">
+    <button
+      type="button"
+      class="js-copy px-3 py-1 inline-flex items-center gap-1"
+      data-url="https://edgcpp.org/dev/doc/_sources/trans_unit.rst.txt"
+    >
+      <i class="i-lucide" data-icon="copy"></i>
+      <span>Copy page</span>
+    </button>
+    <button class="js-menu px-2 py-1" type="button" aria-label="More actions"
+      aria-haspopup="menu" aria-expanded="false" aria-controls="copy-page-content">
+      <i class="i-lucide chevron-down"></i>
+    </button>
+  </div>
+  <div id="copy-page-content" role="menu" aria-orientation="vertical" aria-hidden="true">
+    <div role="presentation">
+      <div class="flex flex-col" role="group">
+        <button class="js-copy" type="button" role="menuitem"
+          data-url="https://edgcpp.org/dev/doc/_sources/trans_unit.rst.txt">
+          <span class="iconify-icon">
+            <i class="i-lucide" data-icon="copy"></i>
+          </span>
+          <span>Copy page</span>
+        </button>
+        <a role="menuitem" href="https://edgcpp.org/dev/doc/_sources/trans_unit.rst.txt" target="_blank" rel="nofollow"><iconify-icon icon="bi:code-slash"></iconify-icon>
+            <span>View Source</span></a><a role="menuitem" href="https://chatgpt.com/?hints=search&q=Read%20https%3A//edgcpp.org/dev/doc/_sources/trans_unit.rst.txt%20so%20I%20can%20ask%20questions%20about%20it." target="_blank" rel="nofollow">
+          <iconify-icon icon="bi:openai"></iconify-icon>
+          <span>Open in ChatGPT</span>
+        </a><a role="menuitem" href="https://claude.ai/new?q=Read%20https%3A//edgcpp.org/dev/doc/_sources/trans_unit.rst.txt%20so%20I%20can%20ask%20questions%20about%20it." target="_blank" rel="nofollow">
+          <iconify-icon icon="bi:claude"></iconify-icon>
+          <span>Open in Claude</span>
+        </a></div>
+    </div>
+  </div>
+</div><article class="yue" role="main">
+          <section id="multiple-translation-units">
+<span id="multi-tu"></span><h1><span class="section-number">17. </span>Multiple Translation Units<a class="headerlink" href="#multiple-translation-units" title="Link to this heading">#</a></h1>
+<p>A <em>translation unit</em> is a set of source files translated as a unit, comprising
+a primary source file and all of the source files included by that file.
+Sometimes, the front end has to deal with more than one translation unit at a
+time:</p>
+<ul>
+<li><div class="line-block">
+<div class="line">When exported templates are used, the source file in which a template is
+defined may be different than the one in which is it used.  The front end
+has to read in a translation unit for the defining source file while
+retaining the translation unit for the referencing source file, and then
+perform the instantiation in a merged context that includes both
+translation units.  Additional translation units may be read in for
+instantiations of other templates.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">When <code class="docutils literal notranslate"><span class="pre">COMPILE_MULTIPLE_TRANSLATION_UNITS</span></code> is TRUE, multiple files can be
+specified on the command line for the front end.  Each file is read in turn
+as the primary file of a translation unit.</div>
+</div>
+</li>
+</ul>
+<p>In both these cases, the first translation unit read is called the <em>primary
+translation unit</em>, and any translation units read after the first are called
+<em>secondary translation units</em>.  The translation units are kept separate within
+the front end.  They have separate intermediate language (IL) trees and
+conceptually separate symbol tables.  After all translation units have been
+processed, the IL for each secondary translation unit is merged into the IL for
+the primary translation unit.  Duplicate copies of entities that appear in more
+than one translation unit are eliminated during the merge, and errors are
+issued for conflicts between entities that have incompatible definitions in
+different translation units.  The final merged primary IL tree is then passed
+to a back end, looking much like an IL tree from a simple one-translation-unit
+compilation.</p>
+<p>The process of translating a primary translation unit and zero or more
+secondary translation units into an IL tree is called a <em>compilation</em>.</p>
+<p>Note that when <code class="docutils literal notranslate"><span class="pre">COMPILE_MULTIPLE_SOURCE_FILES</span></code> <a class="footnote-reference brackets" href="#f1" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> is TRUE and the front
+end is given several source file names on the command line, each translation
+unit is treated as a separate compilation.  It is read separately and its IL
+tree is written to a separate IL file.  No merging is done on the translation
+unit IL trees, and no checking for matching between translation units.  There
+are no secondary translation units in this mode (except those that might be
+brought in for exported templates).</p>
+<p>The principal source files of the front end involved in
+multiple-translation-unit processing are <code class="docutils literal notranslate"><span class="pre">trans_unit.c</span></code>, <code class="docutils literal notranslate"><span class="pre">trans_unit.h</span></code>,
+<code class="docutils literal notranslate"><span class="pre">trans_corresp.c</span></code>, <code class="docutils literal notranslate"><span class="pre">trans_corresp.h</span></code>, <code class="docutils literal notranslate"><span class="pre">trans_copy.c</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">trans_copy.h</span></code>.</p>
+<section id="initialization-termination-and-keeping-translation-units-separate">
+<span id="multi-tu-dispatch"></span><h2><span class="section-number">17.1. </span>Initialization, Termination, and Keeping Translation Units Separate<a class="headerlink" href="#initialization-termination-and-keeping-translation-units-separate" title="Link to this heading">#</a></h2>
+<p>By and large, the code in the front end is written as if there is only one
+translation unit.  Global variables and tables indicate the state at the
+current point in the input, which is a particular point within a single
+translation unit.  For the handling of multiple translation units, this global
+state must be carefully managed, and updated when one switches between
+translation units.</p>
+<p>The process of initialization in the front end is broken down into three parts:</p>
+<ul>
+<li><div class="line-block">
+<div class="line">Initialization that is done only once in the entire front end invocation.
+Initialization routines in this class have names that have the suffix
+“<code class="docutils literal notranslate"><span class="pre">_one_time_init</span></code>”.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">Initialization that is redone for each compilation.  Initialization
+routines in this class have names that have the suffix “<code class="docutils literal notranslate"><span class="pre">_init</span></code>”.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">Initialization that is redone for each translation unit.  Initialization
+routines in this class have names that have the suffix
+“<code class="docutils literal notranslate"><span class="pre">_trans_unit_init</span></code>”.</div>
+</div>
+</li>
+</ul>
+<p>It can be seen that in <code class="docutils literal notranslate"><span class="pre">COMPILE_MULTIPLE_TRANSLATION_UNITS</span></code> mode, the front
+end does one-time initialization, compilation initialization, and then, for
+each source file specified on the command line, translation unit
+initialization.  In <code class="docutils literal notranslate"><span class="pre">COMPILE_MULTIPLE_SOURCE_FILES</span></code> mode, on the other hand,
+the front end does one-time initialization and then, for each source file
+specified on the command line, compilation initialization and then
+translation-unit initialization.  See the top-level routines in <code class="docutils literal notranslate"><span class="pre">fe_init.c</span></code>.</p>
+<p>Similarly, termination is done in several parts:</p>
+<ul>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">pop_scope</span></code> for the file scope does necessary processing at the end of
+the file scope for a translation unit.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">translation_unit_wrapup</span></code> does necessary processing at the end of a
+translation unit.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">fe_wrapup</span></code> does necessary processing at the end of a compilation.  This
+includes calling <code class="docutils literal notranslate"><span class="pre">template_and_inline_function_wrapup</span></code>, which does most
+template instantiation.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">wrap_up_file_scopes</span></code> finishes up each translation unit and merges the
+IL.</div>
+</div>
+</li>
+</ul>
+<p>The instantiation process (during the third step above) can bring in additional
+secondary translation units for exported templates, which go through their own
+initialization, reading/parsing, and termination phases.  Eventually, all
+necessary templates have been instantiated, which means all necessary
+translation units have been created and processed, and <code class="docutils literal notranslate"><span class="pre">wrap_up_file_scopes</span></code>
+is called.</p>
+<p>The source code for a secondary translation unit is read, and the corresponding
+IL is generated, all at one time.  There is no switching between translation
+units while the source code is being read.  Once a secondary translation unit
+has been read, additional processing may be done in that translation unit that
+will add more IL to it, but that is done through template instantiations, and
+never by going back and reading more source code.  Likewise, instantiations can
+add additional IL to the primary translation unit, but no additional source
+code will be read into it.</p>
+<p>A structure of type <code class="docutils literal notranslate"><span class="pre">a_translation_unit</span></code> contains information about a single
+translation unit within a compilation, and the global variable
+<code class="docutils literal notranslate"><span class="pre">curr_translation_unit</span></code> points to the entry for the translation unit that is
+currently active.  By calling <code class="docutils literal notranslate"><span class="pre">switch_translation_unit</span></code>, one can switch to a
+different translation unit, i.e., make another translation unit the “active”
+one.  This is a relatively expensive process that changes the values of many
+global variables to match the new translation unit.</p>
+<p>How does <code class="docutils literal notranslate"><span class="pre">switch_translation_unit</span></code> know what to update? It updates the
+variables recorded by calling <code class="docutils literal notranslate"><span class="pre">register_trans_unit_variable</span></code> during one-time
+initialization.  Variables registered in that way are known as <em>trans unit
+variables</em>, and their per-translation-unit values are recorded in a data
+structure associated with the <code class="docutils literal notranslate"><span class="pre">a_translation_unit</span></code> structure: They are saved
+when the translation unit becomes inactive, and restored when the translation
+unit is reactivated.  Certain values that need to be accessed efficiently even
+when the corresponding translation unit is not the active one are stored
+directly in the <code class="docutils literal notranslate"><span class="pre">a_translation_unit</span></code> structure (e.g.,
+<code class="docutils literal notranslate"><span class="pre">file_scope_pointers_block</span></code>), or are pointed to by fields in that structure
+(e.g., <code class="docutils literal notranslate"><span class="pre">module_id_ptr</span></code>; variables of this kind are registered via
+<code class="docutils literal notranslate"><span class="pre">register_trans_unit_variable_with_field</span></code>).</p>
+<p><code class="docutils literal notranslate"><span class="pre">process_translation_unit</span></code> is the driver for the reading/parsing of a single
+translation unit.</p>
+<p>Some data structures and numbering sequences are deliberately shared across
+multiple translation units.  The source file data structure and source line
+sequence numbers, for example, are shared, so that a source position consisting
+of a sequence number and column number is unique across the entire compilation.
+Likewise, the symbol table and scope number sequence is shared, which ensures
+that scopes always have unique numbers, and therefore that one can do a lookup
+in the symbol table by scope number and find only entities from a single scope
+from a single translation unit.</p>
+</section>
+<section id="memory-regions-and-intermediate-language">
+<h2><span class="section-number">17.2. </span>Memory Regions and Intermediate Language<a class="headerlink" href="#memory-regions-and-intermediate-language" title="Link to this heading">#</a></h2>
+<p>Each secondary translation unit has its own set of IL memory regions, one for
+its file scope and one for each top-level function definition.  The global
+variable <code class="docutils literal notranslate"><span class="pre">file_scope_region_number</span></code> indicates the region number of the file
+scope of the current translation unit, whether it is a primary or secondary
+translation unit.</p>
+<p>The function <code class="docutils literal notranslate"><span class="pre">alloc_primary_file_scope_il</span></code> allocates space in the primary
+translation unit IL even if the current translation unit is a secondary
+translation unit.</p>
+<p>The macro <code class="docutils literal notranslate"><span class="pre">is_secondary_trans_unit</span></code> returns true for an IL entry allocated in
+a memory region that is part of a secondary translation unit.  The global array
+<code class="docutils literal notranslate"><span class="pre">trans_unit_for_scope</span></code> maps a scope number back to a pointer to the
+translation unit that contains that scope.  Note that when IL is moved from
+secondary translation units to the primary IL at the end of the compilation,
+the value of <code class="docutils literal notranslate"><span class="pre">is_secondary_trans_unit</span></code> will change, but that of
+<code class="docutils literal notranslate"><span class="pre">trans_unit_for_scope</span></code> stays as it was.</p>
+<p>The front end memory region is shared across all translation units.</p>
+</section>
+<section id="translation-unit-correspondences">
+<h2><span class="section-number">17.3. </span>Translation Unit Correspondences<a class="headerlink" href="#translation-unit-correspondences" title="Link to this heading">#</a></h2>
+<p>Each IL entry with external linkage is assigned to a correspondence set
+containing all of the related IL entries from different translation units,
+i.e., all the entries that represent the same entity.  So, for example, all
+external global variables called “<code class="docutils literal notranslate"><span class="pre">i</span></code>” will be in one correspondence set.</p>
+<p>A correspondence set is represented by an entry of type
+<code class="docutils literal notranslate"><span class="pre">a_trans_unit_corresp</span></code>, which is allocated in front end memory (so it is not
+really part of the IL).  Each entry that is a member of the correspondence set
+points to the appropriate <code class="docutils literal notranslate"><span class="pre">a_trans_unit_corresp</span></code> entry via the
+<code class="docutils literal notranslate"><span class="pre">trans_unit_corresp</span></code> pointer in its <code class="docutils literal notranslate"><span class="pre">source_corresp</span></code> field.  These pointers
+are set when secondary translation units are processed, and therefore in a
+compilation consisting only of a single translation unit the pointers will be
+NULL and the correspondence-set entries will not be allocated.  <a class="footnote-reference brackets" href="#f2" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a> For
+entries without linkage, or with internal linkage, the <code class="docutils literal notranslate"><span class="pre">trans_unit_corresp</span></code>
+pointer is always NULL.</p>
+<p>IL entries of type <code class="docutils literal notranslate"><span class="pre">a_base_class</span></code> are also matched up in correspondence sets
+and therefore contain a <code class="docutils literal notranslate"><span class="pre">trans_unit_corresp</span></code> pointer (though it is not part
+of a <code class="docutils literal notranslate"><span class="pre">source_corresp</span></code> field in that case).</p>
+</section>
+<section id="canonical-entries">
+<span id="id3"></span><h2><span class="section-number">17.4. </span>Canonical Entries<a class="headerlink" href="#canonical-entries" title="Link to this heading">#</a></h2>
+<p>In each correspondence set, one entry is chosen as the <em>canonical</em> entry, and
+the <code class="docutils literal notranslate"><span class="pre">canonical</span></code> field in the <code class="docutils literal notranslate"><span class="pre">a_trans_unit_corresp</span></code> points to it.  The
+entry chosen as the canonical entry is an instance that contains the most
+detailed information available about the entity: one with a definition if a
+definition is available, and a specialization if both specialized and
+unspecialized versions of a template instance are available.  All other things
+being e qual, an entry in the primary IL is chosen over one in a secondary
+translation unit, because that means less copying later.</p>
+<p>The canonical entry chosen can change as the compilation progresses.  The first
+instance seen will generally be chosen as the canonical entry, but it may be
+replaced afterwards by a better choice from some other secondary translation
+unit scanned later.</p>
+<p>Note that it is possible for a class or namespace not to be the canonical entry
+in its correspondence set while at the same time some of its members are the
+canonical entries in their sets.</p>
+<p>The macro <code class="docutils literal notranslate"><span class="pre">canonical_il_entry_of</span></code> can be used to fetch the address of the
+canonical entry corresponding to a given entry.  For an entry without linkage,
+the entry itself is returned.</p>
+</section>
+<section id="the-copy-address-pointer">
+<h2><span class="section-number">17.5. </span>The Copy Address Pointer<a class="headerlink" href="#the-copy-address-pointer" title="Link to this heading">#</a></h2>
+<p>All IL entries have a prefix that contains various flags and numbers.  IL
+entries in the file scope of a secondary translation unit have, in addition, a
+copy address pointer, which is set during the copy process to indicate the
+address in the primary IL to which the entry should be copied or remapped.</p>
+<p>For entries in correspondence sets, generally the canonical entry will be
+copied to the primary IL and its copy address pointer will be set to the
+address of the copy.  The other members of the correspondence set will not be
+copied, but their copy address pointers will be set to the same copy address so
+that references to them can be remapped to the unique copy in the primary IL.</p>
+<p>For entries not in correspondence sets, including non-declarative entries like
+statement and expression nodes, no copy address is pre-assigned.  When the
+entry is encountered during the copy process, it is copied to the primary IL
+and the copy address pointer is set to the address of the copy.  All references
+to the entry encountered thereafter are remapped to the established copy
+address.</p>
+<p>In some cases, entries in the secondary IL are “merged” into the primary IL.
+This is necessary, for example, if the canonical entry for a correspondence set
+is in a secondary translation unit but there is also a member of that
+correspondence set in the primary IL.  The address in the primary IL must be
+preserved (because there are references to it from elsewhere in the primary IL,
+which will not be rewritten), so the canonical entity must be copied on top of
+the existing primary IL entry.  In such cases, the copy address pointer is used
+to form a two-element list: The copy address pointer of the entry in the
+secondary translation unit points to allocated space for a copy (also in the
+secondary translation unit IL), and the copy address pointer of that copy entry
+points in turn to the address of the existing entry in the primary IL.  The
+copy process copies the original entry to the intermediate copy, with pointer
+remapping, and then later overwrites the primary IL entry, carefully preserving
+certain information (e.g., next-on-list pointers).</p>
+<p>The macro <code class="docutils literal notranslate"><span class="pre">trans_unit_copy_address_of</span></code> gives access to the correspondence
+pointer of an IL entry (for both fetching and setting).  The macro
+<code class="docutils literal notranslate"><span class="pre">checked_trans_unit_copy_address_of</span></code> does the same thing, but also checks
+that the entry pointer provided is actually in the file scope of a secondary
+translation unit.</p>
+</section>
+<section id="correspondence-checking">
+<h2><span class="section-number">17.6. </span>Correspondence Checking<a class="headerlink" href="#correspondence-checking" title="Link to this heading">#</a></h2>
+<p>The code in <code class="docutils literal notranslate"><span class="pre">trans_corresp.c</span></code> establishes correspondences between entities in
+a secondary translation unit and similar entities in the primary translation
+unit and in other secondary translation units.  It sets the correspondence
+pointer of IL entries to indicate the correspondences found.  While
+establishing these correspondences, it checks that linked entities are in fact
+compatible, and issues errors when they are not.  The entities that have
+correspondences set in this way are types, routines, variables, fields,
+namespaces, base classes (i.e., <code class="docutils literal notranslate"><span class="pre">a_base_class</span></code> entries), using-declarations
+appearing in class scopes, and templates (including template instances).</p>
+<p>Correspondence checking can occur in three stages of the compilation:</p>
+<ul>
+<li><div class="line-block">
+<div class="line">Built-in types have their correspondences set by <code class="docutils literal notranslate"><span class="pre">record_builtin_type</span></code> as
+soon as they are created.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">When a translation unit has been processed,
+<code class="docutils literal notranslate"><span class="pre">set_trans_unit_correspondences</span></code> is called from
+<code class="docutils literal notranslate"><span class="pre">translation_unit_wrapup</span></code> to establish correspondences for the entities
+that were created in that translation unit.  The global variable
+<code class="docutils literal notranslate"><span class="pre">correspondence_checking_underway</span></code> is TRUE during this stage (and only
+during this stage); after that <code class="docutils literal notranslate"><span class="pre">correspondence_checking_done</span></code> is TRUE.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">The correspondence checking process is notified of every template
+instantiation by calls to <code class="docutils literal notranslate"><span class="pre">record_instantiation</span></code>.  When this occurs in a
+translation unit after its <code class="docutils literal notranslate"><span class="pre">translation_unit_wrapup</span></code> call, the
+correspondence pointer is established for the new instantiation.  The
+instantiation process also notifies the correspondence checking process of
+template instantiations being completed, through calls to
+<code class="docutils literal notranslate"><span class="pre">establish_class_instantiation_corresp</span></code>,
+<code class="docutils literal notranslate"><span class="pre">establish_function_instantiation_corresp</span></code>,
+<code class="docutils literal notranslate"><span class="pre">establish_variable_instantiation_corresp</span></code>,
+<code class="docutils literal notranslate"><span class="pre">establish_block_extern_function_correspondence</span></code>,
+<code class="docutils literal notranslate"><span class="pre">establish_block_extern_variable_correspondence</span></code> and
+<code class="docutils literal notranslate"><span class="pre">establish_friend_type_correspondence</span></code>.</div>
+</div>
+</li>
+</ul>
+<section id="finding-corresponding-pairs">
+<h3><span class="section-number">17.6.1. </span>Finding Corresponding Pairs<a class="headerlink" href="#finding-corresponding-pairs" title="Link to this heading">#</a></h3>
+<p>Several different mechanisms are used to find an entity in another translation
+unit that corresponds to a given entity:</p>
+<ul>
+<li><div class="line-block">
+<div class="line">For named entities in namespace scope, the symbol table is used.  The
+search process simply traverses the list of symbols attached to the symbol
+header of the entity for which a correspondence is being searched.  This is
+done in functions with the prefix <code class="docutils literal notranslate"><span class="pre">find_</span></code> (e.g.,
+<code class="docutils literal notranslate"><span class="pre">find_type_correspondence</span></code>).</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">For class members, we can rely on the fact that the lists of IL entities
+representing the members should have their elements correspond on a
+one-to-one basis.  Hence no search is needed, although care must be taken
+with compiler-generated members that may not appear in every translation
+unit.  This principle is implemented by
+<code class="docutils literal notranslate"><span class="pre">establish_trans_unit_correspondences_for_class</span></code>.  A similar process can
+be used for enumeration constants.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">Correspondences for instantiations of templates are usually established
+after the templates from which they are generated have been matched up.  To
+support the search for a matching instantiation, a field
+<code class="docutils literal notranslate"><span class="pre">all_instantiations</span></code> was added to <code class="docutils literal notranslate"><span class="pre">a_template_symbol_supplement</span></code>.  This
+field is set only in the supplement for the canonical template entry and
+points to a list of all the instantiation symbols for the template,
+including those for corresponding templates in other translation units.
+Some of the key functions manipulating this list are <code class="docutils literal notranslate"><span class="pre">add_instantiation</span></code>,
+<code class="docutils literal notranslate"><span class="pre">find_class_template_instantiation</span></code> and
+<code class="docutils literal notranslate"><span class="pre">find_function_template_instantiation</span></code>.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">Correspondences are also sometimes established between unnamed types.  This
+happens when matching up declarations of entities with linkage involving
+unnamed types.  For example:</div>
+</div>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">struct</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">*</span><span class="n">p</span><span class="p">,</span><span class="w"> </span><span class="n">q</span><span class="p">;</span><span class="w"> </span><span class="c1">// Could appear in two translation units</span>
+</span></pre></div>
+</div>
+<div class="line-block">
+<div class="line">In such cases, the correspondence is first established for the entities
+with linkage (variables or routines), and the correspondence between the
+types is sought by comparing the two types using <code class="docutils literal notranslate"><span class="pre">f_types_are_compatible</span></code>
+with the option <code class="docutils literal notranslate"><span class="pre">TCF_SEEK_CORRESP</span></code>.</div>
+</div>
+</li>
+</ul>
+</section>
+<section id="ordering-dependencies">
+<h3><span class="section-number">17.6.2. </span>Ordering Dependencies<a class="headerlink" href="#ordering-dependencies" title="Link to this heading">#</a></h3>
+<p>Determining whether two entities from different translation units correspond
+may require that other correspondences are known.  For example, suppose we have
+two namespace scope functions <code class="docutils literal notranslate"><span class="pre">f</span></code> that are declared as</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">extern</span><span class="w"> </span><span class="n">R</span><span class="w"> </span><span class="nf">N::f</span><span class="p">();</span>
+</span></pre></div>
+</div>
+<p>then the two must correspond if the entities denoted by <code class="docutils literal notranslate"><span class="pre">N</span></code> correspond, and
+if that is the case the entities denoted by <code class="docutils literal notranslate"><span class="pre">R</span></code> must correspond too.  The
+ordering of corresponding checks must therefore be managed carefully.</p>
+<p>To reduce the magnitude of this issue, correspondences are determined in two
+steps.  In the first step, correspondences are <em>established</em>: Only those
+components of the entity that uniquely identify it are compared (e.g., the
+entity’s name, its enclosing classes and namespaces, parameter types of
+functions, etc.) and if they match the correspondence pointer is set.  Some
+diagnostics may be issued at this time.  This process is mostly done in
+functions with the prefix <code class="docutils literal notranslate"><span class="pre">establish_</span></code>.  In the second step, which starts
+after all the correspondences for the translation unit have been established,
+the correspondences are <em>verified</em>.  This involves comparing the remaining
+relevant attributes of entities that were found to correspond after the first
+step; diagnostics are issued if the entities do not match.  Most of the
+verification work is done in functions with the prefix <code class="docutils literal notranslate"><span class="pre">verify_</span></code>.  This
+separation into two steps makes sure that in our example above the
+correspondence for <code class="docutils literal notranslate"><span class="pre">R</span></code> has been established by the time it is needed.</p>
+<p>To deal with other ordering issues, such as the requirement that the
+correspondence of <code class="docutils literal notranslate"><span class="pre">N</span></code> be established in our example, the correspondence
+checking process may be stacked.  For example, while searching for a
+correspondence for <code class="docutils literal notranslate"><span class="pre">N::f</span></code> above, another search for a correspondence for
+<code class="docutils literal notranslate"><span class="pre">N</span></code> may be initiated.  This is driven by calls to functions named
+<code class="docutils literal notranslate"><span class="pre">canonical_</span></code><em>entity</em><code class="docutils literal notranslate"><span class="pre">_entry_of</span></code> where <em>entity</em> is one of
+<code class="docutils literal notranslate"><span class="pre">namespace</span></code>, <code class="docutils literal notranslate"><span class="pre">type</span></code>, <code class="docutils literal notranslate"><span class="pre">field</span></code>, <code class="docutils literal notranslate"><span class="pre">routine</span></code>, <code class="docutils literal notranslate"><span class="pre">variable</span></code> or <code class="docutils literal notranslate"><span class="pre">template</span></code>.
+If a correspondence was already established, these functions return the
+requested canonical entry; if not, they first determine the correspondence by
+calling <code class="docutils literal notranslate"><span class="pre">determine_correspondence</span></code> <a class="footnote-reference brackets" href="#f3" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a>.</p>
+<p>Other ordering issues sometimes arise because establishing a correspondence for
+a template instantiation seemingly leads to infinite recursion.  Such
+situations are resolved in part by placing appropriate markers in the
+<code class="docutils literal notranslate"><span class="pre">all_instantiations</span></code> list and in part by as much as possible establishing the
+correspondences of all templates before attempting to match their
+instantiations.  To that end, the front end maintains a list of instantiations
+whose correspondences are yet to be determined (the list is pointed to by
+<code class="docutils literal notranslate"><span class="pre">instantiations_to_process</span></code>).  That list is processed at appropriate times
+(i.e., when the correspondences of the various templates have been found) by
+calls to <code class="docutils literal notranslate"><span class="pre">process_pending_instantiations</span></code>.</p>
+<p>Finally, we should note that the verification process always compares an entity
+with its canonical counterpart.  If a canonical entry (from an already
+processed translation unit) is replaced by a new entry (from the current
+translation unit) the former will need to be compared with the latter when all
+the correspondences have been established in the current translation unit.
+This is done in <code class="docutils literal notranslate"><span class="pre">process_verification_list</span></code>.</p>
+</section>
+<section id="debugging-facilities">
+<h3><span class="section-number">17.6.3. </span>Debugging Facilities<a class="headerlink" href="#debugging-facilities" title="Link to this heading">#</a></h3>
+<p>When the preprocessor symbol <code class="docutils literal notranslate"><span class="pre">DEBUG</span></code> is TRUE,a few facilities are provided by
+<code class="docutils literal notranslate"><span class="pre">trans_corresp.c</span></code> to help identify problems during correspondence checking.
+First, the command-line option “<code class="docutils literal notranslate"><span class="pre">-d-trans_corresp</span></code>” will cause a line of
+output to be produced for each correspondence pointer being set (or cleared),
+as well as for certain operations on the <code class="docutils literal notranslate"><span class="pre">all_instantiations</span></code> lists.  Second,
+the function <code class="docutils literal notranslate"><span class="pre">db_corresp</span></code> can be called from a debugger to examine the
+correspondence of a given entity.  Finally, the modification of a
+correspondence pointer for a specific entity can easily be intercepted in a
+debug environment where addresses are reproducible from run to run.  To enable
+this, set breakpoints on <code class="docutils literal notranslate"><span class="pre">main</span></code> and on <code class="docutils literal notranslate"><span class="pre">corresp_intercept</span></code>.  Rerun the
+front end and at the stop in <code class="docutils literal notranslate"><span class="pre">main</span></code>, set the static variable
+<code class="docutils literal notranslate"><span class="pre">trace_corresp_ptr</span></code> to the address of the entity whose correspondence value
+should be tracked: <code class="docutils literal notranslate"><span class="pre">corresp_intercept</span></code> will be called (triggering the
+breakpoint) when that value is modified.</p>
+</section>
+</section>
+<section id="copying-from-secondary-translation-units">
+<span id="multi-tu-copy"></span><h2><span class="section-number">17.7. </span>Copying from Secondary Translation Units<a class="headerlink" href="#copying-from-secondary-translation-units" title="Link to this heading">#</a></h2>
+<p>The code in <code class="docutils literal notranslate"><span class="pre">trans_copy.c</span></code> copies IL from a secondary translation unit to the
+primary translation unit IL.  It is run after elimination of unneeded entries
+in the secondary translation unit, so it copies only entries that are actually
+“needed.” It also runs after correspondence checking has established the
+correspondences between externally-linked entities, so it does not copy entries
+for which there is already an instance in the primary translation unit IL; for
+such cases, all references to the entity are simply rewritten to point to the
+primary IL instance.</p>
+<p>The secondary translation unit IL consists of a file scope memory region and
+zero or more function scope memory regions.  The file scope memory region is
+actually copied into the primary IL, via a tree walk, with duplicates
+eliminated as indicated above.  The function scope memory regions, on the other
+hand, are not copied.  Instead, they are walked to update pointers
+appropriately, and then the memory region numbers are simply reassigned to the
+primary IL.</p>
+<p>The copy process is handled by <code class="docutils literal notranslate"><span class="pre">copy_secondary_trans_unit_IL_to_primary</span></code>,
+which has five main phases:</p>
+<ul>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">prepare_for_trans_unit_copy</span></code> walks through the declaration lists of the
+file scope of a secondary translation unit and its subscopes, and puts each
+entry into one of four categories: (a) entries that should be copied to the
+primary IL; (b) entries that should overwrite a corresponding entry in the
+primary IL (e.g., a function in the secondary translation unit that has a
+definition, where the corresponding function in the primary IL has only a
+declaration); (c) entries that are in a correspondence set but are not the
+canonical entry, which should be removed from the lists and discarded; and
+(d) entries in a correspondence set that provide additional (minor)
+information over what is present in the canonical entry, which should be
+merged into the corresponding entry.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">copy_from_secondary_to_primary_IL</span></code> uses the IL-walking routines to walk
+the IL tree, copy over entries that need to be copied, and update pointers
+so that the copied IL refers only to copies or to pre-existing entries in
+the primary IL.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">copy_function_bodies_to_primary_IL</span></code> processes the bodies of any
+functions that are to be moved over, by using the IL-walking routines to
+walk the IL tree and update pointers appropriately.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">finish_trans_unit_copy</span></code> walks through the declaration lists again, and
+links copied entries into the declaration lists of the primary IL.  A
+struct type copied over, for example, would be linked into the types list
+of the primary scope of the primary IL.  Variables, types, and routines
+that must be merged into the corresponding entries are also copied onto the
+corresponding entries at this point.  This part of the processing runs
+while switched into the primary translation unit.  See also
+<code class="docutils literal notranslate"><span class="pre">finish_moved_entity_processing</span></code>, which is similar but reaches all copied
+or merged entities, even those from non-merged scopes.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">finish_processing_for_function_bodies</span></code> calls
+<code class="docutils literal notranslate"><span class="pre">finish_function_body_processing</span></code> for each copied function scope memory
+region, and kicks off IL lowering for the function if it’s needed.  This
+part of the processing runs while switched into the primary translation
+unit.</div>
+</div>
+</li>
+</ul>
+<p>For entries that are being merged into the primary IL, the copy process sets
+the <code class="docutils literal notranslate"><span class="pre">il_lowering</span></code> flag in the IL entry prefix to indicate merging rather than
+copying.  (The flag is available for this use because IL lowering is never done
+on secondary translation units.) For merged entries, the copy process uses an
+extra copy of the entity allocated in the secondary translation unit: The
+entity’s copy address pointer points to the copy, whose copy address pointer
+points to the corresponding entity in the primary IL.  During the copy, the
+original entry is copied to the copy space, and its pointers are remapped
+there.  This allows <code class="docutils literal notranslate"><span class="pre">finish_trans_unit_copy</span></code> later to have access to both the
+original entity in the primary IL and the entity from the secondary translation
+unit as updated for the copy.  This is often important because some flags from
+the two entries need to be merged.</p>
+<p>The bodies of functions not copied over are eliminated, and likewise for the
+initializers of variables.  See <code class="docutils literal notranslate"><span class="pre">clear_body_for_routine</span></code> and
+<code class="docutils literal notranslate"><span class="pre">clear_variable_definition</span></code>.  Non-template functions and variables in
+secondary translation units included only to get exported templates are turned
+into external declarations, because the definition of those entities is put out
+when the file is compiled as a primary translation unit.</p>
+<p>The IL for secondary translation units can contain references to other
+translation units.  In some ways, the IL trees for all secondary translation
+units have to be viewed as one big somewhat interconnected tree.  For this
+reason, each of the processing phases described above is done for all secondary
+translation units before advancing to the next phase.</p>
+<p>Part of the function of the copy process is to produce a primary IL tree that
+contains no references to IL entries in secondary translation units, and this
+is done by making sure that every entity copied over has only pointers that
+refer to the primary IL.  Sometimes, however, the instantiation of a template
+that is defined in the primary translation unit introduces exactly the kind of
+mixed-translation-unit IL that we are trying to avoid.  To eliminate such
+references, a pair of routines in <code class="docutils literal notranslate"><span class="pre">trans_copy.c</span></code> is called:</p>
+<ul>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">mark_secondary_trans_unit_IL_entities_used_from_primary_as_needed</span></code>
+sweeps the primary translation unit IL and looks for references to
+secondary translation unit entries.  When it finds them, it marks the
+secondary translation unit entries as needed so that they will be copied to
+the primary IL when the secondary translation unit is copied.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">rewrite_secondary_trans_unit_IL_entity_pointers_used_in_primary</span></code> sweeps
+the primary translation unit IL after the secondary translation units have
+been copied in, and looks for references to secondary translation unit
+entries.  When it finds them, it rewrites them either as references to the
+corresponding entity in the primary translation unit (if there is one) or
+it copies them and rewrites the pointer to the copy.</div>
+</div>
+</li>
+</ul>
+<p>In some (relatively rare) cases, the merged IL produced by the copy process has
+some type entries out of order on the type lists, where “out of order” is
+defined according to the peculiar ordering required by the C-generating back
+end so that it can generate compilable C code.
+<code class="docutils literal notranslate"><span class="pre">fix_type_list_ordering_problems</span></code> is called after IL lowering to examine the
+file-scope types list to look for ordering problems and to move types to fix
+those problems.  If there are no ordering problems (which is almost always the
+case), the checking is done fairly quickly and efficiently.</p>
+</section>
+<section id="externalization-of-statics">
+<h2><span class="section-number">17.8. </span>Externalization of statics<a class="headerlink" href="#externalization-of-statics" title="Link to this heading">#</a></h2>
+<p>When a source file includes exported templates, it is possible that the
+exported templates will refer to static entities in the file.  Because the
+template instances may be generated as part of the translation of other source
+files, and be included in the object code for those files, it may be necessary
+to refer to the static entities from another compilation.  Therefore, the front
+end externalizes all statics when a compilation includes exported templates.
+This gives the static functions and variables external linkage and special
+mangled names.  This has a number of consequences, such as that static inline
+functions become extern inline functions, which in some configurations makes
+them instantiatable.  See <code class="docutils literal notranslate"><span class="pre">externalize_statics_for_exported_templates</span></code>.</p>
+</section>
+<section id="one-instantiation-per-object-mode">
+<h2><span class="section-number">17.9. </span>One-instantiation-per-object mode<a class="headerlink" href="#one-instantiation-per-object-mode" title="Link to this heading">#</a></h2>
+<p>In one-instantiation-per-object mode, each instantiated template is put into a
+separate “slice” of the IL, so that a back end can put out each instantiation
+in a separate object file.  The slices are defined by having a separate
+“needed” flag for each slice (there’s an array of them attached to each IL
+entity), and setting the slice-specific needed flags so that each slice
+contains only the types, variables, etc.  referenced by the template
+instantiation in that slice.</p>
+<p>When there are multiple translation units, the per-instantiation needed flags
+are not maintained in the secondary translation unit IL.  Once the IL is copied
+to the primary IL, the flags are built up and maintained appropriately there.</p>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="f1" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<p>Not <code class="docutils literal notranslate"><span class="pre">COMPILE_MULTIPLE_TRANSLATION_UNITS</span></code>.</p>
+</aside>
+<aside class="footnote brackets" id="f2" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">2</a><span class="fn-bracket">]</span></span>
+<p>There are some circumstances involving templates where the
+correspondence pointer is set even if there is only a primary
+translation unit.  The important point is simply that one shouldn’t
+count on the pointer being set when there is only one translation
+unit.</p>
+</aside>
+<aside class="footnote brackets" id="f3" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id4">3</a><span class="fn-bracket">]</span></span>
+<p>Note that this is different from <code class="docutils literal notranslate"><span class="pre">canonical_il_entry_of</span></code> which does
+not attempt to establish a correspondence.</p>
+</aside>
+</aside>
+</section>
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"><div class="navigation-prev">
+    <a href="../modules/">
+      <i class="i-lucide chevron-left"></i>
+      <div class="page-info">
+        <span>Previous</span><div class="title"><span class="section-number">16. </span>Modules</div></div>
+    </a>
+  </div><div class="navigation-next">
+    <a href="../admin/">
+      <div class="page-info">
+        <span>Next</span>
+        <div class="title"><span class="section-number">18. </span>Administrative Functions</div>
+      </div>
+      <i class="i-lucide chevron-right"></i>
+    </a>
+  </div></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>EDG 7.0, 7/20/26 - ©2026, Edison Design Group, Inc.</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials"></div>
+    </div>
+  </div>
+</footer>
+      <script src="../_static/documentation_options.js?v=618d875b"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/shibuya.js?v=50760d75"></script></body>
+</html>

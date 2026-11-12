@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="violet" data-content_root="../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>12. Statement Scanning - CPFE 7.0 documentation</title><link rel="index" title="Index" href="../genindex/" /><link rel="search" title="Search" href="../search/" /><link rel="next" title="13. Templates" href="../templates/" /><link rel="prev" title="11. Class Declarations" href="../class_decl/" />
+      <link rel="canonical" href="https://edgcpp.org/dev/doc/statements/" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e1a1ceaf" />
+    <link rel="stylesheet" type="text/css" href="../_static/shibuya.css?v=2ceb65ce" />
+    <link media="print" rel="stylesheet" type="text/css" href="../_static/print.css?v=20ff2c19" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=8971ef7f" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://edgcpp.org/dev/doc/statements/"/>
+  <meta property="og:title" content="12. Statement Scanning"/>
+    <meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="../">
+      <img class="light-logo" src="../_static/doc-logo-light.png" alt="CPFE" height="28" loading="lazy" />
+      <img class="dark-logo" src="../_static/doc-logo-dark.png" alt="CPFE" height="28" loading="lazy" />
+      <strong>CPFE</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="../search/" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials"></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2"></span>
+          <span class="hamburger_3"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../build/">1. Configuring and Building the C++ Front End</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ext_intf/">2. External Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../int_overview/">3. Overview of Internal Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../il/">4. Intermediate Language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lower_il/">5. IL Lowering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../symbol_tbl/">6. Symbol Table</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lex_pp/">7. Lexical Analysis and Preprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tables/">8. Table Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../expr/">9. Expression Scanning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../decls/">10. Declarations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../class_decl/">11. Class Declarations</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">12. Statement Scanning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../templates/">13. Templates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../exceptions/">14. Exception Handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pragma/">15. Pragmas and Attributes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/">16. Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../trans_unit/">17. Multiple Translation Units</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../admin/">18. Administrative Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../err_msgs/">19. Error Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../includes/">20. ANSI C and C++ Include Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../runtime/">21. Runtime Library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../utilities/">22. Utility Programs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../c_gen_be/">23. C-Generating Back End</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cp_gen_be/">24. C++-Generating Back End</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../code_style/">25. Coding Style Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../testing/">26. EDG Testing Framework</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../"><span itemprop="name">CPFE</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name"><span class="section-number">12. </span>Statement Scanning</strong>
+        <meta itemprop="position" content="2" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="relative min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+  <div class="copy-page-wrapper relative pb-4 lg:absolute lg:top-8 lg:right-6 xl:right-12">
+  <div id="copy-page-trigger">
+    <button
+      type="button"
+      class="js-copy px-3 py-1 inline-flex items-center gap-1"
+      data-url="https://edgcpp.org/dev/doc/_sources/statements.rst.txt"
+    >
+      <i class="i-lucide" data-icon="copy"></i>
+      <span>Copy page</span>
+    </button>
+    <button class="js-menu px-2 py-1" type="button" aria-label="More actions"
+      aria-haspopup="menu" aria-expanded="false" aria-controls="copy-page-content">
+      <i class="i-lucide chevron-down"></i>
+    </button>
+  </div>
+  <div id="copy-page-content" role="menu" aria-orientation="vertical" aria-hidden="true">
+    <div role="presentation">
+      <div class="flex flex-col" role="group">
+        <button class="js-copy" type="button" role="menuitem"
+          data-url="https://edgcpp.org/dev/doc/_sources/statements.rst.txt">
+          <span class="iconify-icon">
+            <i class="i-lucide" data-icon="copy"></i>
+          </span>
+          <span>Copy page</span>
+        </button>
+        <a role="menuitem" href="https://edgcpp.org/dev/doc/_sources/statements.rst.txt" target="_blank" rel="nofollow"><iconify-icon icon="bi:code-slash"></iconify-icon>
+            <span>View Source</span></a><a role="menuitem" href="https://chatgpt.com/?hints=search&q=Read%20https%3A//edgcpp.org/dev/doc/_sources/statements.rst.txt%20so%20I%20can%20ask%20questions%20about%20it." target="_blank" rel="nofollow">
+          <iconify-icon icon="bi:openai"></iconify-icon>
+          <span>Open in ChatGPT</span>
+        </a><a role="menuitem" href="https://claude.ai/new?q=Read%20https%3A//edgcpp.org/dev/doc/_sources/statements.rst.txt%20so%20I%20can%20ask%20questions%20about%20it." target="_blank" rel="nofollow">
+          <iconify-icon icon="bi:claude"></iconify-icon>
+          <span>Open in Claude</span>
+        </a></div>
+    </div>
+  </div>
+</div><article class="yue" role="main">
+          <section id="statement-scanning">
+<h1><span class="section-number">12. </span>Statement Scanning<a class="headerlink" href="#statement-scanning" title="Link to this heading">#</a></h1>
+<p><code class="docutils literal notranslate"><span class="pre">statements.c</span></code> contains the code to scan statements, and <code class="docutils literal notranslate"><span class="pre">statements.h</span></code>
+contains the associated declarations.</p>
+<p>The top-level routine here is <code class="docutils literal notranslate"><span class="pre">compound_statement</span></code>, which scans a
+brace-enclosed list of statements.  This is used for the bodies of functions
+and for blocks (with and without local declarations) that appear within
+functions.  In C mode, it first calls <code class="docutils literal notranslate"><span class="pre">opt_declaration_list</span></code> to scan the
+optional list of declarations; then, in C or C++ mode, it calls <code class="docutils literal notranslate"><span class="pre">statement</span></code>
+(in a loop) to scan the statements.</p>
+<p><code class="docutils literal notranslate"><span class="pre">statement</span></code> scans one statement, with an optional preceding label or labels.
+Its job is mostly to call the appropriate statement-scanning routine based on
+the first token of the statement.  For most statements, the first token is a
+keyword that identifies the statement.  Otherwise, the statement is an
+expression statement (in C or C++) or a declaration (in C++ only;
+<code class="docutils literal notranslate"><span class="pre">is_decl_not_expr</span></code> is called to decide whether the construct is an expression
+or a declaration).</p>
+<p>A stack of active statements is maintained in <code class="docutils literal notranslate"><span class="pre">struct_stmt_stack</span></code>.  For each
+active statement, it contains the kind of statement and some information about
+what has been scanned so far in the statement.  <code class="docutils literal notranslate"><span class="pre">push_stmt_stack</span></code> and
+<code class="docutils literal notranslate"><span class="pre">pop_stmt_stack</span></code> manage the stack.  <code class="docutils literal notranslate"><span class="pre">find_enclosing_struct_stmt</span></code> can be
+used to find the nearest enclosing structured statement of a given type; this
+is used in finding the construct associated with a <code class="docutils literal notranslate"><span class="pre">break</span></code> or <code class="docutils literal notranslate"><span class="pre">continue</span></code>.</p>
+<p>One important function of the statement stack is that it points to the
+intermediate language for the associated statement.  The top-most entry
+contains enough information to enable one to find the “current” location in the
+intermediate language being generated, the point at which one would like to add
+a statement.  This is, in fact, exactly what <code class="docutils literal notranslate"><span class="pre">add_statement_list</span></code> does: it
+links the given list of statements (possibly just a single statement) into the
+growing tree of statements for the function.  Usually, this is called through<code class="docutils literal notranslate"><span class="pre">add_statement_at_stmt_pos</span></code> , which allocates a statement of a given kind and
+also maintains the <code class="docutils literal notranslate"><span class="pre">code_reachable</span></code> flag, indicating whether or not the
+current location in the code is reachable.  This flag is used to check for
+unreachable code and issue appropriate warnings.  Code is attached to the
+statement tree even if it is unreachable.  As statements are pushed onto and
+popped off the stack, the <code class="docutils literal notranslate"><span class="pre">code_reachable</span></code> flag is maintained accordingly,
+based on whether or not the beginning of the statement can be reached, whether
+the end can be reached from the beginning, and whether the end can be reached
+from the inside.  The <code class="docutils literal notranslate"><span class="pre">lint_notreached_flag</span></code> is also consulted.  For
+statements that have several clauses (<code class="docutils literal notranslate"><span class="pre">if</span></code> and <code class="docutils literal notranslate"><span class="pre">switch</span></code>)
+<code class="docutils literal notranslate"><span class="pre">start_stmt_clause</span></code> and <code class="docutils literal notranslate"><span class="pre">term_stmt_clause</span></code> are called at the appropriate
+locations in processing to keep the <code class="docutils literal notranslate"><span class="pre">code_reachable</span></code> flag up to date.</p>
+<p>The statement stack contains pointers to <code class="docutils literal notranslate"><span class="pre">break</span></code> and <code class="docutils literal notranslate"><span class="pre">continue</span></code> labels for
+the statement.  These are initialized to <code class="docutils literal notranslate"><span class="pre">NULL</span></code>, and later made to point to a
+label if a <code class="docutils literal notranslate"><span class="pre">goto</span></code> is actually generated for a <code class="docutils literal notranslate"><span class="pre">break</span></code> or <code class="docutils literal notranslate"><span class="pre">continue</span></code>.  At
+<code class="docutils literal notranslate"><span class="pre">pop_stmt_stack</span></code> time, the definition for the <code class="docutils literal notranslate"><span class="pre">break</span></code> label is generated if
+one is needed.  The statement scanning routine must handle the <code class="docutils literal notranslate"><span class="pre">continue</span></code>
+label is there is one.</p>
+<p>If a statement is labeled with a simple label, <code class="docutils literal notranslate"><span class="pre">statement</span></code> calls
+<code class="docutils literal notranslate"><span class="pre">scan_label</span></code> to look up or enter the label, then <code class="docutils literal notranslate"><span class="pre">define_label</span></code> to add a
+label definition statement to the intermediate language.</p>
+<p>Nothing tricky is involved in statement processing routines <code class="docutils literal notranslate"><span class="pre">if_statement</span></code>,
+<code class="docutils literal notranslate"><span class="pre">while_statement</span></code>, <code class="docutils literal notranslate"><span class="pre">do_statement</span></code>, <code class="docutils literal notranslate"><span class="pre">goto_statement</span></code>, <code class="docutils literal notranslate"><span class="pre">break_statement</span></code>,
+and <code class="docutils literal notranslate"><span class="pre">continue_statement</span></code>.  <code class="docutils literal notranslate"><span class="pre">asm_statement</span></code> is called for asm statements; it
+in turn calls <code class="docutils literal notranslate"><span class="pre">asm_declaration</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">dependent_statement</span></code> is called to scan statements that are dependent
+statements of <code class="docutils literal notranslate"><span class="pre">if</span></code>, <code class="docutils literal notranslate"><span class="pre">switch</span></code>, <code class="docutils literal notranslate"><span class="pre">while</span></code>, <code class="docutils literal notranslate"><span class="pre">do</span> <span class="pre">while</span></code>, and <code class="docutils literal notranslate"><span class="pre">for</span></code>
+statements.  In C mode, it just scans a statement.  In C++ mode, it creates a
+block statement and places the dependent statement under it, unless the
+dependent statement is a block statement.  That ensures that if anything is
+declared in the dependent statement, its scope will be limited to the dependent
+statement (this is a post-ARM C++ language rule).</p>
+<p><code class="docutils literal notranslate"><span class="pre">for_statement</span></code> scans a <code class="docutils literal notranslate"><span class="pre">for</span></code> or range-based <code class="docutils literal notranslate"><span class="pre">for</span></code> statement (or, in UPC
+mode, a <code class="docutils literal notranslate"><span class="pre">upc_forall</span></code> statement).  Since it is unknown at the beginning of
+scanning whether a <code class="docutils literal notranslate"><span class="pre">for</span></code> or range-based <code class="docutils literal notranslate"><span class="pre">for</span></code> statement is being scanned,
+two block scopes (used to contain the range-based <code class="docutils literal notranslate"><span class="pre">for</span></code> temporary variables)
+are pushed in preparation for the range-based <code class="docutils literal notranslate"><span class="pre">for</span></code> case (they’re discarded
+if scanning reveals a <code class="docutils literal notranslate"><span class="pre">for</span></code> statement).  The first entity inside the
+parentheses (initialization) is scanned by calling <code class="docutils literal notranslate"><span class="pre">for_init_statement</span></code>,
+which allows an expression (in C or C++), a declaration (in C++ only), or a
+<code class="docutils literal notranslate"><span class="pre">for-range-declaration</span></code> (in C++11).  <code class="docutils literal notranslate"><span class="pre">for_init_statement</span></code> also determines
+(through a call to <code class="docutils literal notranslate"><span class="pre">decl_statement_full</span></code>) which type of statement is being
+scanned.  If the <code class="docutils literal notranslate"><span class="pre">for-init</span></code> is a declaration (and a <code class="docutils literal notranslate"><span class="pre">for</span></code> statement is
+being scanned), <code class="docutils literal notranslate"><span class="pre">start_for_init_block</span></code> is called to push an <code class="docutils literal notranslate"><span class="pre">sck_block</span></code>
+scope (with <code class="docutils literal notranslate"><span class="pre">is_for_init_block</span></code> set to TRUE) onto the scope stack, where
+it remains till after the dependent statement of the loop is scanned (see
+<code class="docutils literal notranslate"><span class="pre">finish_for_init_block</span></code>).  If the second expression (test) is present, it is
+scanned by calling <code class="docutils literal notranslate"><span class="pre">can_boolean_controlling_expression</span></code>.  The third
+expression (increment) is scanned by calling <code class="docutils literal notranslate"><span class="pre">scan_void_expression</span></code>.  For any
+of those expressions/statements that is omitted, a <code class="docutils literal notranslate"><span class="pre">NULL</span></code> pointer is used in
+the <code class="docutils literal notranslate"><span class="pre">stmk_for</span></code> statement.  In the range-based <code class="docutils literal notranslate"><span class="pre">for</span></code> case, the statement
+kind is set to <code class="docutils literal notranslate"><span class="pre">stmk_range_based_for</span></code> (this is somewhat unusual since the
+statement kind is typically known earlier) and
+<code class="docutils literal notranslate"><span class="pre">scan_range_based_for_expression</span></code> is called to scan the range expression.
+Semantic checks, determination of the type of range-based <code class="docutils literal notranslate"><span class="pre">for</span></code> (see header
+comments), and IL generation are handled by
+<code class="docutils literal notranslate"><span class="pre">check_range_based_for_statement</span></code>.</p>
+<p>The Microsoft for-each statement (available in C++/CLI emulation mode, as well
+as when <code class="docutils literal notranslate"><span class="pre">microsoft_version</span></code> &gt;= 1400) is scanned by <code class="docutils literal notranslate"><span class="pre">for_each_statement</span></code>.
+If the for-each statement contains a previously declared iterator variable, it
+is scanned by <code class="docutils literal notranslate"><span class="pre">scan_previously_decl_iterator_name</span></code>, otherwise the iterator
+declaration is scanned by <code class="docutils literal notranslate"><span class="pre">for_each_iterator_declaration</span></code>.  Two block scopes
+are pushed (an outer block scope for the loop temporary variables, and an inner
+scope for the iterator variable).  The collection expression is scanned by
+<code class="docutils literal notranslate"><span class="pre">scan_for_each_expression</span></code> and semantic checks (and IL generated) by
+<code class="docutils literal notranslate"><span class="pre">check_for_each_statement</span></code>.  <code class="docutils literal notranslate"><span class="pre">check_for_each_statement</span></code> handles the various
+types of for-each statements (see the header comment for details).  Much of the
+underlying code is shared with the range-based <code class="docutils literal notranslate"><span class="pre">for</span></code> statement.</p>
+<p><code class="docutils literal notranslate"><span class="pre">return_statement</span></code> scans the <code class="docutils literal notranslate"><span class="pre">return</span></code> statement.  It examines the type of
+the current function.  A <code class="docutils literal notranslate"><span class="pre">void</span></code> function should have <code class="docutils literal notranslate"><span class="pre">return</span></code>s that
+return no value; other functions should return a value.
+<code class="docutils literal notranslate"><span class="pre">check_void_return_okay</span></code> checks whether or not a value-less <code class="docutils literal notranslate"><span class="pre">return</span></code> is
+okay in the current function.  It is also used at the final closing brace of
+the function if that position is reachable (since there is an implicit
+<code class="docutils literal notranslate"><span class="pre">return</span></code> there).</p>
+<p><code class="docutils literal notranslate"><span class="pre">switch</span></code> statements cause the most problems.  <code class="docutils literal notranslate"><span class="pre">switch_statement</span></code> itself is
+not too complicated: it just pushes an entry on the statement stack, scans the
+selector expression, and scans the dependent statement.  The complex processing
+comes with <code class="docutils literal notranslate"><span class="pre">case_label</span></code> (which also handles the GNU extension of case ranges;
+e.g., “<code class="docutils literal notranslate"><span class="pre">case</span> <span class="pre">1</span> <span class="pre">...</span>&#160; <span class="pre">3:</span></code>”) and <code class="docutils literal notranslate"><span class="pre">default_label</span></code>, or more precisely, with the
+subroutine those two cases call, <code class="docutils literal notranslate"><span class="pre">add_switch_clause</span></code>.  That routine
+determines whether or not the label can be added to the list of labels for the
+currently-active clause, or whether instead a new clause must be begun.  It
+also determines where the case value (or the default) belongs in the list of
+constants for the clause.  The configuration macro
+<code class="docutils literal notranslate"><span class="pre">RECORD_SWITCH_CASE_ENTRIES</span></code> determines how individual case labels are
+represented.  When TRUE (the default), all the labels (including the default
+case and any GNU case ranges) are represented using type
+<code class="docutils literal notranslate"><span class="pre">a_switch_case_entry</span></code>.  When FALSE (an option maintained primarily for
+backward compatibility purposes), the labels within a clause are usually
+represented as a list of <code class="docutils literal notranslate"><span class="pre">a_constant</span></code> entries, but in a clause labeled with
+<code class="docutils literal notranslate"><span class="pre">default</span></code>, any specific values from <code class="docutils literal notranslate"><span class="pre">case</span></code> labels are superfluous and are
+removed.  In the latter approach, GNU case ranges are represented as a list
+containing all the constants in the range (which doesn’t scale well for large
+ranges).  Because the intermediate language idiom for <code class="docutils literal notranslate"><span class="pre">switch</span></code> statements is
+slightly different from the C language idiom, a bit of translation from one
+idiom to the other is necessary:</p>
+<ul>
+<li><div class="line-block">
+<div class="line">A <code class="docutils literal notranslate"><span class="pre">break</span></code> in a <code class="docutils literal notranslate"><span class="pre">switch</span></code> usually just ends the current clause and makes
+the code following it unreachable.  Since the intermediate language
+<code class="docutils literal notranslate"><span class="pre">switch</span></code> clauses end with a <code class="docutils literal notranslate"><span class="pre">break</span></code> by default, no <code class="docutils literal notranslate"><span class="pre">goto</span></code> to a
+<code class="docutils literal notranslate"><span class="pre">break</span></code> label is usually needed.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">Fall-through from one clause into the next is translated as a <code class="docutils literal notranslate"><span class="pre">goto</span></code> to a
+generated label at the start of the next clause.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">When <code class="docutils literal notranslate"><span class="pre">case</span></code> or <code class="docutils literal notranslate"><span class="pre">default</span></code> labels are not at the top level in the
+<code class="docutils literal notranslate"><span class="pre">switch</span></code> body (i.e., they are defined within structured statements inside
+the <code class="docutils literal notranslate"><span class="pre">switch</span></code>), the <code class="docutils literal notranslate"><span class="pre">switch</span></code> clause is just a <code class="docutils literal notranslate"><span class="pre">goto</span></code> to a generated
+label at the right location, and the unusual statement(s) inside the
+<code class="docutils literal notranslate"><span class="pre">switch</span></code> body go into the body statement attached to the intermediate
+language <code class="docutils literal notranslate"><span class="pre">switch</span></code>.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">Likewise, when there are local declarations in the compound statement that
+is the body of the <code class="docutils literal notranslate"><span class="pre">switch</span></code>, those declarations go into the body
+statement.</div>
+</div>
+</li>
+</ul>
+<p>There is also processing to detect and report cases in which a declaration that
+involves implicit or explicit initialization is bypassed by a transfer of
+control (by means of a <code class="docutils literal notranslate"><span class="pre">goto</span></code> or <code class="docutils literal notranslate"><span class="pre">switch</span></code>).  A separate data structure is
+maintained to assist in this checking: variable <code class="docutils literal notranslate"><span class="pre">control_flow_descr_list</span></code>
+identifies a doubly linked list of entries of type <code class="docutils literal notranslate"><span class="pre">a_control_flow_descr</span></code>
+that represents a view of the static control flow pattern of a given function.
+Blocks, <code class="docutils literal notranslate"><span class="pre">goto</span></code>s, labels, <code class="docutils literal notranslate"><span class="pre">case</span></code> labels, and initializing declarations are
+all represented by entries on the list.  Some of these entries point to IL
+entries, but the IL does not point back.</p>
+<p>The list is dynamically pruned – it has only enough information on it for the
+checking that is required.  For instance, once a forward goto has been checked,
+it is no longer interesting and is removed, and entire blocks may be removed
+once they become irrelevant to subsequent analysis.  (See
+<code class="docutils literal notranslate"><span class="pre">remove_control_flow_descr</span></code> and <code class="docutils literal notranslate"><span class="pre">remove_list_of_flow_control_descrs</span></code>, which
+place entries onto an available list, and <code class="docutils literal notranslate"><span class="pre">alloc_control_flow_descr</span></code>, which
+reuses freed entries in preference to allocating new ones.)</p>
+<p><code class="docutils literal notranslate"><span class="pre">add_to_control_flow_descr_list</span></code> is called (from <code class="docutils literal notranslate"><span class="pre">add_stmt_at_stmt_pos</span></code> for
+initializations, from <code class="docutils literal notranslate"><span class="pre">push_stmt_stack</span></code> for blocks, etc.) to add a new entry
+to the end of the list, though in some cases the entry will not be
+added – because it is not required after all – and sometimes it will even
+cause other entries to be removed – for instance, if a completed block turns
+out to have no labels or gotos, the entire block can be eliminated.</p>
+<p>At the end of a block within a <code class="docutils literal notranslate"><span class="pre">switch</span></code> statement,
+<code class="docutils literal notranslate"><span class="pre">add_to_control_flow_descr_list</span></code> may call <code class="docutils literal notranslate"><span class="pre">report_switch_past_init</span></code>, which
+examines the entries on the list for initializing declarations that may be
+bypassed by a transfer of control to a <code class="docutils literal notranslate"><span class="pre">case</span></code> label.  An error is issued in
+C++ mode, a warning otherwise.</p>
+<p><code class="docutils literal notranslate"><span class="pre">check_for_jump_over_initialization</span></code> is called from <code class="docutils literal notranslate"><span class="pre">goto_statement</span></code> and
+from <code class="docutils literal notranslate"><span class="pre">statement</span></code> when a label definition is seen.  For a forwards <code class="docutils literal notranslate"><span class="pre">goto</span></code> it
+calls <code class="docutils literal notranslate"><span class="pre">add_to_control_flow_descr_list</span></code> to record information that will be
+used for checking when the label is processed.  For a label it calls
+<code class="docutils literal notranslate"><span class="pre">check_goto_and_label</span></code> to report any previously recorded <code class="docutils literal notranslate"><span class="pre">goto</span></code>s that may
+now be recognized to involve bypassing an initializing declaration (see
+<code class="docutils literal notranslate"><span class="pre">report_goto_past_init</span></code>, which issues an error in C++ and a warning
+otherwise); and an entry representing the label is added to the list.  For a
+backwards <code class="docutils literal notranslate"><span class="pre">goto</span></code> it again calls <code class="docutils literal notranslate"><span class="pre">check_goto_and_label</span></code>, which in turn calls
+<code class="docutils literal notranslate"><span class="pre">report_goto_past_init</span></code>, if appropriate.</p>
+<p>The control flow descriptor list is also used by
+<code class="docutils literal notranslate"><span class="pre">check_for_branch_into_handler</span></code>, which reports attempts to branch into an
+exception handler from code outside the handler.</p>
+<p>An important part of statement processing is the management of object
+lifetimes.  For example, each time a compound statement starts, a new object
+lifetime begins; and it ends when the compound statement terminates.  In other
+words, objects (e.g., automatic variables and long-lifetime expression
+temporaries) created inside the compound statement have lifetimes that
+terminate when it does.  The destructor (if any) for such an object must be
+called in the event of the normal termination of the scope, a branch out of it,
+or unwinding through it as the result of an exception.  The information
+enabling back ends to support these implicit destructor calls, in the right
+place and in the right order, is provided by entries of type
+<code class="docutils literal notranslate"><span class="pre">an_object_lifetime</span></code>, discussed in detail in the chapter on the intermediate
+language.</p>
+<p>Each time a new function or block scope is created, a new object lifetime is
+pushed on the object lifetime stack – <code class="docutils literal notranslate"><span class="pre">push_object_lifetime</span></code> is called in
+<code class="docutils literal notranslate"><span class="pre">push_scope</span></code>, and the object lifetime is bound to the scope entry for block
+scopes in <code class="docutils literal notranslate"><span class="pre">ensure_il_scope_exists</span></code> (in <code class="docutils literal notranslate"><span class="pre">il.c</span></code>).  In addition, an object
+lifetime is pushed for try blocks in <code class="docutils literal notranslate"><span class="pre">try_block_statement</span></code> and for cfront
+dependent statements in <code class="docutils literal notranslate"><span class="pre">start_block_statement</span></code>; in the latter case, since
+there is no scope, the lifetime entry is bound to the block entry associated
+with the block statement.</p>
+<p>When a label is defined, a block-after-label object lifetime is pushed.  Such
+lifetimes are effectively subblocks of the current lifetime that run from the
+label to the end of the block in which the label appears.  When a label is
+defined inside an inner block, a block-after-label lifetime is also pushed in
+the containing block when the inner block terminates.  (See
+<code class="docutils literal notranslate"><span class="pre">terminate_curr_block_object_lifetime</span></code> and
+<code class="docutils literal notranslate"><span class="pre">reset_curr_block_object_lifetime</span></code>.) Block-after-label lifetimes are also
+pushed for case labels.</p>
+<p>The object lifetime that is current at the point of the label’s definition is
+recorded in the label statement.  A <code class="docutils literal notranslate"><span class="pre">goto</span></code> statement that references that
+label will point to the innermost object lifetime shared by the label and the
+<code class="docutils literal notranslate"><span class="pre">goto</span></code>; this is computed by <code class="docutils literal notranslate"><span class="pre">common_object_lifetime</span></code>.</p>
+<p>The general strategy is always to create an object lifetime at standard
+transitions in the source code (e.g., upon entering a block or when a label is
+seen) and then, when the construct it belongs to terminates, to decide whether
+there is justification for retaining that lifetime entry in the IL.  If not (as
+determined by <code class="docutils literal notranslate"><span class="pre">is_useless_object_lifetime</span></code>), it is removed from the IL tree.</p>
+<p>Consequently, a label or <code class="docutils literal notranslate"><span class="pre">goto</span></code> statement may be assigned an object lifetime
+that subsequently proves “useless”.  In that case the object lifetime pointers
+of the statement entries are promoted (see
+<code class="docutils literal notranslate"><span class="pre">fixup_curr_block_labels_and_gotos</span></code>, which calls
+<code class="docutils literal notranslate"><span class="pre">promote_label_and_goto_lifetimes</span></code>; this is also where
+<code class="docutils literal notranslate"><span class="pre">pop_object_lifetime</span></code> is called for block-after-label lifetimes).  This
+processing is driven by management of the control flow description list (see
+<code class="docutils literal notranslate"><span class="pre">add_to_control_flow_descr_list</span></code>).</p>
+<p>If all the labels and <code class="docutils literal notranslate"><span class="pre">goto</span></code>s in a function end up pointing to the function
+scope lifetime but the function scope lifetime itself turns out to be useless,
+then the lifetime pointers in the label and <code class="docutils literal notranslate"><span class="pre">goto</span></code> statements are cleared
+(see <code class="docutils literal notranslate"><span class="pre">wrapup_control_flow_processing</span></code>).</p>
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"><div class="navigation-prev">
+    <a href="../class_decl/">
+      <i class="i-lucide chevron-left"></i>
+      <div class="page-info">
+        <span>Previous</span><div class="title"><span class="section-number">11. </span>Class Declarations</div></div>
+    </a>
+  </div><div class="navigation-next">
+    <a href="../templates/">
+      <div class="page-info">
+        <span>Next</span>
+        <div class="title"><span class="section-number">13. </span>Templates</div>
+      </div>
+      <i class="i-lucide chevron-right"></i>
+    </a>
+  </div></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>EDG 7.0, 7/20/26 - ©2026, Edison Design Group, Inc.</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials"></div>
+    </div>
+  </div>
+</footer>
+      <script src="../_static/documentation_options.js?v=618d875b"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/shibuya.js?v=50760d75"></script></body>
+</html>
